@@ -1,0 +1,46 @@
+<div class="d-flex">
+    <ng-container>
+      <i class="vsm-icon pe-7s-culture pt-1 me-3 fsize-3 float-start"></i>
+      <ng-select
+        bindLabel="campusId"
+        class="ngSelectWidth"
+        placeholder="Select campus"
+        [clearable]="false"
+        [searchable]="false"
+        [(ngModel)]="selectedCampus"
+        (change)="onChange()"
+      >
+        <ng-option
+          [value]="item.campusId"
+          [disabled]="item.disabled"
+          *ngFor="let item of campuses"
+        >
+          Campus - {{ item.campusName }}
+        </ng-option>
+      </ng-select>
+
+      <i
+        class="vsm-icon pe-7s-study pt-1 me-3 fsize-3 float-start ms-3"
+      ></i>
+
+      <ng-select
+        bindLabel="intakeId"
+        class="ngSelectWidth"
+        placeholder="Select intake"
+        [clearable]="false"
+        [searchable]="false"
+        [(ngModel)]="selectedIntake"
+        (change)="onChange()"
+      >
+        <ng-option
+          [value]="item.intakeId"
+          [disabled]="item.disabled"
+          *ngFor="let item of intakes"
+        >
+          Intake - {{ item.intakeName }} -
+          {{ item.startDate | date : "yyyy" }}
+        </ng-option>
+      </ng-select>
+    </ng-container>
+  </div>
+  

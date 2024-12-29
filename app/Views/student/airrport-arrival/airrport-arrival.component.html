@@ -1,0 +1,483 @@
+<div *ngIf="!permissionMessageImage">
+  <div class="row">
+    <div
+      class="col-md-12 application-detail"
+      *ngIf="!formSubmittedSuccessfully"
+    >
+      <form [formGroup]="arrivalDataForm" (ngSubmit)="savedata()">
+        <div class="modal-header shadow-lg">
+          <div class="row w-100 card-header">
+            <div class="col-sm-6 fsize-2 fw-600" *ngIf="userType == 5">
+              Airport Arrival
+            </div>
+            <div class="col-sm-6 fsize-2 fw-600" *ngIf="userType > 5">
+              {{ studentName }}'s Airport Arrival
+            </div>
+            <div class="col-md-6 text-end">
+              <button type="submit" class="btn btn-success me-2">Submit</button>
+              <button
+                type="button"
+                class="btn btn-outline-dark"
+                (click)="clearData()"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12 mt-4">
+          <div class="modal-body scroll-airportArrival">
+            <input type="hidden" formControlName="AirportId" />
+            <input type="hidden" formControlName="ApplicationId" />
+
+            <div class="row mt-2">
+              <div class="col-md-12 my-3 fsize-2">
+                <div class="fw-600">Travel Information</div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Airline Name <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="AirlineName"
+                  placeholder="enter your airline name"
+                />
+                <div
+                  *ngIf="f['AirlineName'].touched && f['AirlineName'].errors"
+                >
+                  <span
+                    *ngIf="f['AirlineName'].errors['required']"
+                    class="text-danger"
+                    >Please Enter Airline Name
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Flight Number <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="FlightNumber"
+                  placeholder="enter your flight Number"
+                />
+                <div
+                  *ngIf="f['FlightNumber'].touched && f['FlightNumber'].errors"
+                >
+                  <span
+                    *ngIf="f['FlightNumber'].errors['required']"
+                    class="text-danger"
+                    >Please Enter Flight Number
+                  </span>
+                  <span *ngIf="f['FlightNumber'].errors['maxlength']" class="text-danger">
+                    Flight number cannot exceed 10 characters
+                  </span>
+                  <span
+                    *ngIf="f['FlightNumber'].errors['pattern']"
+                    class="text-danger"
+                    >Please enter valid flight number</span
+                  >
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Departure Country <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="countries"
+                  bindLabel="countryName"
+                  placeholder="Select Country"
+                  [searchable]="true"
+                  [clearable]="true"
+                  bindValue="countryId"
+                  formControlName="DepartureCountry"
+                  (ngModelChange)="location($event, true)"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    f['DepartureCountry'].touched &&
+                    f['DepartureCountry'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['DepartureCountry'].errors['required']"
+                    class="text-danger"
+                    >Please Select Departure Country
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Departure Location <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="departCities"
+                  bindLabel="cityName"
+                  formControlName="DepartureLocation"
+                  placeholder="Select City"
+                  [searchable]="true"
+                  [clearable]="true"
+                  bindValue="cityId"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    f['DepartureLocation'].touched &&
+                    f['DepartureLocation'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['DepartureLocation'].errors['required']"
+                    class="text-danger"
+                    >Please Select Departure Location
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Arrival Country <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="countries"
+                  bindLabel="countryName"
+                  placeholder="Select Country"
+                  [searchable]="true"
+                  [clearable]="true"
+                  bindValue="countryId"
+                  (ngModelChange)="location($event, false)"
+                  formControlName="ArrivalCountry"
+                >
+                </ng-select>
+                <div
+                  *ngIf="
+                    f['ArrivalCountry'].touched && f['ArrivalCountry'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['ArrivalCountry'].errors['required']"
+                    class="text-danger"
+                    >Please Select Arrival Country
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Arrival Location <span class="text-danger">*</span></label
+                >
+                <ng-select
+                  [items]="arrivalCities"
+                  bindLabel="cityName"
+                  formControlName="ArrivalLocation"
+                  placeholder="Select City"
+                  [searchable]="true"
+                  [clearable]="true"
+                  bindValue="cityId"
+                >
+                </ng-select>
+                <!-- <input type="text" class="form-control" formControlName="ArrivalLocation"
+                                       placeholder="enter your arrival location" /> -->
+                <div
+                  *ngIf="
+                    f['ArrivalLocation'].touched && f['ArrivalLocation'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['ArrivalLocation'].errors['required']"
+                    class="text-danger"
+                    >Please Select Arrival Location
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Arrival Date <span class="text-danger">*</span></label
+                >
+                <input
+                  type="date"
+                  class="form-control"
+                  min="{{ SetDate }}"
+                  formControlName="ArrivalDate"
+                  placeholder="enter your arrival date"
+                  (change)="birthdateCount($event)"
+                />
+
+                <div
+                  *ngIf="f['ArrivalDate'].touched && f['ArrivalDate'].errors"
+                >
+                  <span
+                    *ngIf="f['ArrivalDate'].errors['required']"
+                    class="text-danger"
+                    >Please Enter Arrival Date
+                  </span>
+                  <span
+                    *ngIf="f['ArrivalDate'].errors['invalidDate']"
+                    class="text-danger"
+                    >Selected arrival date cannot be in the past.
+                  </span>
+                </div>
+                <!-- <input type="text" class="form-control" placeholder="enter your arrival date" /> -->
+              </div>
+              <div class="col-md-4 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Arrival Time <span class="text-danger">*</span></label
+                >
+                <input
+                  type="time"
+                  class="form-control"
+                  formControlName="ArrivalTime"
+                  placeholder="enter your arrival time"
+                />
+                <div
+                  *ngIf="f['ArrivalTime'].touched && f['ArrivalTime'].errors"
+                >
+                  <span
+                    *ngIf="f['ArrivalTime'].errors['required']"
+                    class="text-danger"
+                    >Please Enter Arrival Time
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-12 my-3 fsize-2">
+                <div class="fw-600">Accommodation Information</div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Age on Expected Date of Arrival
+                  <span class="text-danger">*</span></label
+                >
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="Age"
+                  placeholder="enter your age"
+                  readonly
+                />
+                <div *ngIf="f['Age'].touched && f['Age'].errors">
+                  <span *ngIf="f['Age'].errors['required']" class="text-danger"
+                    >Age is Required
+                  </span>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Staying in a David Game College Resident?
+                </label>
+                <select class="form-control" formControlName="CollegeResident">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Are you a Boarding Student?
+                  <span class="text-danger">*</span></label
+                >
+                <select class="form-control" formControlName="BoardingStudent">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+                <div
+                  *ngIf="
+                    f['BoardingStudent'].touched && f['BoardingStudent'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['BoardingStudent'].errors['required']"
+                    class="text-danger"
+                    >Please Select Are You a Boarding Student
+                  </span>
+                </div>
+              </div>
+
+              <div class="col-md-8 mt-3">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Accommodation Address
+                  <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="AccommodationAddress"
+                  placeholder="enter your accommodation address"
+                />
+                <div
+                  *ngIf="
+                    f['AccommodationAddress'].touched &&
+                    f['AccommodationAddress'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['AccommodationAddress'].errors['required']"
+                    class="text-danger"
+                    >Please Enter Accommodation Address
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="row mt-3">
+              <div class="col-md-12 my-3 fsize-2">
+                <div class="fw-600">Collection Information </div>
+              </div>
+              <div class="col-md-4">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Require a collection from a London travel hub?   <span class="text-danger">*</span></label
+                >
+           
+
+                <select class="form-control" formControlName="Londontravel">
+                  <option value="">Select</option>
+                  <option value="true">Yes</option>
+                  <option value="false">No</option>
+                </select>
+
+                <div
+                *ngIf="
+                  f['Londontravel'].touched &&
+                  f['Londontravel'].errors
+                "
+              >
+                <span
+                  *ngIf="f['Londontravel'].errors['required']"
+                  class="text-danger"
+                  >Please Select Collection Information
+                </span>
+              </div>
+              </div>
+              <!--  -->
+              <div class="col-md-4" *ngIf="f['Londontravel'].value === 'true'">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Which travel hub do you Require collection from?
+                  <span class="text-danger">*</span>
+                  </label>
+                <ng-select
+                  formControlName="TravelHubCollection"
+                  placeholder="Select Arrival Airport"
+                  bindLabel="airportName"
+                  bindValue="id"
+                  [items]="arrivalairport"
+                  [searchable]="true"
+                  [clearable]="true"
+                  
+                  
+
+                >
+                </ng-select>
+
+                <!-- <div
+                  *ngIf="
+                    f['TravelHubCollection'].touched &&
+                    f['TravelHubCollection'].errors['required']
+                  "
+                >
+                  <span
+                    *ngIf="f['TravelHubCollection'].errors['required']"
+                    class="text-danger"
+                    >Please select collection form
+                  </span>
+                </div> -->
+                <div *ngIf="f['AdditionalPassengers'].touched && f['AdditionalPassengers'].errors">
+                  <span
+                  *ngIf="f['AdditionalPassengers'].errors"
+                  class="text-danger">
+                  Please Select Arrival Airport</span>
+                </div>
+              </div>
+              <!--  -->
+              <div class="col-md-4" *ngIf="f['Londontravel'].value === 'true'">
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Travelling with any Additional Passengers?
+                  <span class="text-danger">*</span>
+                  </label>
+                <ng-select
+                  formControlName="AdditionalPassengers"
+                  (change)="aditionalPassengers($event)"
+                  placeholder="Select Additional Passengers"
+                >
+                  <!-- <ng-option [value]="">Select</ng-option> -->
+                  <ng-option [value]="true">Yes</ng-option>
+                  <ng-option [value]="false">No</ng-option>
+                </ng-select>
+                <div
+                  *ngIf="
+                    f['AdditionalPassengers'].touched &&
+                    f['AdditionalPassengers'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['AdditionalPassengers'].errors"
+                    class="text-danger">
+                    Please Select Additional Passengers</span> 
+                </div>
+              </div>
+              
+              <div
+                class="col-md-4 mt-3"
+                *ngIf="aditionalHideShow && f['Londontravel'].value === 'true'"
+              >
+                <label class="fw-400 fsize-1 form-lable mb-2"
+                  >Number of Additional Passengers
+                  <span class="text-danger">*</span>
+                </label>
+                <input
+                  type="number"
+                  class="form-control"
+                  formControlName="TotalAditionalPassengers"
+                  placeholder="enter total number of passengers"
+                />
+                
+                <div
+                  *ngIf="
+                    f['TotalAditionalPassengers'].touched &&
+                    f['TotalAditionalPassengers'].errors
+                  "
+                >
+                
+                  <span
+                    *ngIf="f['TotalAditionalPassengers'].errors['invalidValue']   " 
+                    class="text-danger"
+                    >Please enter total number of passengers
+                  </span> 
+                  <!-- &&
+                  !f['TotalAditionalPassengers'].errors['required'] &&
+                  f['TotalAditionalPassengers'].errors['invalidValue'] -->
+                  <span
+                    *ngIf="
+                      f['TotalAditionalPassengers'].errors['invalidValue']    "
+                    class="text-danger"
+                    >Please enter valid number of passengers
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+         </div>
+      </form>
+    </div>
+
+    <div
+      *ngIf="formSubmittedSuccessfully"
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      "
+    >
+      <p style="font-weight: bold; text-align: center; font-size: 24px">
+        Thank you! Your form has been submitted successfully.
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>

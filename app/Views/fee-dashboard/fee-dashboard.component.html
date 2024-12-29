@@ -1,0 +1,73 @@
+<!-- <angular-editor #editor [(ngModel)]="htmlContent" [config]="config">
+</angular-editor>
+<button (click)="clickOnButton(editor)">Click Me</button> -->
+
+
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Fee
+        <div class="btn-actions-pane-right">
+            <div role="group" class="btn-group-sm btn-group">
+                <button class="btn btn-primary float-end my-2 mr-2" (click)="addFeePage()">Add Fee</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-responsive p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+            <thead>
+                <tr>
+                    <th class="text-left" style="width: 20px;">
+                        Intake
+                    </th>
+                    <th class="text-left" style="width: 25px;">
+                        Course
+                    </th>
+                    <th class="text-left" style="width: 25px;">
+                        Campus
+                    </th>
+                    <th class="text-left" style="width: 10px;">
+                        Fee
+                    </th>
+                    <th class="text-left" style="width: 20px;">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr *ngFor="let fee of fees">
+                    <td class="text-left">
+                        {{fee.intakeName}}
+                    </td>
+                    <td class="text-left text-capitalize">
+                        {{fee.courseName}}
+                    </td>
+                    <td class="text-left">
+                        {{fee.campusName}}
+                    </td>
+                    <td class="text-left">
+                        {{fee.totalFee}}
+                    </td>
+                    <td class="text-left text-nowrap">
+                        <button class="me-1 btn btn-success btn-sm fa fa-pencil"></button>
+                        <button class="me-1 btn btn-primary btn-sm fa fa-eye"></button>
+                    </td>
+                </tr> -->
+                <tr *ngIf="fees.length==0">
+                    <td colspan="3" class="text-center">No Fee found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<form (ngSubmit)="editFee()">
+    <input type="hidden" id="FeeId" value="" />
+    <input type="submit" id="editFeeCall" style="display: none;">
+</form>
+
+<form (ngSubmit)="viewFee()">
+    <input type="hidden" id="FeeId" value="" />
+    <input type="submit" id="viewFeeCall" style="display: none;">
+</form>

@@ -1,0 +1,525 @@
+<div class="d-flex dasboard" *ngIf="inquiryDashboardData">
+  <app-dashboard-kanban-header
+    stageName="Inquiry"
+    linkClass="bg-CAS"
+    mainClass="card-gradian-CAS border-CAS"
+    [applicationCount]="inquiryDashboardData.applicationCount"
+    routeLink="/inquiry"
+    [statuses]="inquiriesStatuses"
+    icon="lnr-laptop-phone"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Application"
+    linkClass="bg-warning"
+    mainClass="card-gradian-warning border-warning"
+    [applicationCount]="applicationDashboardData.applicationCount"
+    routeLink="/application"
+    [statuses]="applicationsStatuses"
+    icon="pe-7s-study"
+    [newCount]="applicationDashboardData.newCount"
+    newTextClass="text-warning"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Conditional Offer"
+    linkClass="bg-offer"
+    mainClass="card-gradian-offers border-offers"
+    [applicationCount]="conditionOfferDashboardData.applicationCount"
+    routeLink="/offer"
+    queryParams="conditional"
+    [statuses]="conditionOfferStatuses"
+    icon="pe-7s-rocket"
+    [newCount]="conditionOfferDashboardData.newCount"
+    newTextClass="text-offers"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Un-Conditional Offer"
+    linkClass="bg-success"
+    mainClass="card-gradian-success border-success"
+    [applicationCount]="unConditionOfferDashboardData.applicationCount"
+    routeLink="/offer"
+    queryParams="unconditional"
+    [statuses]="unConditionOfferStatuses"
+    icon="pe-7s-rocket"
+    [newCount]="unConditionOfferDashboardData.newCount"
+    newTextClass="text-success"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Visa"
+    linkClass="bg-visa"
+    mainClass="card-gradian-visa border-visa"
+    [applicationCount]="visaDashboardData.applicationCount"
+    routeLink="/visa"
+    [statuses]="visaStatuses"
+    icon="pe-7s-plane"
+    [newCount]="visaDashboardData.newCount"
+    newTextClass="text-visa"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Onboarding"
+    linkClass="bg-onboard"
+    mainClass="card-gradian-onboard border-onboard"
+    [applicationCount]="studentOnboardedDashboardData.applicationCount"
+    routeLink="/onboarding"
+    [statuses]="onBoardingStatuses"
+    icon="pe-7s-culture"
+    [newCount]="studentOnboardedDashboardData.newCount"
+    newTextClass="text-onboard"
+  ></app-dashboard-kanban-header>
+  <app-dashboard-kanban-header
+    stageName="Archived"
+    linkClass="bg-archived"
+    mainClass="card-gradian-archieved border-archieved"
+    [applicationCount]="archivedDashboardData.applicationCount"
+    routeLink="/archieved"
+    [statuses]="archiveStatuses"
+    icon="pe-7s-study"
+    [newCount]="0"
+    newTextClass="text-archieved"
+  ></app-dashboard-kanban-header>
+</div>
+
+<div class="d-flex mt-2" *ngIf="inquiryDashboardData">
+  <div class="kaban-row" cdk-scrollable>
+    <div
+      class="card mb-4 me-2 card-CAS"
+      (click)="openLarge(application.inquiryId)"
+      (wheel)="scollInquiryApplication($event)"
+      *ngFor="let application of inquiryDashboardData.inquiryDetails"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ application.lastName }} </span
+            >, <span>{{ application.firstName }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2 text-end">
+              <div class="title small-font">Inquiry On</div>
+              <div class="date small">
+                {{ application.inquiryOn | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+            <div class="me-2 border-left ps-2">
+              <div class="title small-font">Status</div>
+              <div class="date small">{{ application.status }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="kaban-row" (wheel)="scollApplication($event)" cdk-scrollable>
+    <div
+      class="card mb-4 me-2 card-warning"
+      *ngFor="let application of applicationDashboardData.applications"
+      (click)="getApplication(application.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ application.lastName }} </span
+            >, <span>{{ application.firstName }}</span>
+            <i
+              class="vsm-icon pe-7s-mail fsize-2 align-middle"
+              title="Convert from inquiry"
+              *ngIf="application.isFromInquiry"
+            ></i>
+          </div>
+          <div
+            class="float-end text-warning fw-normal new-label"
+            *ngIf="application.isNew"
+          >
+            NEW 
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div
+            class="title fsize-1 mb-2 course-name"
+            *ngIf="application.course"
+          >
+            {{ application.course.courseName }}
+          </div>
+          <div>
+            <span
+              class="m-0 pb-6 p-0 small-font fw-bold text-end text-warning"
+              *ngIf="application.totalUploaded > 0"
+              >+{{ application.totalUploaded }}</span
+            >
+            <i
+              class="align-bottom lnr-file-empty fsize-1 mx-1 my-0"
+              *ngIf="application.totalRequested > 0"
+            ></i>
+            <span class="small-font" *ngIf="application.totalRequested > 0"
+              >{{ application.totalAccepted }}/{{
+                application.totalRequested
+              }}</span
+            >
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2 text-end">
+              <div class="title small-font">APPLIED</div>
+              <div class="date small">
+                {{ application.applyDate | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+            <div class="me-2 border-left ps-2">
+              <div class="title small-font">STAGE</div>
+              <div
+                class="date small"
+                *ngIf="application.statusname.toLowerCase() != 'accepted'"
+              >
+                {{ application.statusname }}
+              </div>
+              <div
+                class="date small"
+                *ngIf="application.statusname.toLowerCase() == 'accepted'"
+              >
+                Received
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">STEPS</div>
+              <div class="small">{{ application.step }}/4</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="kaban-row"
+    (wheel)="scollOfferApplication($event, 1)"
+    cdk-scrollable
+  >
+    <div
+      class="card mb-4 m-0 card-offer"
+      *ngFor="let application of conditionOfferDashboardData.offers"
+      (click)="getApplication(application.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ application.lastName }} </span
+            >, <span>{{ application.firstName }}</span>
+            <i
+              class="vsm-icon pe-7s-mail fsize-2 align-middle"
+              title="Convert from inquiry"
+              *ngIf="application.isFromInquiry"
+            ></i>
+          </div>
+          <div
+            class="float-end text-offer fw-normal new-label"
+            *ngIf="application.isNew"
+          >
+            NEW
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="title fsize-1 mb-2 course-name">
+            {{ application.course.courseName }}
+          </div>
+          <div>
+            <span
+              class="m-0 pb-6 p-0 small-font fw-bold text-end text-offer"
+              *ngIf="application.totalUploaded > 0"
+              >+{{ application.totalUploaded }}</span
+            >
+            <i
+              class="align-bottom lnr-file-empty fsize-1 mx-1 my-0"
+              *ngIf="application.totalRequested > 0"
+            ></i>
+            <span class="small-font" *ngIf="application.totalRequested > 0"
+              >{{ application.totalAccepted }}/{{
+                application.totalRequested
+              }}</span
+            >
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2 text-end">
+              <div class="title small-font">Date</div>
+              <div class="date small">
+                {{ application.offerDate | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+            <div class="me-2 border-left ps-2">
+              <div class="title small-font">Status</div>
+              <div class="date small">{{ application.statusname }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">OFFER</div>
+              <div class="small">{{ application.offer }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="kaban-row"
+    (wheel)="scollOfferApplication($event, 2)"
+    cdk-scrollable
+  >
+    <div
+      class="card mb-4 m-0 card-success"
+      *ngFor="let application of unConditionOfferDashboardData.offers"
+      (click)="getApplication(application.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ application.lastName }} </span
+            >, <span>{{ application.firstName }}</span>
+            <i
+              class="vsm-icon pe-7s-mail fsize-2 align-middle"
+              title="Convert from inquiry"
+              *ngIf="application.isFromInquiry"
+            ></i>
+          </div>
+          <div
+            class="float-end text-success fw-normal new-label"
+            *ngIf="application.isNew"
+          >
+            NEW
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="title fsize-1 mb-2 course-name">
+            {{ application?.course?.courseName }}
+          </div>
+          <div>
+            <span
+              class="m-0 pb-6 p-0 small-font fw-bold text-end text-success"
+              *ngIf="application.totalUploaded > 0"
+              >+{{ application.totalUploaded }}</span
+            >
+            <i
+              class="align-bottom lnr-file-empty fsize-1 mx-1 my-0"
+              *ngIf="application.totalRequested > 0"
+            ></i>
+            <span class="small-font" *ngIf="application.totalRequested > 0"
+              >{{ application.totalAccepted }}/{{
+                application.totalRequested
+              }}</span
+            >
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2 text-end">
+              <div class="title small-font">Date</div>
+              <div class="date small">
+                {{ application.offerDate | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+            <div class="me-2 border-left ps-2">
+              <div class="title small-font">Status</div>
+              <div class="date small">{{ application.statusname }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">OFFER</div>
+              <div class="small">{{ application.offer }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="kaban-row" (wheel)="scollhandler($event)" cdk-scrollable>
+    <div
+      class="card mb-4 me-2 card-visa"
+      *ngFor="let visa of visaDashboardData.visa"
+      (click)="getApplication(visa.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ visa.lastName }} </span
+            >, <span>{{ visa.firstName }}</span>
+            <i
+              class="vsm-icon pe-7s-mail fsize-2 align-middle"
+              title="Convert from inquiry"
+              *ngIf="visa.isFromInquiry"
+            ></i>
+          </div>
+          <div
+            class="float-end text-visa fw-normal new-label"
+            *ngIf="visa.isNew"
+          >
+            NEW
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="title fsize-1 mb-2 course-name">
+            {{ visa.course?.courseName }}
+          </div>
+          <div>
+            <span
+              class="m-0 pb-6 p-0 small-font fw-bold text-end text-visa"
+              *ngIf="visa.totalUploaded > 0"
+              >+{{ visa.totalUploaded }}</span
+            >
+            <i
+              class="align-bottom lnr-file-empty fsize-1 mx-1 my-0"
+              *ngIf="visa.totalRequested > 0"
+            ></i>
+            <span class="small-font" *ngIf="visa.totalRequested > 0"
+              >{{ visa.totalAccepted }}/{{ visa.totalRequested }}</span
+            >
+          </div>
+        </div>
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2 text-end">
+              <div class="title small-font">APPLIED</div>
+              <div class="date small">
+                {{ visa.applyDate | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+            <div class="me-2 border-left ps-2">
+              <div class="title small-font">STATUS</div>
+              <div class="date small">{{ visa.statusname }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">OFFER</div>
+              <div class="small">{{ visa.offer }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="kaban-row"
+    (wheel)="scollOnboardApplication($event)"
+    cdk-scrollable
+  >
+    <div
+      class="card mb-4 m-0 card-onboard"
+      *ngFor="let onboard of studentOnboardedDashboardData.studentOnboard"
+      (click)="getApplication(onboard.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ onboard.lastName }} </span
+            >, <span>{{ onboard.firstName }}</span>
+            <i
+              class="vsm-icon pe-7s-mail fsize-2 align-middle"
+              title="Convert from inquiry"
+              *ngIf="onboard.isFromInquiry"
+            ></i>
+          </div>
+          <div
+            class="float-end text-onboard fw-normal new-label"
+            *ngIf="onboard.isNew"
+          >
+            NEW
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2">
+              <div class="title small-font">COURSE</div>
+              <div class="date small">{{ onboard.course.courseName }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">ARRIVAL</div>
+              <div class="date small">
+                {{ onboard.arriveDate | date : "dd MMM ''yy" }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div
+    class="kaban-row"
+    (wheel)="scollArchieveApplication($event)"
+    cdk-scrollable
+  >
+    <div
+      class="card mb-4 me-2 card-archived"
+      *ngFor="let archive of archivedDashboardData.archives"
+      (click)="getApplication(archive.applicationId)"
+    >
+      <div class="card-header row mx-0">
+        <div class="col-md-12 ps-0">
+          <div class="float-start text-capitalize">
+            <span class="stage-text" style="letter-spacing: 0px; color: black"
+              ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+              {{ archive.lastName }} </span
+            >, <span>{{ archive.firstName }}</span>
+          </div>
+          <div class="float-end text-archived fw-normal new-label align-top">
+            {{ archive.statusname }}
+          </div>
+        </div>
+      </div>
+      <div class="card-body py-2 opacity-7">
+        <div class="d-flex justify-content-between">
+          <div class="d-flex">
+            <div class="me-2">
+              <div class="title small-font">REASON</div>
+              <div class="date small">{{ archive.reanson }}</div>
+            </div>
+          </div>
+          <div>
+            <div class="ms-2 text-end">
+              <div class="title small-font">STAGE</div>
+              <div class="date small">{{ archive.archiveOn }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-inquiry-model
+  [inquiryId]="inquiryId"
+  (closeModel)="inquiryId = 0"
+></app-inquiry-model>

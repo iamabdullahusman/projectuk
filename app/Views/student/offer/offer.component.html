@@ -1,0 +1,1369 @@
+<div *ngIf="!permissionMessageImage">
+  <div class="main-card mb-3 card" >
+    <div class="card-header fsize-2 fw-600" *ngIf="userType == 5">My Offer </div>
+    <div class="card-header fsize-2 fw-600" *ngIf="userType > 5">
+      {{ studentName }}'s Offer
+    </div>
+    <div class="table-responsive p-3 m-3" >
+      <div class="row offer-div">
+        <div class="col-md-6 position-relative">
+          <iframe
+           *ngIf="ShowOffer"
+            width="100%"
+            height="100%"
+            frameBorder="0"
+            [src]="urlSafe"
+            class="border border-1 border-light rounded-3 w-100"
+          ></iframe>
+        </div>
+        <div class="col-md-6">
+          <!-- Main Div -->
+
+          <div
+            class="main-card mb-3 card card-warning shadow-none"
+            *ngIf="isMainPage"
+          >
+            <div
+              class="offer-header card-header card-shadow-success mt-0 mb-2 card-gradian-success"
+            >
+              <div class="col-md-4" *ngIf="!isDeferOfferPage">
+                <span class="pe-7s-file fs-4 me-1 align-bottom"></span>
+                <span
+                  [innerHTML]="applicationOfferDetail?.applicationOfferName"
+                ></span>
+              </div>
+              <div class="border-0 mt-0 pb-3 text-end col-md-8">
+                <div class="offer-margin border-0 mt-0 text-end mb-1 col-md-12">
+                  <span
+                    *ngIf="!isDeferOfferPage"
+                    class="text-capitalize me-1 fw-600 fsize-1"
+                    [ngClass]="
+                      offerTypeClass[applicationOfferDetail?.offerType]
+                    "
+                    >{{ offerType[applicationOfferDetail?.offerType] }}</span
+                  >
+                  <span
+                    *ngIf="applicationOfferDetail?.offerType == 8"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Reason - {{ applicationOfferDetail?.deferReason }}
+                  </span>
+                </div>
+
+                <div class="offer-bottom border-0 mt-0 text-end col-md-12">
+                  <button
+                    class="btn btn-sm btn-light me-1"
+                    (click)="
+                      openModal(
+                        OfferModel,
+                        1,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="
+                      !hideDeclineBtn && applicationOfferDetail?.offerType != 13 && applicationOfferDetail?.offerType != 15
+                    "
+                  >
+                    Decline
+                  </button>
+                  <button
+                    class="btn btn-sm btn-light me-1"
+                    *ngIf="
+                      applicationOfferDetail?.offerType != 4 &&
+                      applicationOfferDetail?.offerType != 12 &&
+                      applicationOfferDetail?.offerType != 11
+                    "
+                    (click)="
+                      ConformValidtion(
+                        4,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                  >
+                    Withdraw
+                  </button>
+                  <button
+                    class="btn btn-sm btn-success me-1"
+                    (click)="
+                      ConformValidtion(
+                        2,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="
+                      !hideAcceptedBtn &&
+                      (applicationOfferDetail?.offerType != 13 && applicationOfferDetail?.offerType != 15)
+                    "
+                  >
+                    Accept
+                  </button>
+                  <button
+                    class="btn btn-sm btn-info me-2 mt-1"
+                    (click)="
+                      ConformValidtion(
+                        12,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="
+                      applicationOfferDetail?.offerType == 1 ||
+                      applicationOfferDetail?.offerType == 4 ||
+                      applicationOfferDetail?.offerType == 6
+                    "
+                  >
+                    Request Offer
+                  </button>
+                  <!-- <button class="btn btn-sm btn-success me-1"
+                  (click)="openModal(DeferOfferModel, 3,applicationOfferDetail?.applicationOfferId)"
+                  *ngIf="!hideDeferBtn">Defer
+                  Offer</button> -->
+                  <button
+                    class="btn btn-sm btn-success me-1"
+                    (click)="
+                      redirectToDeferPage(
+                        0,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="!hideDeferBtn"
+                  >
+                    Defer Offer
+                  </button>
+                  <button
+                    class="btn btn-sm btn-success me-1"
+                    *ngIf="applicationOfferDetail?.offerType == 7"
+                    (click)="
+                      ConformValidtion(
+                        13,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                  >
+                    Defer Offer Accept
+                  </button>
+                  <button
+                    class="btn btn-sm btn-success me-1"
+                    (click)="
+                      ConformValidtion(
+                        9,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="applicationOfferDetail?.offerType == 8"
+                  >
+                    Continue With Offer
+                  </button>
+                  <button
+                    class="btn btn-sm btn-danger me-1"
+                    (click)="
+                      ConformValidtion(
+                        10,
+                        applicationOfferDetail?.applicationOfferId
+                      )
+                    "
+                    *ngIf="applicationOfferDetail?.offerType == 8"
+                  >
+                    Rejected
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            
+            <!-- Zainab said us to remove this from Student portal on Offer Page -->
+            <!-- <div class="card-body" *ngIf="!isDeferOfferPage">
+              <div class="row ms-0 me-1">
+              </div>
+              <div class="row mt-2">
+                <div class="col-sm-12 text-end">
+                  <button class="btn btn-sm btn-info"
+                    (click)="getOfferConditions(applicationOfferDetail?.applicationOfferId,true)"
+                    *ngIf="applicationOfferDetail?.isCondition">View
+                    Condition</button>
+                </div>
+              </div>
+              <div class="row mt-3 mb-3">
+                <div class="col-md-6 pt-1">
+                  <span class="pe-7s-file fs-4 me-1 align-bottom"></span
+                  >Required Documents
+                </div>
+                <div
+                  class="text-end col-md-6"
+                  *ngIf="studentRequestedDocument?.length > 2"
+                >
+                  <span class="me-2"
+                    >+ {{ studentRequestedDocument.length - 2 }} More</span
+                  >
+                  <button
+                    class="btn btn-sm btn-info"
+                    (click)="redirectToDocumentPage()"
+                  >
+                    View All
+                  </button>
+                </div>
+              </div>
+              <app-offer-document
+                [documents]="studentRequestedDocument"
+              ></app-offer-document>
+            </div> -->
+          </div>
+
+          <!-- Offer History Page -->
+
+          <div
+            class="main-card mb-3 card card-warning shadow-none"
+            *ngIf="isHistoryPage"
+          >
+            <div
+              class="offer-header card-header card-shadow-success mt-0 mb-2 card-gradian-success"
+            >
+              <div
+                class="col-md-6 elign-items-cneter justify-content-center"
+                *ngIf="isDeferOfferPage"
+              >
+                <span class="pe-7s-file fs-2 me-1"></span>
+                <span class="text-success fs-2 text-capitalize">My Offer</span>
+              </div>
+              <div class="col-md-6">
+                <div class="border-0 text-end col-md-12">
+                  <!-- <span class="text-Defer text-capitalize me-1 fw-600 fsize-1">Offer
+                  Deferred!</span> -->
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 1"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Offer Declined</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 0"
+                    class="text-warning text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Offer Pending</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 2"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Offer Accepted</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 3"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Defer offer Requested</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 4"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Your offer Has Been Withdraw</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 7"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Defer offer request Accepted</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 8"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Defer offer request rejected</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 5"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    offer is On-Hold
+                  </span>
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 6"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    offer is Expire
+                  </span>
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 8"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                  </span>
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 9"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Continued with offer</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 13"
+                    class="text-success text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    Approved</span
+                  >
+                  <!-- <span *ngIf="item.applicationOfferDetail?.offerType == 11"
+                                      class="mt-2 text-danger text-capitalize fsize-2">
+                                     Admin can Offer
+                                      Canceled
+                                    </span> -->
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 11"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                  Offer has been canceled by Admin</span
+                  >
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 12"
+                    class="text-primary text-capitalize me-1 mt-1 fw-600 fsize-1"
+                  >
+                    Offer Requested</span
+                  >
+                  <!-- <span *ngIf="item.applicationOfferDetail?.offerType == 12"
+                                      class="mt-2 text-primary text-capitalize fsize-2">
+                                      Offer
+                                      Requested
+                                    </span> -->
+                  <span
+                    *ngIf="MainData[0].applicationOfferDetail?.offerType == 10"
+                    class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                  >
+                    You Have Rejected this Offer</span
+                  >
+                </div>
+              </div>
+              <!-- <div class="border-0 mt-3 pb-3 text-end col-md-6">
+              <div class="border-0 mt-3  text-end col-md-12">
+                <span *ngIf="isDeferOfferPage" class="text-Defer text-capitalize me-1 fw-600 fsize-1">
+                  Offer
+                  Deferred!</span>
+              </div>
+            </div> -->
+              <!-- <div class="col-md-6"> do you want to defer an offer</div> -->
+            </div>
+
+            <div class="card-body" *ngIf="isDeferOfferPage">
+              <!-- <div class="mb-5"
+              *ngIf="!hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 0 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 2 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 3 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 7 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 8 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 9 || !hasDepositFees && MainData[0].applicationOfferDetail?.offerType == 12">
+
+              <div class="row text-capitalize">
+                <div class="col-md-6">
+                  <span class="pe-7s-file fs-4 align-bottom"></span> Fees Deposit
+                  Payment <span class="text-danger"> Min. GBP
+                    {{MainData[0].applicationOfferDetail?.depositeAmount}}</span>
+                </div>
+                <div class="border-0 text-end col-md-6">
+                  <button class="btn btn-sm btn-info" (click)="downloadFile(emailedDocuments[2]?.filePath)">
+                    Download
+                  </button>
+                </div>
+              </div>
+              <form [formGroup]="UploadDepositReceiptForm" (ngSubmit)="uploadDepositeReceipt()">
+                <div class="position-relative mt-2 ms-0 me-0 row">
+                  <input class="form-control" type="file" formControlName="dReceipt"
+                    (change)="convertFileToBase64($event)">
+                  <div *ngIf="isDepositReceiptSubmitted && fReceipt['dReceipt'].errors">
+                    <span *ngIf="fReceipt['dReceipt'].errors['required']" class="text-danger">
+                      Please
+                      chose file
+                    </span>
+                  </div>
+                </div>
+                <div class="row mt-2">
+                  <div class="col-md-8">
+                    <span>Download deposit instruction and upload the payment proof.</span>
+                  </div>
+                  <div class="col-md-4 text-end">
+                    <button type="button" class="btn btn-outline-dark btn-sm me-2" (click)="onCancelClick(2)">
+                      Cancel
+                    </button>
+                    <button type="submit" class="btn btn-success btn-sm">Submit</button>
+                  </div>
+                </div>
+              </form>
+            </div> -->
+              <div *ngFor="let item of MainData">
+                <div
+                  class="fw-bold"
+                  *ngIf="item.applicationOfferDetail?.offerType != 14"
+                >
+                  <span class="pe-7s-file fs-4 me-1 align-bottom"></span>
+                  <span
+                    [innerHTML]="
+                      item.applicationOfferDetail?.applicationOfferName
+                    "
+                    class="fs-5"
+                  ></span>
+                  <span class="text-Defer">
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 1"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer Declined</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 0"
+                      class="text-warning text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer Pending</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 2"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer Accepted</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 3"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                      >- Defer Offer is Requested</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 4"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                      >- Your offer Has Been Withdrawn</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 7"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                      >- Defer offer request is Accepted</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 13"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                    >
+                      Accepted</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 8"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- Defer offer request is rejected</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 5"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer is On-Hold
+                    </span>
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 6"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer is Expire</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 8"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- (Reason :-
+                      {{ item.applicationOfferDetail?.deferReason }} )</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 9"
+                      class="text-success text-capitalize me-1 fw-600 fsize-1"
+                    >
+                      - Continued with offer</span
+                    >
+                    <!-- <span *ngIf="item.applicationOfferDetail?.offerType == 11"
+                    class="mt-2 text-danger text-capitalize fsize-2">
+                    can Offer
+                    Canceled
+                  </span> -->
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 11"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- Offer was canceled</span
+                    >
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 12"
+                      class="text-primary text-capitalize me-1 mt-1 fw-600 fsize-1"
+                      >- Offer Requested</span
+                    >
+                    <!-- <span *ngIf="item.applicationOfferDetail?.offerType == 12"
+                    class="mt-2 text-primary text-capitalize fsize-2">
+                    Offer
+                    Requested
+                  </span> -->
+                    <span
+                      *ngIf="item.applicationOfferDetail?.offerType == 10"
+                      class="text-danger text-capitalize me-1 fw-600 fsize-1"
+                      >- You Have Rejected this Offer</span
+                    >
+                  </span>
+                </div>
+                <div
+                  class="row ms-0 m-2 text-muted"
+                  *ngIf="item.applicationOfferDetail?.offerType != 14"
+                >
+                  <!-- Lorem Ipsum is simply dummy text of the printing and
+                  typesetting industry. Lorem Ipsum has been the industry's
+                  standard dummy text ever since the 1500s. unchanged. -->
+                </div>
+                <div
+                  class="card-header mt-0 mb-2"
+                  *ngIf="item.applicationOfferDetail?.offerType != 14"
+                >
+                  <div
+                    class="elign-items-cneter justify-content-center col-md-4 me-2"
+                    *ngIf="isDeferOfferPage"
+                  >
+                    <!-- <button
+                      class="btn btn-sm btn-warning"
+                      (click)="
+                        getOffer(
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                    >
+                      View
+                    </button> -->
+                    <!-- <button class="btn btn-sm btn-info ms-2" (click)="getOfferConditions(applicationOfferDetail?.applicationOfferId,true)"
+                      *ngIf="item.applicationOfferDetail.isCondition">View
+                      Condition</button> -->
+                  </div>
+                  <div class="border-0 mt-0 pb-3 text-end col-md-8">
+                    <button
+                      class="btn btn-sm btn-light me-1"
+                      (click)="
+                        openModal(
+                          OfferModel,
+                          1,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        (item.applicationOfferDetail?.offerType == 0 &&
+                          item.applicationOfferDetail?.isOfferActive) ||
+                        (item.applicationOfferDetail?.offerType == 7 &&
+                          item.applicationOfferDetail?.isOfferActive)
+                      "
+                    >
+                      Decline
+                    </button>
+                    <button
+                      class="btn btn-sm btn-light me-1"
+                      *ngIf="
+                        item.applicationOfferDetail?.offerType != 4 &&
+                        item.applicationOfferDetail?.isOfferActive &&
+                        item.applicationOfferDetail?.offerType != 12 &&
+                        item.applicationOfferDetail?.offerType != 11
+                      "
+                      (click)="
+                        ConformValidtion(
+                          4,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                    >
+                      Withdraw
+                    </button>
+                    <button
+                      class="btn btn-sm btn-success me-1"
+                      (click)="
+                        ConformValidtion(
+                          2,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        item.applicationOfferDetail?.offerType == 0 &&
+                        item.applicationOfferDetail?.isOfferActive
+                      "
+                    >
+                      Accept
+                    </button>
+                    <button
+                      class="btn btn-sm btn-success me-1"
+                      (click)="
+                        ConformValidtion(
+                          13,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        item.applicationOfferDetail?.offerType == 7 &&
+                        item.applicationOfferDetail?.isOfferActive
+                      "
+                    >
+                      Accept Defer Offer
+                    </button>
+                    <button
+                      class="btn btn-sm btn-info me-2"
+                      (click)="
+                        ConformValidtion(
+                          12,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        (item.applicationOfferDetail?.offerType == 1 &&
+                          item.applicationOfferDetail?.isOfferActive) ||
+                        (item.applicationOfferDetail?.offerType == 4 &&
+                          item.applicationOfferDetail?.isOfferActive) ||
+                        (item.applicationOfferDetail?.offerType == 6 &&
+                          item.applicationOfferDetail?.isOfferActive)
+                      "
+                    >
+                      Request Offer
+                    </button>
+                    <!-- <button class="btn btn-sm btn-success me-1"
+                    (click)="openModal(DeferOfferModel, 3,item.applicationOfferDetail?.applicationOfferId)"
+                    *ngIf="item.applicationOfferDetail?.offerType == 2">Defer
+                    Offer</button> -->
+                    <button
+                      class="btn btn-sm btn-success me-1"
+                      (click)="
+                        redirectToDeferPage(
+                          1,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        (item.applicationOfferDetail?.offerType == 2 &&
+                          item.applicationOfferDetail?.isOfferActive) ||
+                        (item.applicationOfferDetail?.offerType == 0 &&
+                          item.applicationOfferDetail?.isOfferActive)
+                      "
+                    >
+                      Defer Offer
+                    </button>
+                    <!-- && item.applicationOfferDetail?.isDeferOffer == false || && item.applicationOfferDetail?.isDeferOffer == false -->
+                    <button
+                      class="btn btn-sm btn-success me-1"
+                      (click)="
+                        ConformValidtion(
+                          9,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        item.applicationOfferDetail?.offerType == 8 &&
+                        item.applicationOfferDetail?.isOfferActive
+                      "
+                    >
+                      Continue With Offer
+                    </button>
+                    <button
+                      class="btn btn-sm btn-danger me-1"
+                      (click)="
+                        ConformValidtion(
+                          10,
+                          item.applicationOfferDetail?.applicationOfferId
+                        )
+                      "
+                      *ngIf="
+                        item.applicationOfferDetail?.offerType == 8 &&
+                        item.applicationOfferDetail?.isOfferActive
+                      "
+                    >
+                      Rejected
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Differ Offer-->
+
+          <div
+            class="main-card mb-3 card card-warning shadow-none"
+            *ngIf="isDifferPage"
+          >
+            <!-- card header for differd offer -->
+            <div
+              class="offer-header card-header card-shadow-success mt-0 mb-2 card-gradian-success text-capitalize"
+            >
+              <div class="col-md-6 fs-3 text-success fw-bold">
+                <span class="pe-7s-file me-2"></span>
+                <span
+                  [innerHTML]="applicationOfferDetail?.applicationOfferName"
+                ></span>
+              </div>
+              <div class="col-md-6">
+                <div class="border-0 text-end col-md-12">
+                  <span class="text-success text-capitalize fw-normal fs-5 me-2"
+                    >Deffer Offer</span
+                  >
+                </div>
+              </div>
+            </div>
+
+            <!-- card body for differd offer -->
+            <div class="card-body">
+              <div class="row ms-0 me-1">
+                <!-- Lorem Ipsum is simply dummy text of the printing and typesetting
+                industry. Lorem Ipsum has been the industry's standard dummy
+                text ever since the 1500s. unchanged. -->
+              </div>
+              <div class="mt-5"></div>
+              <div class="mt-2">
+                <form
+                  [formGroup]="DeferOfferForm"
+                  (ngSubmit)="updateDeferOffer()"
+                >
+                  <input type="hidden" formControlName="offerType" />
+                  <div>
+                    <div class="row mb-5">
+                      <div class="col-md-12 fw-600 fs-5">
+                        Reason to Defer Offer
+                      </div>
+                      <div class="col-md-12 mt-1">
+                        <input
+                          type="text"
+                          class="form-control p-2"
+                          placeholder="Enter reason.."
+                          formControlName="comment"
+                        />
+                        <div
+                          *ngIf="
+                            isDeferOfferSubmitted &&
+                            fDeferOffer['comment'].errors
+                          "
+                        >
+                          <span
+                            *ngIf="fDeferOffer['comment'].errors['required']"
+                            class="text-danger"
+                            >Please enter your reason.</span
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-4">
+                        <div class="col-md-12">
+                          <div class="d-flex align-items-center">
+                            <input
+                              type="checkbox"
+                              class="me-2"
+                              style="height: 25px; width: 25px"
+                              id="isChangeIntakeChecked"
+                              (change)="deferOfferSelectionCheckBox()"
+                            />
+                            <span class="fs-5 fw-600 text-center"
+                              >Change Intake</span
+                            >
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-12 mb-2 mt-3"
+                          *ngIf="isDeferIntakeShow"
+                        >
+                          <label
+                            class="form-label fs-5 fw-normal text-capitalize"
+                            >Select New Intake
+                            <span class="text-danger">*</span></label
+                          >
+                          <ng-select
+                            formControlName="intakeId"
+                            bindLabel="intakeId"
+                            placeholder="Select intake"
+                            [searchable]="true"
+                            [clearable]="false"
+                          >
+                            <ng-option
+                              [value]="item.intakeId"
+                              [disabled]="item.disabled"
+                              *ngFor="let item of intakeData"
+                            >
+                              {{ item.intakeName
+                              }}{{ item.endDate | date : " YYYY" }}
+                            </ng-option>
+                          </ng-select>
+                          <div
+                            *ngIf="
+                              isDeferOfferSubmitted &&
+                              fDeferOffer['intakeId'].errors
+                            "
+                          >
+                            <span
+                              *ngIf="fDeferOffer['intakeId'].errors['required']"
+                              class="text-danger"
+                              >Please choose Intake.</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="col-md-12">
+                          <div class="d-flex align-items-center">
+                            <input
+                              type="checkbox"
+                              class="me-2"
+                              style="height: 25px; width: 25px"
+                              id="isChangeCourseChecked"
+                              (change)="deferOfferSelectionCheckBox()"
+                            />
+                            <span class="fs-5 fw-600 text-center"
+                              >Change Course</span
+                            >
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-12 mb-2 mt-3"
+                          *ngIf="isDeferCourseShow"
+                        >
+                          <label
+                            class="form-label fs-5 fw-normal text-capitalize"
+                            >Select New Course
+                            <span class="text-danger">*</span></label
+                          >
+                          <!-- <ng-select formControlName="courseId" bindLabel="courseId" placeholder="Select Course"
+                          [searchable]="true" [clearable]="false" [(ngModel)]="selectedCourse">
+                          <ng-option [value]="item.courseId" [disabled]="item.disabled" *ngFor="let item of CourseData">
+                            {{item.courseName}}
+                          </ng-option>
+                        </ng-select> -->
+                          <ng-select
+                            formControlName="courseId"
+                            bindLabel="courseId"
+                            placeholder="Select Course"
+                            [searchable]="true"
+                            [clearable]="false"
+                          >
+                            <ng-option
+                              [value]="item.courseId"
+                              [disabled]="item.disabled"
+                              *ngFor="let item of CourseData"
+                            >
+                              {{ item.courseName }}
+                            </ng-option>
+                          </ng-select>
+                          <div
+                            *ngIf="
+                              isDeferOfferSubmitted &&
+                              fDeferOffer['courseId'].errors
+                            "
+                          >
+                            <span
+                              *ngIf="fDeferOffer['courseId'].errors['required']"
+                              class="text-danger"
+                              >Please choose course.</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-md-4">
+                        <div class="col-md-12">
+                          <div class="d-flex align-items-center">
+                            <input
+                              type="checkbox"
+                              class="me-2"
+                              style="height: 25px; width: 25px"
+                              id="isChangeCampusChecked"
+                              (change)="deferOfferSelectionCheckBox()"
+                            />
+                            <span class="fs-5 fw-600 text-center"
+                              >Change Campus</span
+                            >
+                          </div>
+                        </div>
+                        <div
+                          class="col-md-12 mb-2 mt-3"
+                          *ngIf="isDeferCampusShow"
+                        >
+                          <label
+                            class="form-label fs-5 fw-normal text-capitalize"
+                            >Select New Campus
+                            <span class="text-danger">*</span></label
+                          >
+                          <!-- <ng-select formControlName="campusId" bindLabel="campusId" placeholder="Select Campus"
+                          [searchable]="true" [clearable]="false" [(ngModel)]="selectedCampuse">
+                          <ng-option [value]="item.campusId" [disabled]="item.disabled" *ngFor="let item of CampusData">
+                            {{item.campusName}}
+                          </ng-option>
+                        </ng-select> -->
+                          <ng-select
+                            formControlName="campusId"
+                            bindLabel="campusId"
+                            placeholder="Select Campus"
+                            [searchable]="true"
+                            [clearable]="false"
+                            (change)="changeCourseIntake()"
+                          >
+                            <ng-option
+                              [value]="item.campusId"
+                              [disabled]="item.disabled"
+                              *ngFor="let item of CampusData"
+                            >
+                              {{ item.campusName }}
+                            </ng-option>
+                          </ng-select>
+                          <div
+                            *ngIf="
+                              isDeferOfferSubmitted &&
+                              fDeferOffer['campusId'].errors
+                            "
+                          >
+                            <span
+                              *ngIf="fDeferOffer['campusId'].errors['required']"
+                              class="text-danger"
+                              >Please choose campus.</span
+                            >
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="!isAnyDeferOfferSelected">
+                        <span class="text-danger"
+                          >Please choose valid criteria to defer offer.</span
+                        >
+                      </div>
+                      <div *ngIf="changeCampusError" class="text-danger">
+                        *If you change campus you must need to change intake and
+                        course as well
+                      </div>
+                    </div>
+                    <div class="mt-2">
+                      <button
+                        type="button"
+                        class="btn btn-light me-2"
+                        (click)="CancelDeferPage()"
+                      >
+                        Cancel
+                      </button>
+                      <button type="submit" class="btn btn-success">
+                        Defer Offer
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #OfferModel let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title {{ modalTitleClass }}" id="modal-basic-title">
+          {{ modalTitle }}
+        </h4>
+        <button
+          type="button"
+          class="close btn"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <span aria-hidden="true">
+            <h3>×</h3>
+          </span>
+        </button>
+      </div>
+      <form [formGroup]="OfferModelForm" (ngSubmit)="updateOfferStatus()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12">
+              <input type="hidden" formControlName="offerType" />
+              <!-- <input type="text-area" formControlName="comment" class="form-control" placeholder="Please add your comments"> -->
+              <label class="form-label fw-600 text-capitalize"
+                >Decline Reason <span class="text-danger">*</span></label
+              >
+              <ng-select
+                formControlName="comment"
+                bindLabel="comment"
+                placeholder="Select Reject Reason"
+                [searchable]="true"
+                [clearable]="false"
+                (change)="CheckReasonStatus($event)"
+              >
+                <ng-option
+                  [value]="item.reason"
+                  [disabled]="item.disabled"
+                  *ngFor="let item of OfferRejectDroupDownData"
+                >
+                  {{ item.reason }}
+                </ng-option>
+              </ng-select>
+              <div *ngIf="isModelSubmitted && fModal['comment'].errors">
+                <span
+                  *ngIf="fModal['comment'].errors['required']"
+                  class="text-danger"
+                  >Please Choose Reason.</span
+                >
+              </div>
+              <input
+                type="text-area"
+                *ngIf="isRejectOther"
+                formControlName="reasonComment"
+                class="form-control mt-2"
+                placeholder="Please add your comments"
+              />
+              <div *ngIf="isModelSubmitted && fModal['reasonComment'].errors">
+                <span
+                  *ngIf="fModal['reasonComment'].errors['required']"
+                  class="text-danger"
+                  >Please add valid reason.</span
+                >
+              </div>
+
+              <!-- <textarea aria-setsize="50 40" placeholder="write your comment here"></textarea> -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-warning"
+            (click)="modal.dismiss('Cross click')"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template #DeferOfferModel let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title {{ modalTitleClass }}" id="modal-basic-title">
+          {{ modalTitle }}
+        </h4>
+        <button
+          type="button"
+          class="close btn"
+          aria-label="Close"
+          (click)="modal.dismiss('Cross click')"
+        >
+          <span aria-hidden="true">
+            <h3>×</h3>
+          </span>
+        </button>
+      </div>
+      <form
+        [formGroup]="DeferOfferModelForm"
+        (ngSubmit)="updateDeferOfferStatus()"
+      >
+        <div class="modal-body">
+          <div class="row">
+            <input type="hidden" formControlName="offerType" />
+            <div class="col-md-12 mb-3">
+              <label class="form-label fw-600 text-capitalize"
+                >Select Options<span class="text-danger">*</span></label
+              >
+              <ng-select
+                placeholder="Select Option"
+                [searchable]="true"
+                [clearable]="false"
+                (change)="ChengeOption($event)"
+              >
+                <ng-option [value]="1">Change Intake </ng-option>
+                <ng-option [value]="2">Change Campus </ng-option>
+                <ng-option [value]="3">Change Course </ng-option>
+                <ng-option [value]="4">Change Intake And Course </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  !isIntake &&
+                  !isCourse &&
+                  !isCampus &&
+                  !isComment &&
+                  isDeferModelSubmitted
+                "
+              >
+                <span class="text-danger">Please choose option.</span>
+              </div>
+            </div>
+            <div class="col-md-12 mb-3" *ngIf="isIntake">
+              <label class="form-label fw-600 text-capitalize" *ngIf="isIntake"
+                >Intakes <span class="text-danger">*</span></label
+              >
+              <ng-select
+                formControlName="intakeId"
+                bindLabel="intakeId"
+                *ngIf="isIntake"
+                placeholder="Select intake"
+                [searchable]="true"
+                [clearable]="false"
+                [(ngModel)]="selectedIntake"
+              >
+                <ng-option
+                  [value]="item.intakeId"
+                  [disabled]="item.disabled"
+                  *ngFor="let item of intakeData"
+                >
+                  {{ item.intakeName }}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  isDeferModelSubmitted && fDefer['intakeId'].errors && isIntake
+                "
+              >
+                <span
+                  *ngIf="fDefer['intakeId'].errors['required']"
+                  class="text-danger"
+                  >Please choose Intake.</span
+                >
+              </div>
+            </div>
+            <div class="col-md-12 mb-3" *ngIf="isCourse">
+              <label class="form-label fw-600 text-capitalize" *ngIf="isCourse"
+                >Course <span class="text-danger">*</span></label
+              >
+              <ng-select
+                formControlName="courseId"
+                bindLabel="courseId"
+                *ngIf="isCourse"
+                placeholder="Select Course"
+                [searchable]="true"
+                [clearable]="false"
+                [(ngModel)]="selectedCourse"
+              >
+                <ng-option
+                  [value]="item.courseId"
+                  [disabled]="item.disabled"
+                  *ngFor="let item of CourseData"
+                >
+                  {{ item.courseName }}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  isDeferModelSubmitted && fDefer['courseId'].errors && isCourse
+                "
+              >
+                <span
+                  *ngIf="fDefer['courseId'].errors['required']"
+                  class="text-danger"
+                  >Please choose course.</span
+                >
+              </div>
+            </div>
+            <div class="col-md-12 mb-3" *ngIf="isCampus">
+              <label class="form-label fw-600 text-capitalize" *ngIf="isCampus"
+                >Campus <span class="text-danger">*</span></label
+              >
+              <ng-select
+                formControlName="campusId"
+                bindLabel="campusId"
+                *ngIf="isCampus"
+                placeholder="Select Campus"
+                [searchable]="true"
+                [clearable]="false"
+                [(ngModel)]="selectedCampuse"
+              >
+                <ng-option
+                  [value]="item.campusId"
+                  [disabled]="item.disabled"
+                  *ngFor="let item of CampusData"
+                >
+                  {{ item.campusName }}
+                </ng-option>
+              </ng-select>
+              <div
+                *ngIf="
+                  isDeferModelSubmitted && fDefer['campusId'].errors && isCampus
+                "
+              >
+                <span
+                  *ngIf="fDefer['campusId'].errors['required']"
+                  class="text-danger"
+                  >Please choose campus.</span
+                >
+              </div>
+            </div>
+            <div class="col-md-12 mb-3" *ngIf="isComment">
+              <label class="form-label fw-600 text-capitalize" *ngIf="isComment"
+                >comment <span class="text-danger">*</span></label
+              >
+              <input
+                type="text-area"
+                formControlName="comment"
+                class="form-control"
+                *ngIf="isComment"
+                placeholder="Please add your comments"
+              />
+              <div
+                *ngIf="
+                  isDeferModelSubmitted && fDefer['comment'].errors && isComment
+                "
+              >
+                <span
+                  *ngIf="fModal['comment'].errors['required']"
+                  class="text-danger"
+                  >Please enter your comment.</span
+                >
+              </div>
+            </div>
+            <!-- <div class="col-md-12">
+                    <input type="hidden" formControlName="offerType">
+                    <input type="text-area" formControlName="comment" class="form-control"
+                        placeholder="Please add your comments">
+                     <textarea aria-setsize="50 40" placeholder="write your comment here"></textarea>
+                </div> -->
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-warning"
+            (click)="modal.dismiss('Cross click')"
+          >
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </ng-template>
+
+    <ng-template #MultipleDocumentUrlModal let-modal>
+      <div class="modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Document Receipt</h4>
+            <button
+              type="button"
+              class="close btn"
+              aria-label="Close"
+              (click)="modal.dismiss('Cross click')"
+            >
+              <span aria-hidden="true">
+                <h3>×</h3>
+              </span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="DocumentMultipleModel">
+              <div *ngFor="let DocName of MultipleDocUment">
+                <p>
+                  <b>{{ DocName.fileName }}</b>
+                </p>
+                <div *ngIf="DocName?.file.split('.').pop() == 'pdf'">
+                  <iframe
+                    class="w-100 vh-50 mb-2 mt-2"
+                    [src]="DocName.fileUrl"
+                  ></iframe>
+                </div>
+                <div *ngIf="DocName?.file.split('.').pop() != 'pdf'">
+                  <img class="w-100 vh-50 mb-2 mt-2" [src]="DocName.fileUrl" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              (click)="modal.dismiss('Cross click')"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>
+
+<ng-template #documentModel let-modal>
+  <div class="modal-header py-2">
+    <h4 class="modal-title" id="modal-basic-title">Term and Condition</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 pb-2">
+          <input type="hidden" formControlName="docId" />
+          <input type="hidden" formControlName="applicationId" />
+          <label class="form-label mt-2"
+            >Choose Document(Png,Jpeg or Pdf)<span class="text-danger"
+              >*</span
+            ></label
+          >
+          <input
+            type="file"
+            formControlName="documentFile"
+            class="form-control"
+            (change)="convertFileToBase64($event)"
+          />
+          <div *ngIf="!isValidFile">
+            <span class="text-danger">Please choose valid file type.</span>
+          </div>
+          <div
+            *ngIf="
+              (isReSubmitFormSubmitted && base64File == '') ||
+              (isReSubmitFormSubmitted && base64File == null)
+            "
+          >
+            <span class="text-danger">Please choose file</span>
+          </div>
+          <!-- <div *ngIf="isFormSubmitted && f['documentFile'].errors">
+            <span *ngIf="f['documentFile'].errors['required']" class="text-danger">Please chose file</span>
+          </div> -->
+        </div>
+        <!-- <div id="NewDocUPLoad"></div> -->
+      </div>
+      <!-- <div class="text-end">
+        <button type="button" class="btn btn-warning" (click)="NewDocUp()">AddNew</button>
+      </div> -->
+    </div>
+    <div class="modal-footer">
+      <button
+        type="button"
+        class="btn btn-warning"
+        (click)="modal.dismiss('Cross click')"
+      >
+        Cancel
+      </button>
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #OfferConditionModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Offer Condition</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <!-- <form [formGroup]="fullfilForm" (ngSubmit)="SaveFullfil()"> -->
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-12 mb-3" *ngFor="let condition of offerConditions">
+        <input
+          type="checkbox"
+          *ngIf="condition.isFullFil"
+          checked
+          id="oc_{{ condition.conditionOfferId }}"
+          disabled
+        />
+        <input
+          type="checkbox"
+          *ngIf="!condition.isFullFil"
+          id="oc_{{ condition.conditionOfferId }}"
+          disabled
+        /><label
+          class="ms-2"
+          for="oc_{{ condition.conditionOfferId }}"
+          value="{{ condition.conditionOfferId }}"
+          >{{ condition.condtion }}</label
+        >
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-md-12 text-end">
+        <button
+          type="button"
+          class="btn btn-danger me-2"
+          (click)="modal.dismiss()"
+        >
+          Close
+        </button>
+        <!-- <button type="submit" class="btn btn-success" (click)="SaveFullfil()">Save</button> -->
+      </div>
+    </div>
+  </div>
+  <!-- </form> -->
+</ng-template>

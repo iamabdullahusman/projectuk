@@ -1,0 +1,498 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    User
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button
+          class="btn btn-primary float-end my-2 mr-2"
+          (click)="open(mymodal)"
+        >
+          Create New
+        </button>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="All" (click)="loadUsers(0)"> </mat-tab>
+    <mat-tab label="Admin" (click)="loadUsers(1)"> </mat-tab>
+    <mat-tab label="Teacher" (click)="loadUsers(8)"> </mat-tab>
+    <!-- <mat-tab label="Admission Department" (click)="loadUsers(2)"> </mat-tab> -->
+    <mat-tab label="Regional Manager" (click)="loadUsers(3)"> </mat-tab>
+    <mat-tab label="Agent" (click)="loadUsers(4)"> </mat-tab>
+    <mat-tab label="Student" (click)="loadUsers(5)"> </mat-tab>
+    <mat-tab label="Parent" (click)="loadUsers(6)"> </mat-tab>
+    <mat-tab label="Sponsor" (click)="loadUsers(7)"> </mat-tab>
+  </mat-tab-group>
+  <br />
+  <div
+    class="table-responsive p-3"
+    [ngClass]="{ 'no-data': userdetails.length === 0 }"
+  >
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="align-middle mb-0 table table-striped table-borderless table-hover"
+    >
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 5%">No.</th>
+          <th class="text-left" style="width: 30%">Name</th>
+          <th class="text-left" tyle="width: 30%">Email</th>
+          <th class="text-left" style="width: 30%">User Role</th>
+          <th class="text-left" style="width: 5%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of userdetails; let i = index">
+          <td class="text-left">
+            {{ user.index }}
+          </td>
+          <td class="text-left text-capitalize">
+            {{ user.fullName }}
+          </td>
+          <td class="text-left">
+            {{ user.email }}
+          </td>
+          <td class="text-left">
+
+            {{ user.userTypeName }}
+          
+          </td>
+          <td class="text-left text-nowrap">
+            <button class="btn btn-primary me-1" (click)="edit(mymodal, i)">
+              Edit
+            </button>
+
+            <button class="me-1 btn btn-success btn-sm" routerLink="/teacher/view/{{ user.teacherId}}" *ngIf="user.userTypeName === 'Teacher'">
+              View
+            </button>
+
+         <!--   
+           <button class="me-1 btn btn-primary btn-sm" (click)="view(user.userId)" *ngIf="user.userTypeName === 'Teacher' || user.userTypeName === 'Student'">
+              View
+            </button>  
+            <a
+            class="me-1 btn btn-primary btn-sm"
+            routerLink="/teacher/view/{{ user.userId }}"
+            title="View"
+            ><i class="fa fa-eye"></i
+          ></a>
+
+          <a routerLink="/teacher/view/{{user.userId}}" class="btn btn-warning btn-sm me-1" title="slot">
+            <i class="fa fa-gear"></i>
+          </a> 
+        -->
+
+
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">User</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="onCloseClick()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="SaveUser()">
+    <div class="modal-body">
+      <div class="row">
+        <!-- <input 
+        type="tel" 
+        id="phone5656565" 
+      /> -->
+        <div class="col-md-12">
+          <input type="hidden" formControlName="userId" />
+          <label class="form-label"
+            >User Role<span class="text-danger">*</span></label
+          >
+          <select
+            name="user"
+            id="#"
+            class="form-control"
+            formControlName="userType"
+            (change)="ChangeUserRole()"
+            [(ngModel)]="nrSelect"
+          >
+            <option value="" disabled>Select Type</option>
+            <option value="1">Admin</option>
+            <!-- <option value="2">Admission Department</option> -->
+            <option value="3">Regional manager</option>
+            <option value="4">Agent</option>
+            <option value="5">Student</option>
+            <option value="6">Parent</option>
+            <option value="7">Sponsor</option>
+            <option value="8">Teacher</option>
+          </select>
+          <div *ngIf="isSubmitted && f['userType'].errors">
+            <span *ngIf="f['userType'].errors['required']" class="text-danger"
+              >Usertype is required.</span
+            >
+          </div>
+        </div>
+      
+      
+      
+        <div class="col-md-6 mt-2">
+          <label class="form-label"
+            >First Name <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="firstName"
+            class="form-control"
+            placeholder="Enter First Name"
+          />
+          <div *ngIf="isSubmitted && f['firstName'].errors">
+            <span *ngIf="f['firstName'].errors['required']" class="text-danger"
+              >First name is required.</span
+            >
+            <span *ngIf="f['firstName'].errors['pattern']" class="text-danger"
+              >Please enter valid name.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-6 mt-2">
+          <label class="form-label"
+            >Last Name <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="lastName"
+            class="form-control"
+            placeholder="Enter Last Name"
+          />
+          <div *ngIf="isSubmitted && f['lastName'].errors">
+            <span *ngIf="f['lastName'].errors['required']" class="text-danger"
+              >Last name is required.</span
+            >
+            <span *ngIf="f['lastName'].errors['pattern']" class="text-danger"
+              >Please enter valid name.</span
+            >
+          </div>
+        </div>
+
+
+
+        
+
+
+        <div [ngClass]="{
+          'col-md-6': nrSelect == '8',
+          'col-md-12': nrSelect != '8' 
+        }"
+        class="mt-2">
+          <label class="form-label"
+            >Email <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            *ngIf="isNew == false"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter Email"
+            disabled
+          />
+          <input
+            type="text"
+            *ngIf="isNew != false"
+            formControlName="email"
+            class="form-control"
+            placeholder="Enter Email"
+          />
+          <div *ngIf="isSubmitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']" class="text-danger"
+              >Email is required.</span
+            >
+            <span *ngIf="f['email'].errors['pattern']" class="text-danger"
+              >Please enter valid email.</span
+            >
+          </div>
+        </div>
+        <div [ngClass]="{
+          'col-md-6': nrSelect == '8',
+          'col-md-12': nrSelect != '8'
+        }"
+        class="mt-2" *ngIf= 'hidePassword == true'>
+          <label class="form-label"
+            >password <span class="text-danger">*</span></label
+          >
+          <input
+            type="password"
+            formControlName="password"
+            class="form-control"
+            placeholder="Enter Password"
+          />
+          <div *ngIf="isSubmitted && f['password'].errors">
+            <span *ngIf="f['password'].errors['required']" class="text-danger"
+              >Password is required.</span
+            >
+            <span *ngIf="f['password'].errors['pattern']" class="text-danger"
+              > Please enter a valid password. It must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character (@$=!#%*?&).</span
+            > 
+          </div>
+        </div>
+
+        <div class="col-md-12 mt-2" *ngIf="nrSelect == '3'">
+          <label class="form-label"
+            >Country <span class="text-danger">*</span></label
+          >
+          <div style="width: 100%">
+            <ng-select
+              formControlName="rCountries"
+              bindLabel="rCountries"
+              placeholder="Select Country"
+              [searchable]="true"
+              [clearable]="true"
+              [(ngModel)]="country1"
+              multiple="true"
+            >
+              <ng-option
+                *ngFor="let country of countries1"
+                [value]="country.countryId"
+                [disabled]="country.disabled"
+              >
+                {{ country.countryName }}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="isSubmitted && f['rCountries'].errors">
+              <span
+                *ngIf="f['rCountries'].errors['required']"
+                class="text-danger"
+                >Country is required.</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2" *ngIf="nrSelect == '4'">
+          <label class="form-label"
+            >Country <span class="text-danger">*</span></label
+          >
+          <div style="width: 100%">
+            <ng-select
+              formControlName="countries"
+              bindLabel="countries"
+              placeholder="Select Country"
+              [searchable]="true"
+              [clearable]="true"
+              [(ngModel)]="agentCountryId"
+              (ngModelChange)="changeContry($event)"
+              required
+            >
+              <ng-option
+                *ngFor="let country of countries1"
+                [value]="country.countryId"
+                [disabled]="country.disabled"
+              >
+                {{ country.countryName }}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="isSubmitted && f['countries'].errors">
+              <span
+                *ngIf="f['countries'].errors['required']"
+                class="text-danger"
+                >Please choose country</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2" *ngIf="nrSelect == '4'">
+          <label class="form-label"
+            >City <span class="text-danger">*</span></label
+          >
+          <div style="width: 100%">
+            <ng-select
+              formControlName="cities"
+              placeholder="Select City"
+              [searchable]="true"
+              [clearable]="true"
+              [(ngModel)]="agentCityId"
+              required
+            >
+              <ng-option
+                *ngFor="let city of dCities"
+                [value]="city.cityId"
+                [disabled]="city.disabled"
+                style="z-index: 1060; margin-left: 33px"
+              >
+                {{ city.cityName }}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="isSubmitted && f['cities'].errors">
+              <span *ngIf="f['cities'].errors['required']" class="text-danger"
+                >Please choose city</span
+              >
+            </div>
+          </div>
+        </div>
+        
+        <div *ngIf="checktoResetForm == false">
+          <div class="col-md-12 mt-2">
+            <!-- This will push Mobile Phone Number to the next line -->
+          </div>
+        </div>
+
+        
+        <!-- For Mobile Teacher -->
+        <div class="col-md-6 mt-2" *ngIf="nrSelect == '8'">
+         
+          
+          <label class="form-label"
+          >Mobile Phone No. <span class="text-danger">*</span></label
+        >
+        <div class="input-group">
+          <input  class="form-control col-md-1" formControlName="contactNo"  placeholder="Enter Phone Number"  id="phoneInputId" type="tel"/>
+        <!-- <select class="form-select" formControlName="countryCode"  [(ngModel)]="selectedCountryCode" (change)="onCountryCodeChange($event)" >
+          <option *ngFor="let code of countryCodes" [value]="code.dial_code" [selected]="code.dial_code === selectedCountryCode" >
+            {{ code.dial_code }}  ({{ code.name }}) 
+          </option>
+        </select>
+        <input
+          type="text"
+          formControlName="contactNo"
+          class="form-control"
+          placeholder="Enter Mobile Phone No."  style="width: 125px;"
+        /> -->
+      </div>
+          <div style="width: 100%">
+            <div *ngIf="isSubmitted && f['contactNo'].errors">
+              <span
+                *ngIf="f['contactNo'].errors['required']"
+                class="text-danger"
+                >Mobile Phone Number is required.</span
+              >
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Home Number </label
+        >
+        <input
+          type="text"
+          formControlName="homeNumber"
+          class="form-control"
+          placeholder="Enter Home No."
+        />
+        </div>
+        <div class="col-md-6 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Date Of Birth </label
+        >
+        <input
+          type="date"
+          formControlName="dateOfBirth"
+          class="form-control"
+          placeholder="Enter Date of Birth"
+        />
+        </div>
+
+
+        <div class="col-md-6 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Address </label
+        >
+        <input
+          type="text"
+          formControlName="address"
+          class="form-control"
+          placeholder="Enter Address"
+        />
+        </div>
+
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Name 1 </label
+        >
+        <input
+          type="text"
+          formControlName="emergencyContactName1"
+          class="form-control"
+          placeholder="Enter Name"
+        />
+        </div>
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Address 1</label
+        >
+        <input
+          type="text"
+          formControlName="emergencyAddress1"
+          class="form-control"
+          placeholder="Enter Address"
+        />
+        </div>
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Number 1</label
+        >
+        
+      
+        <input
+          type="text"
+          formControlName="emergencyNumber1"
+          class="form-control"
+          placeholder="Enter Contact" 
+        />
+      
+        </div>
+
+
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Name 2 </label
+        >
+        <input
+          type="text"
+          formControlName="emergencyContactName2"
+          class="form-control"
+          placeholder="Enter Name"
+        />
+        </div>
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Address 2</label
+        >
+        <input
+          type="text"
+          formControlName="emergencyAddress2"
+          class="form-control"
+          placeholder="Enter Address "
+        />
+        </div>
+        <div class="col-md-4 mt-2" *ngIf="nrSelect == '8'">
+          <label class="form-label"
+          >Emergency Contact Number 2</label
+        >
+        <input
+          type="text"
+          formControlName="emergencyNumber2"
+          class="form-control"
+          placeholder="Enter Number"
+        />
+        </div>
+        <div class="col-md-12 mt-2"  *ngIf="nrSelect == '8'">
+          <label class="form-label fw-600">CV</label>
+          <input
+            type="file"
+            class="form-control"
+            (change)="onFileChoose($event)"
+          />
+        </div>
+
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+  </form>
+</ng-template>

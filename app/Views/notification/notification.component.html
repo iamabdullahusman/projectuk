@@ -1,0 +1,49 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        <h4 class="text-muted">Notification</h4>
+        <div class="btn-actions-pane-right">
+            <div role="group" class="btn-group-sm btn-group">
+              <button class="btn btn-primary float-end my-2 mr-2 me-5" (click)="AllNotificationRead()">Read All Notification</button>
+            </div>
+          </div>
+        <!-- <div class="btn-actions-pane-right btn btn-primary" (click)="exportCSV()">Export</div> -->
+    </div>
+    <div class="enquiryTable p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        Notification Date
+                    </th>
+                    <th class="text-left">
+                        Notification Description
+                    </th>
+                    <th class="text-left">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let user of Notificationdata;let i=index">
+                    <td class="text-left">
+                        {{user.createdDate | date:'dd/MM/yyyy hh:mm'}}
+                    </td>
+                    <td class="text-left">
+                        {{user.discription}} 
+                    </td>
+                    <td class="text-left text-nowrap">
+                        <mat-slide-toggle [matTooltip]="user.isRead?'Mark as unread':'Mark as read'"
+                            matTooltipPosition="above" class="example-margin" [color]="color" [checked]="user.isRead"
+                            (change)="IsReadNotifications(user.notificationmapping,$event)">
+                        </mat-slide-toggle>
+                    </td>
+                </tr>
+                <tr *ngIf="Notificationdata.length == 0">
+                    <td colspan="5" class="text-center">No record found.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

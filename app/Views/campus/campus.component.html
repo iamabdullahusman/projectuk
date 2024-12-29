@@ -1,0 +1,200 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Campus
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal(campusModal)">
+          Add Campus
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 5%;">
+            No.
+          </th>
+          <th class="text-left" style="width: 30%;">
+            Campus Name
+          </th>
+          <th class="text-left" style="width: 30%;">
+            Country Name
+          </th>
+          <th class="text-left" style="width: 30%;">
+            City Name
+          </th>
+          <th class="text-left" style="width: 5%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let campus of campuses;let i=index">
+          <td class="text-left">
+            {{campus.index}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{campus.campusName}}
+          </td>
+          <td class="text-left">
+            {{campus.countryName}}
+          </td>
+          <td class="text-left">
+            {{campus.cityName}}
+          </td>
+          <td class="text-left text-nowrap">
+            <button class="me-1 btn btn-success btn-sm" (click)="openModal(campusModal,campus.campusId,false)"
+              title="Edit"><i class="fa fa-pencil"></i></button>
+            <button class="me-1 btn btn-primary btn-sm" (click)="openModal(campusModal,campus.campusId,true)"
+              title="View"><i class="fa fa-eye"></i></button>
+
+            <button class="btn btn-danger btn-sm" (click)="deleteCampus(campus.campusId)" title="Delete"><i
+                class="fa fa-trash"></i></button>
+
+          </td>
+        </tr>
+        <tr *ngIf="campuses.length==0">
+          <td colspan="5" class="text-center">No campus found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #campusModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="campusForm" (ngSubmit)="SaveCampus()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="campusId">
+          <label class="form-label">Campus Name <span class="text-danger">*</span></label>
+          <input type="text" formControlName="campusName" class="form-control" placeholder="Enter Campus Name">
+          <div *ngIf="isSubmitted && f['campusName'].errors">
+            <span *ngIf="f['campusName'].errors['required']" class="text-danger">Campus name is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="campusId">
+          <label class="form-label">Country Name <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="countryId" (change)="changeContry()">
+            <option value="">Select Country Name</option>
+            <option *ngFor="let country of countries" value="{{country.countryId}}">{{country.countryName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['countryId'].errors">
+            <span *ngIf="f['countryId'].errors['required']" class="text-danger">Country is required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="campusId">
+          <label class="form-label">City <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="cityId">
+            <option value="">Select City Name</option>
+            <option *ngFor="let city of cities" value="{{city.cityId}}">{{city.cityName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['cityId'].errors">
+            <span *ngIf="f['cityId'].errors['required']" class="text-danger">City is required.</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row mt-2">
+        <div class="col-sm-7 text-center">
+          <div class="d-flex">
+            <div class="col-sm-5">Couse Name</div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2">Start Date</div>
+            <div class="col-sm-1"></div>
+            <div class="col-sm-2">End Date</div>
+          </div>
+        </div>
+        <div class="col-sm-5 text-center">
+          <div class="d-flex">
+            <div class="col-sm-4 me-2">Intake Month</div>
+            <div class="col-sm-3">Start Date</div>
+            <div class="col-sm-1 me-2"></div>
+            <div class="col-sm-2">End Date</div>
+          </div>
+        </div>
+      </div>
+      <div class="row mt-2" *ngFor="let c of courses">
+        <div class="position-relative col-sm-7">
+          <div>
+            <div class="custom-checkbox custom-control form-check">
+              <input type="checkbox" id="course{{c.courseId}}" class="form-check-input" value="{{c.courseId}}"
+                [checked]="checkedCourse(c.courseId)" (change)="onCourseChecked($event)" [disabled]="isView">
+              <label for="course{{c.courseId}}" class="form-label mx-1 row form-check-label">
+                <div class="col-sm-6">{{c.courseName}}</div>
+                <div class="col-sm-3">{{c.startDate | date:"dd MMM ''yy"}}</div>
+                <div class="col-sm-3">{{c.endDate | date:"dd MMM ''yy"}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="position-relative col-sm-5">
+          <div>
+            <div class="form-check " *ngFor="let i of c.intakes">
+              <input class="form-check-input" type="checkbox" id="i{{c.courseId}}{{i.intakeId}}"
+                value="{{c.courseId}},{{i.intakeId}}" [checked]="checkhedIntake(c.courseId, i.intakeId)"
+                (change)="onIntakeChange($event)" [disabled]="isView">
+              <label class="form-check-label mx-1
+               row" for="i{{c.courseId}}{{i.intakeId}}">
+                <div class="col-sm-4">{{i.intakeName}}</div>
+                <div class="col-sm-4">{{i.startDate | date:"dd MMM ''yy"}}</div>
+                <div class="col-sm-4">{{i.endDate | date:"dd MMM ''yy"}}</div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="isSubmitted && f['course'].errors">
+        <span *ngIf="f['course'].errors['required']" class="text-danger">Course and Intake are required.</span>
+        <span *ngIf="f['course'].errors && !f['course'].errors['required']" class="text-danger">Please select
+          Intake of course.</span>
+      </div> -->
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save" *ngIf="!isView">
+    </div>
+  </form>
+</ng-template>
+<ng-template #documentModel let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <input type="hidden" formControlName="docId">
+          <input type="hidden" formControlName="applicationId">
+          <input type="file" formControlName="documentFile" class="form-control" (change)="convertFileToBase64($event)">
+          <div *ngIf="isFormSubmitted && f['documentFile'].errors">
+            <span *ngIf="f['documentFile'].errors['required']" class="text-danger">Please chose file</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  </form>
+</ng-template>

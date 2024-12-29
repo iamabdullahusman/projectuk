@@ -1,0 +1,71 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Condition
+        <div class="btn-actions-pane-right">
+            <div role="group" class="btn-group-sm btn-group">
+                <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal('',false)">
+                    Add Condition
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle mb-0 table table-borderless table-striped table-hover">
+            <thead>
+                <tr>
+
+                    <th class="text-left">
+                        Condition
+                    </th>
+                    <th class="text-left">
+                        Created By
+                    </th>
+                    <th class="text-left">
+                        Created Date
+                    </th>
+                    <th class="text-left">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+<input type="hidden" (click)="clickEdit($event)" id="hdnClickEdit" />
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />
+<input type="hidden" (click)="DeleteCondition($event)" id="hdnClickDelete" />
+<ng-template #conditionModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <form [formGroup]="conditionForm" (ngSubmit)="SaveCondition()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <input type="hidden" formControlName="ConditonId">
+                    <label class="form-label">Condition<span class="text-danger">*</span></label>
+                    <input type="text" formControlName="Condtion" class="form-control" placeholder="Enter Condition">
+                    <div *ngIf="isSubmitted && f['Condtion'].errors">
+                        <span *ngIf="f['Condtion'].errors['required']" class="text-danger">Condition is
+                            required.</span>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+            <input type="submit" class="btn btn-primary" *ngIf="!hasViewModel" value="Save">
+        </div>
+    </form>
+</ng-template>

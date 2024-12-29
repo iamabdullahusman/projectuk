@@ -1,0 +1,111 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Email Event
+  <!--  <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end m-2 mr-2" (click)="openModal(EmailModal)">Add Email Event Name</button>
+      </div>
+    </div> -->
+  </div>
+
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions"
+      class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 35%;">
+            Email Type
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Email Template Count
+          </th>
+          <th class="text-left" style="width: 10%;">
+            Created By
+          </th>
+          <th class="text-left" style="width: 20%;">
+            Created On
+          </th>
+          <th class="text-left" style="width: 20%;">
+            Action      
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #EmailModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="EmailTemplateForm" (ngSubmit)="SaveEmail()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="EmailTemplateTypeId">
+          <label class="form-label">Email Template Type Name <span class="text-danger">*</span></label>
+          <input type="text" formControlName="EmailTemplateTypeName" class="form-control"
+            placeholder="Enter Email Template Name">
+          <div *ngIf="f['EmailTemplateTypeName'].touched && f['EmailTemplateTypeName'].errors">
+            <span *ngIf="f['EmailTemplateTypeName'].errors['required']" class="text-danger">Email
+              Template
+              name is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Email Template Description <span class="text-danger">*</span></label>
+          <input type="text" formControlName="EmailTemplateTypeTitle" class="form-control"
+            placeholder="Enter Email Template Description">
+          <div *ngIf="f['EmailTemplateTypeTitle'].touched && f['EmailTemplateTypeTitle'].errors">
+            <span *ngIf="f['EmailTemplateTypeTitle'].errors['required']" class="text-danger">Email
+              Template
+              description is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Application Stage<span class="text-danger">*</span></label>
+          <ng-select formControlName="ApplicationType" [items]="ApplicationtypeList" bindLabel="stageName"
+            placeholder="Select Application Type." [searchable]="true" [clearable]="true" bindValue="stageId">
+          </ng-select>
+          <div *ngIf="f['ApplicationType'].touched && f['ApplicationType'].errors">
+            <span *ngIf="f['ApplicationType'].errors['required']" class="text-danger">Please
+              select Application Stage.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
+    </div>
+  </form>
+</ng-template>
+
+<form (ngSubmit)="editEmailTemplate()">
+  <input type="hidden" id="EmailTemplateId" value="" />
+  <input type="submit" id="editEmailTemplateCall" style="display: none;">
+</form>
+
+<form (ngSubmit)="viewEmailTemplate()">
+  <input type="hidden" id="EmailTemplateId" value="" />
+  <input type="hidden" id="ApplicationType" value="" />
+  <input type="submit" id="viewEmailTemplateCall" style="display: none;">
+</form>
+
+<form (ngSubmit)="deleteEmailTemplate()">
+  <input type="hidden" id="EmailTemplateId" value="" />
+  <input type="submit" id="deleteEmailTemplateCall" style="display: none;">
+</form>
+
+<!-- <input type="hidden" (click)="clickEdit($event)" id="hdnClickEdit" />
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />
+<input type="hidden" (click)="clickDelete($event)" id="hdnClickDelete" /> -->

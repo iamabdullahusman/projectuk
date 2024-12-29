@@ -1,0 +1,243 @@
+<!-- <app-page-title [heading]="heading" [subheading]="subheading" [icon]="icon" [clickEvent]="clickEvent"></app-page-title> -->
+
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        <h4 class="text-muted">Sponsor Request</h4>
+    </div>
+    <div class="enquiryTable p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+            <thead>
+                <tr>
+
+                    <th class="text-left">
+                        Sponsor Name
+                    </th>
+                    <th class="text-left">
+                        Status
+                    </th>
+                    <th class="text-left">
+                        Request Date
+                    </th>
+                    <th class="text-left">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let Sponsor of SponsorRequest">
+                    <td><span>{{Sponsor.sponcerName}}</span></td>
+                    <td > {{ Sponsor.statusName }}</td>
+                    <td>  <span >{{Sponsor.createdDate+'Z' | date:'dd/MM/yyyy hh:mm a'}}</span></td>
+                    <td> 
+                        <button class="btn btn-warning"
+                            (click)="ViewSponsorRequest(Sponsor.applicationId,Sponsor.sponsorId,Sponsor.status,Sponsor.sponcerName)">View</button>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #SponsorDetails let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-basic-title">
+            <b>Sponsor Details</b>
+        </h3>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">
+                <h3>×</h3>
+            </span>
+        </button>
+    </div>
+    <form [formGroup]="VerifiedSponsorForm">
+     
+       <div class="modal-body">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <!-- <input type="hidden" formControlName="sponsorId"> -->
+                    <label class="form-label fw-600 text-capitalize">SponsorType Name <span
+                            class="text-danger">*</span></label>
+                        <select class="form-control" formControlName="SponserType" [disabled]="true">
+                            <option [ngValue]="null"[disabled]="true">Other (Please Specify)</option>
+                            <!-- <option *ngFor="let feePayOption of feePayOptions" value="{{feePayOption.feePaybyId}}">
+                              {{feePayOption.feePaidPerson}}</option> -->
+                          </select>
+                    <!-- <div *ngIf="f['SponserType'].touched && f['SponserType'].errors">
+                        <span *ngIf="f['SponserType'].errors['required']" class="text-danger">SponsorType
+                            name is
+                            required.</span>
+                    </div> -->
+            </div>
+            <!-- <div class="col-md-6 mb-3">
+                    
+                <label class="form-label fw-600 text-capitalize">Sponsor Name<span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="SponcerName" class="form-control"
+                    placeholder="Enter Sponsor Name">
+                <div *ngIf="f['SponcerName'].touched && f['SponcerName'].errors">
+                    <span *ngIf="f['SponcerName'].errors['required']" class="text-danger">Sponsor
+                        name is
+                        required.</span>
+                </div>
+            </div> -->
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Sponsor Name 
+                    <span class="text-danger">*</span>
+                </label>
+                <input 
+                    type="text" 
+                    formControlName="SponcerName" 
+                    class="form-control" 
+                    placeholder="Enter Sponsor Name"
+                >
+                <div *ngIf="VerifiedSponsorForm.get('SponcerName').touched && VerifiedSponsorForm.get('SponcerName').errors">
+                    <span *ngIf="VerifiedSponsorForm.get('SponcerName').errors['required']" class="text-danger">
+                        Sponsor name is required.
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Authorized Person First Name <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="FirstName" class="form-control"
+                    placeholder="Enter Authorized Person Name">
+                <div *ngIf="f['FirstName'].touched && f['FirstName'].errors">
+                    <span *ngIf="f['FirstName'].errors['required']" class="text-danger">Authorized person
+                        first name is required </span>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Authorized Person Last Name <span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="LastName" class="form-control"
+                    placeholder="Enter Authorized Person Name">
+                <div *ngIf="f['LastName'].touched && f['LastName'].errors">
+                    <span *ngIf="f['LastName'].errors['required']" class="text-danger">Authorized person
+                        last name is required </span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Email Id<span class="text-danger">*</span></label>
+                <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter Email Id">
+                <div *ngIf="f['EmailId'].touched && f['EmailId'].errors">
+                    <span *ngIf="f['EmailId'].errors['required']" class="text-danger">Email Id is
+                        required</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Country<span class="text-danger">*</span></label>
+                <ng-select formControlName="CountryId" bindLabel="CountryId" (ngModelChange)="changeContry($event)"
+                    placeholder="Select Your Country" [searchable]="true" [clearable]="false">
+                    <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of Countrydata">
+                        {{item.countryName}}
+                    </ng-option>
+                </ng-select> 
+                <div *ngIf="isSubmitted && f['CountryId'].errors">
+                    <span *ngIf="f['CountryId'].errors['required']" class="text-danger">Country is
+                        required.</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">City <span class="text-danger">*</span></label>
+                <ng-select formControlName="CityId" bindLabel="cityName" placeholder="Select City"
+                    [searchable]="true" [clearable]="false" bindValue="cityId">
+                    <ng-option *ngFor="let city of citydata" [value]="city.cityId" [disabled]="city.disabled">
+                        {{city.cityName}}
+                    </ng-option>
+                </ng-select>
+                <div *ngIf="isSubmitted && f['CityId'].errors">
+                    <span *ngIf="f['CityId'].errors['required']" class="text-danger">Please choose city</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3 ">
+                <label class="form-label fw-600 text-capitalize">Address<span class="text-danger">*</span></label>
+                <textarea ng-model="Address" formControlName="Address" class="form-control"
+                    placeholder="Enter Your Address"></textarea>
+                <div *ngIf="f['Address'].touched && f['Address'].errors">
+                    <span *ngIf="f['Address'].errors['required']" class="text-danger">Address is required</span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Postal Code<span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="PostalCode" class="form-control"
+                    placeholder="Enter Contact Number">
+                <div *ngIf="f['PostalCode'].touched && f['PostalCode'].errors">
+                    <span *ngIf="f['PostalCode'].errors['required']" class="text-danger">Postal Code is
+                        required</span>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-600 text-capitalize">Contact Number<span
+                        class="text-danger">*</span></label>
+                <input type="text" formControlName="ContactDetail" class="form-control"
+                    placeholder="Enter Contact Number">
+                <div *ngIf="f['ContactDetail'].touched && f['ContactDetail'].errors">
+                    <span *ngIf="f['ContactDetail'].errors['required']" class="text-danger">Contact number is
+                        required</span>
+                </div>
+            </div>
+        </div>
+
+       </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+            <button type="submit" class="btn btn-success" (click)="verifirySponsor(true)"
+                >Approve</button>
+            <!-- <button type="submit" class="btn btn-success" (click)="verifirySponsor(true)">Verified</button> -->
+            <button type="submit" class="btn btn-danger" (click)="rejectSponsor(true)"
+                >Reject</button>
+                <!-- *ngIf="sponsorRequestStatus==1" -->
+        </div>
+
+    </form>
+</ng-template>
+
+<ng-template #SponsorReject let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-basic-title">
+            <b>Sponsor Reason message</b>
+        </h3>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">
+                <h3>×</h3>
+            </span>
+        </button>
+    </div>
+    <form [formGroup]="VerifiedSponsorForm">
+        <div class="modal-body">
+            <div class="row">
+
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label fw-600 text-capitalize">Reason <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" formControlName="reason">
+                    <div *ngIf="f['reason'].touched && f['reason'].errors">
+                        <span *ngIf="f['reason'].errors['required']" class="text-danger">Please enter reason
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+            <button type="submit" class="btn btn-success" (click)="verifirySponsor(false)"
+                *ngIf="sponsorRequestStatus==1">Submit</button>
+        </div>
+
+    </form>
+</ng-template>

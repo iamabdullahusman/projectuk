@@ -1,0 +1,323 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Fee
+    </div>
+
+    <!-- <label class="form-label fw-600 text-capitalize"></label> -->
+    <form [formGroup]="FeeForm" (ngSubmit)="saveFee()">
+        <div class="modal-body bg-white">
+            <div class="row">
+                <div class="col-sm-4 pb-2">
+                    <label class="form-label">Campus<span class="text-danger">*</span></label>
+                    <ng-select [items]="campuses" bindLabel="campusName" 
+                        placeholder="Select Campus" [searchable]="true" [clearable]="true" bindValue="campusId"
+                        formControlName="campusId">
+                        <!-- (change)="getCourseByCampus()" -->
+                    </ng-select>
+                    <div *ngIf="f['campusId'].touched && f['campusId'].errors">
+                        <span *ngIf="f['campusId'].errors['required']" class="text-danger">Please select
+                            Campus.</span>
+                    </div>
+                </div>
+                <div class="col-sm-4 pb-2">
+                    <label class="form-label">Course<span class="text-danger">*</span></label>
+                    <ng-select [items]="courses"  bindLabel="courseName"
+                        placeholder="Select Course" [searchable]="true" [clearable]="true" bindValue="courseId"
+                        formControlName="courseId">
+                        <!-- (change)="getIntakeByCampusCourse()" -->
+                    </ng-select>
+                    <div *ngIf="f['courseId'].touched && f['courseId'].errors">
+                        <span *ngIf="f['courseId'].errors['required']" class="text-danger">Please select
+                            Course.</span>
+                    </div>
+                </div>
+                <div class="col-sm-4 pb-2">
+                    <label class="form-label">Intake<span class="text-danger">*</span></label>
+                    <ng-select [items]="intakes" bindLabel="intakeName"  (change)="changedata()"
+                        placeholder="Select Intake" [searchable]="true" [clearable]="true" bindValue="intakeId"
+                        formControlName="intakeId">
+                    </ng-select>
+                    <!-- (change)="FeeAvailable()" -->
+                    <div *ngIf="f['intakeId'].touched && f['intakeId'].errors">
+                        <span *ngIf="f['intakeId'].errors['required']" class="text-danger">Please select
+                            Intake.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 pb-2 text-danger">
+                <span *ngIf="intakeCourseCampusErr == true" class="text-danger">For this Intake, Course and Campus Fee
+                    structure is already created.</span>
+            </div>
+            <div class="col-sm-12 pb-2">
+                <label class="form-label">Total Fee<span class="text-danger">*</span></label>
+                <div class="form-group input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">£</span>
+                    </div>
+                    <input type="number" class="form-control" placeholder="Enter Total fee" formControlName="totalFee" (keyup)="addInstallment()">
+                </div>
+                <div *ngIf="f['totalFee'].touched && f['totalFee'].errors">
+                    <span *ngIf="f['totalFee'].errors['required']" class="text-danger">Please enter
+                        Total Fee.</span>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Standard Fee<span class="text-danger">*</span></label>
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="number" class="form-control" (keyup)="Sum()" placeholder="Enter Standard Fee"
+                            formControlName="standardFee" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['standardFee'].touched && f['standardFee'].errors">
+                        <span *ngIf="f['standardFee'].errors['required']" class="text-danger">Please enter
+                            standard fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Registration Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="registrationFee"
+                            placeholder="Enter Registration Fee" class="form-control col-sm-12" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['registrationFee'].touched && f['registrationFee'].errors">
+                        <span *ngIf="f['registrationFee'].errors['required']" class="text-danger">Please enter
+                            Registration Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Practical Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="practicalFee"
+                            placeholder="Enter Practical Fee" class="form-control col-sm-12" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['practicalFee'].touched && f['practicalFee'].errors">
+                        <span *ngIf="f['practicalFee'].errors['required']" class="text-danger">Please enter
+                            Practical Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Material Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="materialFee"
+                            placeholder="Enter Material Fee" class="form-control col-sm-12" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['materialFee'].touched && f['materialFee'].errors">
+                        <span *ngIf="f['materialFee'].errors['required']" class="text-danger">Please enter
+                            Material Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Presessional Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="presessional"
+                            placeholder="Enter Presessional" class="form-control col-sm-12" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['presessional'].touched && f['presessional'].errors">
+                        <span *ngIf="f['presessional'].errors['required']" class="text-danger">Please enter
+                            Presessional Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Exam Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="examFee" placeholder="Enter Exam Fee"
+                            class="form-control col-sm-12" (keyup)="addInstallment()">
+                    </div>
+                    <div *ngIf="f['examFee'].touched && f['examFee'].errors">
+                        <span *ngIf="f['examFee'].errors['required']" class="text-danger">Please enter
+                            Exam Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Other Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="othersFee" placeholder="Enter Other Fee"
+                            class="form-control col-sm-12">
+                    </div>
+                    <div *ngIf="f['othersFee'].touched && f['othersFee'].errors">
+                        <span *ngIf="f['othersFee'].errors['required']" class="text-danger">Please enter
+                            Other Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Scholarship</label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" (keyup)="Sum()" formControlName="scholarship" placeholder="Enter Scholarship"
+                            class="form-control col-sm-12">
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Actual Total Fee<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" [(ngModel)]="actualTotalFee" disabled="true"
+                            [ngModelOptions]="{standalone: true}" class="form-control col-sm-12">
+                    </div>
+                    <div>
+                        <span class="text-danger" *ngIf="feeError == true">Sum of all the fee must be equal to total
+                            fee</span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Deposit Amount<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="number" formControlName="depositAmount" placeholder="Enter Deposit Amount"
+                            inputmode="numeric" class="form-control col-sm-12"
+                            (keyup)="setGrossFee();setInstallment(0)">
+                    </div>
+                    <div *ngIf="f['depositAmount'].touched && f['depositAmount'].errors">
+                        <span *ngIf="f['depositAmount'].errors['required']" class="text-danger">Please enter
+                            Deposit Amount.</span>
+                        <span *ngIf="f['depositAmount'].errors['depositError'] == true" class="text-danger">Please enter
+                            deposit
+                            amount
+                            less than actual fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Reservation Fee</label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" formControlName="reservationFee" placeholder="Enter Reservation Fee"
+                            class="form-control col-sm-12" >
+                    </div>
+                    <div *ngIf="f['reservationFee'].touched && f['reservationFee'].errors">
+                        <span *ngIf="f['reservationFee'].errors['required']" class="text-danger">Please enter
+                            Reservation Fee.</span>
+                    </div>
+                </div>
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Balance<span class="text-danger">*</span></label>
+
+                    <div class="form-group input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">£</span>
+                        </div>
+                        <input type="text" [(ngModel)]="grossFee" disabled="true" [ngModelOptions]="{standalone: true}"
+                            class="form-control col-sm-12" >
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="col-sm-12 pb-2">
+                <label class="form-label">Total Installments: <span class="text-danger">*</span></label>
+                <input type="text" formControlName="totalInstallments" (keyup)="addInstallment()"
+                    placeholder="Enter Total Installment" class="form-control col-sm-12">
+                <div *ngIf="f['totalInstallments'].touched && f['totalInstallments'].errors">
+                    <span *ngIf="f['totalInstallments'].errors['required']" class="text-danger">Please enter
+                        total Installment.</span>
+                </div>
+            </div>
+            <div formArrayName="installments">
+                <div class="row" *ngFor="let installment of installmentControls; let i = index" [formGroupName]="i">
+                    <div class="col-sm-3 pb-2">
+                        <label class="form-label">Installment {{i+1}} Due<span class="text-danger">*</span></label>
+                        <input type="date" formControlName="installmentDue" (change)="setMinimumInstallmentValues(i)"
+                            placeholder="Enter Installment Due" class="form-control col-sm-12"
+                            min="{{minmunInstallment[i]}}" max="{{maxduedate}}">
+                        <div
+                            *ngIf="installment.get('installmentDue').touched && installment.get('installmentDue').errors">
+                            <span *ngIf="installment.get('installmentDue').errors['required']"
+                                class="text-danger">Please
+                                enter
+                                Installment due date.</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 pb-2">
+                        <label class="form-label">Installment Amount<span class="text-danger">*</span></label>
+                        <div class="col-sm-12 row">
+                            <!-- <div class="col-sm-11"> -->
+
+                            <div class="form-group input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">£</span>
+                                </div>
+                                <input type="text" formControlName="installmentAmount"
+                                    placeholder="Enter Installment Amount" (keyup)="checkInstallment(i)"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div
+                            *ngIf="installment.get('installmentAmount').touched && installment.get('installmentAmount').errors">
+                            <span
+                                *ngIf="installment.get('installmentAmount').errors['required'] || installment.get('installmentAmount').errors.min"
+                                class="text-danger">Please
+                                enter
+                                Installment Amount.</span>
+                            <span *ngIf="installment.get('installmentAmount').errors['pattern']"
+                                class="text-danger">Please enter numeric data only.</span>
+                        </div>
+                        <span *ngIf="installmentError[i] == true" class="text-danger">Total amount of Installments
+                            must be
+                            equal to Balance</span>
+                        <span *ngIf="remainingInstallment != 0" class="text-danger">Still {{remainingInstallment}} is
+                            remaining in the Installment amount</span>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12 pb-2">
+                    <label class="form-label">Notes</label>
+                    <input type="text" formControlName="notes" placeholder="Enter Notes" class="form-control col-sm-12">
+                    <!-- <div *ngIf="f['notes'].touched && f['notes'].errors">
+                        <span *ngIf="f['notes'].errors['required']" class="text-danger">Please enter
+                            Total Fee.</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="submit" *ngIf="!isView" class="btn btn-success"
+                [disabled]="feeError || installmentFlag || installmentErr || intakeCourseCampusErr">Save</button>
+            <span>
+                <button type="button" class="btn btn-danger" (click)="closeFee()">Cancel</button>
+            </span>
+        </div>
+    </form>
+</div>

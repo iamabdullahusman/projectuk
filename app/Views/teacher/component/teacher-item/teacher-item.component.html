@@ -1,0 +1,9 @@
+<div [ngClass]="customClass" *ngIf="value" (click)="onClick()">
+    {{value}}
+</div>
+<div [ngClass]="customClass" *ngIf="!value" (click)="onClick()">
+    NA
+</div>
+<div class="fw-600">
+    {{label}}
+</div>

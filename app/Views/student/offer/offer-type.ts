@@ -1,0 +1,33 @@
+export const OFFERTYPE = {
+  0: "Offer Pending",
+  1: "Offer Declined",
+  2: "Offer Accepted",
+  3: "Defer offer Requested",
+  4: "Your offer Has Been Withdrawn",
+  5: "offer is On-Hold",
+  6: "offer is Expire",
+  7: "Defer offer request Accepted",
+  8: "Defer offer request rejected",
+  9: "Continued with offer",
+  10: "You Have Rejected this Offer",
+  11: "Offer has been canceled by Admin",
+  12: "Offer Requested",
+  13: "Approved",
+};
+
+export const OFFERTYPECLASS = {
+  0: "text-warning",
+  1: "text-danger",
+  2: "text-success",
+  3: "text-success",
+  4: "text-success",
+  5: "text-danger",
+  6: "text-danger",
+  7: "text-success",
+  8: "text-danger",
+  9: "text-success",
+  10: "text-danger",
+  11: "text-danger",
+  12: "text-primary",
+  13: "text-primary",
+};

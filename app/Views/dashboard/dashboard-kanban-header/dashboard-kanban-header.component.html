@@ -1,0 +1,50 @@
+<div class="kaban-header">
+  <div
+    class="card mb-3 widget-chart widget-chart2 text-start card-btm-border mt-0 py-0 px-3"
+    [ngClass]="mainClass"
+    [routerLink]="routeLink"
+    [queryParams]="{ offerType: queryParams }"
+  >
+    <div class="widget-chat-wrapper-outer">
+      <div class="widget-chart-content">
+        <div class="d-flex justify-content-between">
+            <div class="widget-chart-flex icon-text">
+              <i class="mt-1 vsm-icon fs-4" [ngClass]="icon"></i>
+              <span class="ms-2 fw-600 fsize-2 opacity-7">{{
+                applicationCount
+              }}</span>
+              <span class="ms-2 fsize-2 opacity-7">{{ stageName }}</span>
+            </div>
+            <div
+              class="m-0 p-0 small text-end fw-bold"
+              [ngClass]="newTextClass"
+              *ngIf="newCount > 0"
+            >
+              +{{ newCount }}
+            </div>
+        </div>
+        <div class="d-flex mt-4 justify-content-between">
+          <div *ngFor="let status of statuses">
+            <div
+              class="widget-heading fsize-1 mb-1 opacity-7 fw-600 text-center"
+            >
+              {{ status.count }}
+            </div>
+            <div class="widget-subheading mb-0 opacity-9 small-font">
+              {{ status.name }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="row mb-3 mx-0 rounded text-white py-2"
+    [ngClass]="linkClass"
+    [routerLink]="routeLink"
+  >
+    <div class="col-md-12">
+      <div class="stage-text float-start">{{ stageName }}</div>
+    </div>
+  </div>
+</div>

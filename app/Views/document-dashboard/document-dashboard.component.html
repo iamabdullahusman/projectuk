@@ -1,0 +1,359 @@
+<div class="application-header mb-4 p-2">
+  <div class="d-flex flex-row-reverse">
+    <!-- <div class=" d-flex"> -->
+    <div class="me-2 assign-label text-capitalize">
+      <div class="d-inline-block" ngbDropdown placement="bottom-right">
+        <button type="button" ngbDropdownToggle class="btn">
+          <span class="fa fa-filter btn btn-outline-dark fsize-1"></span>
+        </button>
+        <div ngbDropdownMenu class="dropdown-menu-xl">
+          <ul class="nav flex-column">
+            <form [formGroup]="filterForm" (submit)="loadData()">
+              <perfect-scrollbar [autoPropagation]="true" class="filter-scroll">
+                <li class="nav-item-header nav-item" style="color: black">
+                  Course
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select Course"
+                    [items]="courses"
+                    bindLabel="courseName"
+                    bindValue="courseId"
+                    [clearable]="false"
+                    formControlName="Course"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Stage
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select stage"
+                    [items]="applicationStages"
+                    bindLabel="stageName"
+                    bindValue="stageId"
+                    [clearable]="false"
+                    formControlName="Stage"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Applied Date
+                </li>
+                <li class="nav-item px-3">
+                  <input
+                    name="daterange"
+                    ngxDaterangepickerMd
+                    class="form-control"
+                    [(ngModel)]="AppliedDate"
+                    formControlName="AppliedDate"
+                    (keyup)="datePickerChange($event)"
+                  />
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Assigned To
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select Assigned To"
+                    [items]="assignedTo"
+                    bindLabel="userName"
+                    bindValue="userId"
+                    [clearable]="false"
+                    formControlName="AssignedTo"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Agent
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select Agent"
+                    [items]="agents"
+                    bindLabel="userName"
+                    bindValue="userId"
+                    [clearable]="false"
+                    formControlName="Agent"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li
+                  *ngIf="userType == 1"
+                  class="nav-item-header nav-item"
+                  style="color: black"
+                >
+                  RM
+                </li>
+                <li *ngIf="userType == 1" class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select RM"
+                    [items]="RMs"
+                    bindLabel="userName"
+                    bindValue="userId"
+                    [clearable]="false"
+                    formControlName="RM"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Country
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select Country"
+                    [items]="countries"
+                    bindLabel="countryName"
+                    bindValue="countryId"
+                    [clearable]="false"
+                    formControlName="Country"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Source
+                </li>
+                <li class="nav-item px-3">
+                  <ng-select
+                    placeholder="Select Source"
+                    [items]="sources"
+                    bindLabel="referenceName"
+                    bindValue="referenceId"
+                    [clearable]="false"
+                    formControlName="Source"
+                    multiple="true"
+                  >
+                  </ng-select>
+                </li>
+                <li class="nav-item-header nav-item" style="color: black">
+                  Application Name
+                </li>
+                <li class="nav-item px-3 pb-2">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="search application"
+                    formControlName="ApplicantName"
+                  />
+                </li>
+              </perfect-scrollbar>
+              <li class="nav-item-divider nav-item"></li>
+              <li class="text-center nav-item">
+                <button type="submit" class="btn btn-primary btn-sm me-2">
+                  Submit
+                </button>
+                &nbsp;
+                <button
+                  type="button"
+                  class="btn btn-danger btn-sm"
+                  (click)="clearFilterData()"
+                >
+                  Clear
+                </button>
+              </li>
+            </form>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overflow-auto">
+  <div class="d-flex document-dashboard">
+    <app-kanban-header
+      titleHeader="Requested"
+      headerClass="bg-warning"
+      newTextClass="text-warning"
+      tooltip="Once the application has completed the 4 steps, admin can request additional documents"
+      [newCount]="dashbaordData.totalNewRequested"
+      [total]="dashbaordData.totalRequested"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Received"
+      headerClass="bg-primary"
+      newTextClass="text-primary"
+      tooltip="Once the applicant has submitted all the requested document they can be seen here were admin can review and approve the document"
+      [newCount]="dashbaordData.totalNewReceived"
+      [total]="dashbaordData.totalReceived"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Approved"
+      headerClass="bg-success"
+      newTextClass="text-success"
+      tooltip="All the applicant whose document are approved and are ready to move into offer stage."
+      [newCount]="dashbaordData.totalNewAccepted"
+      [total]="dashbaordData.totalAccepted"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Archived"
+      headerClass="bg-danger"
+      newTextClass="text-danger"
+      tooltip="Application archived due to various reasons."
+      [total]="dashbaordData.totalArchived"
+    ></app-kanban-header>
+  </div>
+
+  <div class="d-flex mt-2" cdkDropListGroup>
+    <div class="kaban-row application-row" (wheel)="ScrollHandeler($event, 1)">
+      <app-kanban-card
+        [application]="application"
+        cardClass="card-warning"
+        newTextClass="text-warning"
+        displayDateLabel="Requested"
+        footerClass="card-ft-warning"
+        [isShowFooter]="true"
+        footerText="Pending Doc"
+        [pendingWaitingDoc]="application.totalPending"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+        *ngFor="let application of dashbaordData.requested"
+      ></app-kanban-card>
+    </div>
+    <div
+      class="kaban-row application-row"
+      [cdkDropListData]="dashbaordData.received"
+      cdkDropList
+      (cdkDropListDropped)="drop($event, 9)"
+      (wheel)="ScrollHandeler($event, 2)"
+    >
+    <app-kanban-card
+        [application]="application"
+        cardClass="card-primary"
+        newTextClass="text-primary"
+        displayDateLabel="Received"
+        footerClass="card-ft-primary"
+        [isShowFooter]="true"
+        footerText="Awaiting Approval"
+        [pendingWaitingDoc]="application.totalUploaded"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+        *ngFor="let application of dashbaordData.received"
+      ></app-kanban-card>
+    </div>
+    <div
+      class="kaban-row application-row"
+      [cdkDropListData]="dashbaordData.accepted"
+      cdkDropList
+      (cdkDropListDropped)="drop($event, 10)"
+      (wheel)="ScrollHandeler($event, 3)"
+    >
+    <app-kanban-card
+        [application]="application"
+        cardClass="card-success"
+        newTextClass="text-success"
+        displayDateLabel="Approved"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+        *ngFor="let application of dashbaordData.accepted"
+      ></app-kanban-card>
+      
+    </div>
+    <div
+      class="kaban-row application-row"
+      [cdkDropListData]="dashbaordData.archived"
+      cdkDropList
+      (cdkDropListDropped)="dropOnArchive(changeStatus, $event)"
+      (wheel)="ScrollHandeler($event, 4)"
+    >
+    <app-kanban-card
+        [application]="application"
+        cardClass="card-danger"
+        newTextClass="text-danger"
+        displayDateLabel="Archived"
+        [isArchive]="true"
+        footerClass="card-ft-danger"
+        isShowFooter="true"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+        *ngFor="let application of dashbaordData.archived"
+      ></app-kanban-card>
+    </div>
+  </div>
+</div>
+<ng-template #changeStatus let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      Application Status Change
+    </h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <form [formGroup]="applicationStatusForm">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="contentId" />
+          <label class="form-label"
+            >Application Status <span class="text-danger">*</span></label
+          >
+
+          <ng-select
+            formControlName="statusId"
+            bindLabel="stageName"
+            placeholder="Select application status"
+          >
+            <ng-option
+              [value]="item.stageId"
+              *ngFor="let item of archiveStatuses"
+            >
+              {{ item.stageName }}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="f['statusId'].touched && f['statusId'].errors">
+            <span *ngIf="f['statusId'].errors['required']" class="text-danger"
+              >Please select status.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Reason <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            placeholder="Reason"
+            class="form-control"
+            formControlName="comment"
+          />
+          <div *ngIf="f['comment'].touched && f['comment'].errors">
+            <span *ngIf="f['comment'].errors['required']" class="text-danger"
+              >Reason is required.</span
+            >
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-md-12 text-end">
+        <button
+          type="button"
+          class="btn btn-success"
+          [disabled]="!applicationStatusForm.valid"
+          (click)="updateArchive()"
+        >
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

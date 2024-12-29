@@ -1,0 +1,223 @@
+<div class="main-card mb-3 card row">
+  <div
+    class="col-md-12 application-detail"
+    *ngIf="application && !permissionMessageImage"
+  >
+    <div class="card-header fsize-2 fw-600" *ngIf="userType == 5">
+      My Application
+    </div>
+    <div class="card-header fsize-2 fw-600" *ngIf="userType > 5">
+      {{ studentName }}'s Application
+    </div>
+
+    <div class="modal-body">
+      <div class="row mx-0 mt-4">
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ applicationName }}
+          </div>
+          <div class="text-muted">Name</div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="fw-600">
+            {{ application.email }}
+          </div>
+          <div class="text-muted">Email</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.phoneNo }}
+          </div>
+          <div class="text-muted">Phone No</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600">{{ application.dateOfBirth }}</div>
+          <div class="text-muted">Date of Birth</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.countryOfResidentName }}
+          </div>
+          <div class="text-muted">Country of Residence</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.nationalityName }}
+          </div>
+          <div class="text-muted">Nationality</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <div class="fw-600 text-capitalize">{{ application.adress }}</div>
+          <div class="text-muted">Address</div>
+        </div>
+        <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600 fs-4">Parent / Legal Guardian Details</div>
+        </div>
+        <div class="col-md-2">
+          <div class="fw-600 text-capitalize">
+            {{ application.parentFirstName }}
+            {{ application.parentLastName }}
+          </div>
+          <div class="text-muted">Parents/Guardian Name</div>
+        </div>
+        <div class="col-md-3">
+          <div class="fw-600">{{ application.parentEmail }}</div>
+          <div class="text-muted">Parents/Guardian Email</div>
+        </div>
+        <div class="col-md-2">
+          <div class="fw-600">{{ application.parentPhoneNo }}</div>
+          <div class="text-muted">Parents/Guardian Phone</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.feePayByData.feePaidPerson }}
+          </div>
+          <div class="text-muted">Fee Sponsor</div>
+        </div>
+        <div class="col-md-3 mb-3" *ngIf="application.feePaybyDetail">
+          <div
+            class="fw-600 text-capitalize more-details"
+            title="{{ application.feePaybyDetail }}"
+          >
+            {{ application.feePaybyDetail }}
+          </div>
+          <div class="text-muted">Fee Details</div>
+        </div>
+
+        <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600 fs-4">Course Details</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            Intake -
+            {{ application.intakeData.intakeName }}
+            {{ application.dateOfStudy }}
+          </div>
+          <div class="text-muted">Applied For</div>
+        </div>
+        <div class="col-md-3 mb-3">
+          <div class="fw-600 text-nowrap text-capitalize">
+            {{ application.course.courseName }}
+          </div>
+          <div class="text-muted">Course</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.campusData.campusName }}
+          </div>
+          <div class="text-muted">Study Location</div>
+        </div>
+        <div class="col-md-5 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.suggestedUniversityName }}
+          </div>
+          <div class="text-muted">You like to study at University</div>
+        </div>
+        <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600 fs-4">Social / Medical / Visa</div>
+        </div>
+        <div class="col-md-2 mb-3" *ngIf="application.socialRefrenceType">
+          <div class="fw-600 text-capitalize">
+            {{ application.socialReferance.referenceName }}
+          </div>
+          <div class="text-muted">Social Referance</div>
+        </div>
+        <div
+          class="col-md-3 mb-3"
+          *ngIf="application.socialRefrenceTypeDetails"
+        >
+          <div
+            class="fw-600 text-capitalize"
+            title="{{ application.socialRefrenceTypeDetails }}"
+          >
+            {{ application.socialRefrenceTypeDetails }}
+          </div>
+          <div class="text-muted">Social Rereface Details</div>
+        </div>
+        <div
+          class="mb-3 col-md-2"
+        >
+          <div
+            class="fw-600 text-capitalize"
+            *ngIf="application.hasExistMedicalCondition"
+          >
+            Yes
+          </div>
+          <div
+            class="fw-600 text-capitalize"
+            *ngIf="!application.hasExistMedicalCondition"
+          >
+            No
+          </div>
+          <div class="text-muted">Medical</div>
+        </div>
+        <div class="col-md-2 mb-3" *ngIf="application.medicalConditionDetail">
+          <div
+            class="fw-600 text-capitalize"
+            title="{{ application.medicalConditionDetail }}"
+          >
+            {{ application.medicalConditionDetail }}
+          </div>
+          <div class="text-muted" *ngIf="application.medicalConditionDetail">
+            Details
+          </div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize" *ngIf="application.hasVisa">
+            Yes
+          </div>
+          <div class="fw-600 text-capitalize" *ngIf="!application.hasVisa">
+            No
+          </div>
+          <div class="text-muted">Previous/Current UK Visa</div>
+        </div>
+        <div class="col-md-2 mb-3" *ngIf="application.visaTypeName">
+          <div class="fw-600 text-capitalize">
+            {{ application.visaTypeName }}
+          </div>
+          <div class="text-muted" *ngIf="application.visaTypeName">
+            Visa Type
+          </div>
+        </div>
+        <div
+          class="col-md-4 mb-3 more-details"
+          *ngIf="application.visaTypeDetail"
+        >
+          <div
+            class="fw-600 text-capitalize"
+            title="{{ application.visaTypeDetail }}"
+          >
+            {{ application.visaTypeDetail }}
+          </div>
+          <div class="text-muted" *ngIf="application.visaTypeName">
+            Visa Details
+          </div>
+        </div>
+        <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600 fs-4">School Leaving Qualification</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.lastSchoolQualification }}
+          </div>
+          <div class="text-muted">School Qualification</div>
+        </div>
+        <!-- <div class="col-md-3 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.secondarySchoolName }}
+          </div>
+          <div class="text-muted">Secondary School</div>
+        </div>
+        <div class="col-md-2 mb-3">
+          <div class="fw-600 text-capitalize">
+            {{ application.schoolCompletionYear }}
+          </div>
+          <div class="text-muted">School Completion In</div>
+        </div> -->
+        
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>
+</div>

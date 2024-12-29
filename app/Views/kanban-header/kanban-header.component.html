@@ -1,0 +1,18 @@
+<div class="kaban-header">
+  <div class="row mx-0 border-rounded-top py-2 text-white" [ngClass]="headerClass">
+    <div class="col-md-12">
+      <div class="stage-text float-start">{{ titleHeader }}</div>
+      <div class="float-end fa-lg">
+        <span [matTooltip]="tooltip"> <i class="fa fa-info-circle"></i></span>
+      </div>
+    </div>
+  </div>
+  <div
+    class="d-flex mb-3 justify-content-between kaban-header-body text-uppercase"
+  >
+    <div>{{ total }} Applications</div>
+    <div [ngClass]="newTextClass" *ngIf="newCount > 0">
+      +<span>{{ newCount }}</span> NEW
+    </div>
+  </div>
+</div>

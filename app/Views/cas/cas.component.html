@@ -1,0 +1,212 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <h4 class="text-muted">CAS</h4>
+    <div class="btn-actions-pane-right btn btn-primary" (click)="exportCSV()">Export</div>
+  </div>
+  <div class="enquiryTable p-3">
+    <table datatable [dtOptions]="dtOptions" id="application8"
+      class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+      <thead>
+        <tr>
+          <th class="text-left">
+            Application Name
+          </th>
+          <th class="text-left">
+            Course
+          </th>
+          <th class="text-left">
+            Status
+          </th>
+          <th class="text-left">
+            Issue Date
+          </th>
+          <th class="text-left">
+            Report
+          </th>
+          <th class="text-left">
+            Reported Date
+          </th>
+          <th class="text-left">
+            Created By
+          </th>
+          <th class="text-left">
+            Created Date
+          </th>
+          <th class="text-left">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<ng-template #RecieptModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">CAS Document</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <iframe class="w-100 vh-65" [src]="CASFileUrl"></iframe>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+  </div>
+</ng-template>
+
+
+<form (ngSubmit)="viewInquery()">
+  <input type="hidden" id="url" value="" />
+  <input type="submit" id="frmcas" style="display: none;">
+</form>
+
+<input type="hidden" id="ApplicationId" value="" />
+<input type="hidden" id="CASId" value="" />
+<input type="hidden" (click)="AddNewCAS()" id="AddNewCAS" />
+
+<ng-template #AddCas let-modal>
+  <div class="modal-header border-0">
+    <h4 class="modal-title" id="modal-basic-title">CAS</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <form [formGroup]="CsaIssueFileForm" (ngSubmit)="UploadCsaFile()">
+
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mt-2">
+          <label class="form-label">CAS Reference Number <span class="text-danger">*</span></label>
+          <input type="text" formControlName="CasNumber" class="form-control" placeholder="i.e. E4G0AE1H42SOJ4"
+            maxlength="14">
+          <div *ngIf="isSubmitted && f['CasNumber'].errors">
+            <span *ngIf="f['CasNumber'].errors['required']" class="text-danger">Please enter CAS
+              number.</span>
+            <span *ngIf="f['CasNumber'].errors['pattern']" class="text-danger">Please enter
+              14 character for CAS number
+            </span>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label class="mb-2">CAS Certificate<span class="text-danger">*</span></label>
+          <input type="file" formControlName="FileName" class="form-control mb-2" (change)="changeCsafile($event)">
+          <div *ngIf="!isValidFile">
+            <span class="text-danger">Please choose valid file
+              type.</span>
+          </div>
+          <div *ngIf="isSubmitted && f['FileName'].errors">
+            <span *ngIf="f['FileName'].errors['required']" class="text-danger">Please chose
+              file</span>
+          </div>
+        </div>
+        <div class="col-md-12 mt-2">
+          <label class="mb-2">CAS Issue Date<span class="text-danger">*</span></label>
+          <input type="date" formControlName="IssueDate" class="form-control" max={{SetDate}}>
+          <div *ngIf="isSubmitted && f['IssueDate'].errors">
+            <span *ngIf="f['IssueDate'].errors['required']" class="text-danger">Please select
+              IssueDate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button type="button" class="btn btn-danger" (click)="modal.dismiss()">
+            Cancel
+          </button>
+          <button class="btn btn-success m-2" type="submit">Reissue</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #CASModal1 let-modal>
+  <div class="modal-header">
+      <h3 class="modal-title" id="modal-basic-title">
+          <b>{{modalTitle}}</b>
+      </h3>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">
+              <h3>×</h3>
+          </span>
+      </button>
+  </div>
+  <form [formGroup]="ChangeCASform" (ngSubmit)="ChangeCASStatus()">
+      <div class="modal-body">
+          <div class="row">
+            <input type="hidden" formControlName="ApplicationId">
+              <div class="col-md-12 mb-3">
+                  <label class="form-label fw-600 text-capitalize">CAS Status </label>
+
+                  <select formControlName="cas" class="form-select">
+                      <option value="1">Expire</option>
+                      <option value="2">Issued</option>
+                      <option value="3">ReIssued</option>
+                      <option value="4">Withdraw</option>
+                      <option value="5">Report</option>
+                      <option value="6">VisaRefuse</option>
+                      <option value="7">VisaGranted</option>
+                      <option value="8">AssignTo</option>
+                      <option value="9">Used</option>
+                  </select>
+                  <div *ngIf="CASData['cas'].touched && CASData['cas'].errors">
+                    <span *ngIf="CASData['cas'].errors['required']" class="text-danger">CAS status is
+                        required.</span>
+                </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+          <button type="submit" class="btn btn-success" >Save</button>
+      </div>
+
+  </form>
+</ng-template>
+<input type="hidden" (click)="openModel1($event, false)" id="ChangeCAS" />
+
+
+<!-- <ng-template #RecieptRejectModal let-modal>
+    <div class="modal-header border-0">
+         <h4 class="modal-title" id="modal-basic-title">Deposit Reject Reason</h4>
+         <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss()">
+              <span aria-hidden="true">×</span>
+         </button>
+    </div>
+    <form [formGroup]="commentmodal" (ngSubmit)="changeDepositStatus(2)">
+         <div class="card-body">
+
+              <div class="row">
+
+                   <div class="col-md-12 mb-3">
+                        <label class="form-label">Reason <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" formControlName="comment" placeholder="Reason">
+                        <div *ngIf="isSubmitted && f['comment'].errors">
+                             <span *ngIf="f['comment'].errors['required']" class="text-danger">Reason is
+                                  required.</span>
+                        </div>
+                   </div>
+
+              </div>
+         </div>
+         <div class="card-footer">
+              <div class="row">
+                   <div class="col-md-12 text-end">
+                        <button type="submit" class="btn btn-success">Save</button>
+                   </div>
+              </div>
+
+         </div>
+    </form>
+</ng-template> -->

@@ -1,0 +1,946 @@
+<div class="application-header mb-4 p-2">
+  <div class="d-flex justify-content-end">
+    <div class="d-flex">
+      <div class="me-2 assign-label text-capitalize">
+        <div class="d-inline-block" ngbDropdown placement="bottom-right">
+          <button type="button" ngbDropdownToggle class="btn">
+            <span class="fa fa-filter btn btn-outline-dark fsize-1"></span>
+          </button>
+          <div ngbDropdownMenu class="dropdown-menu-xl">
+            <ul class="nav flex-column">
+              <form [formGroup]="filterForm" (submit)="loadData()">
+                <perfect-scrollbar
+                  [autoPropagation]="true"
+                  class="filter-scroll"
+                >
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Course
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select Course"
+                      [items]="courses"
+                      bindLabel="courseName"
+                      bindValue="courseId"
+                      [clearable]="false"
+                      formControlName="Course"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Stage
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select stage"
+                      [items]="applicationStages"
+                      bindLabel="stageName"
+                      bindValue="stageId"
+                      [clearable]="false"
+                      formControlName="Stage"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Applied Date
+                  </li>
+                  <li class="nav-item px-3">
+                    <input
+                      name="daterange"
+                      ngxDaterangepickerMd
+                      (keyup)="datePickerChange($event)"
+                      class="form-control"
+                      formControlName="AppliedDate"
+                    />
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Assigned To
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select Assigned To"
+                      [items]="assignedTo"
+                      bindLabel="userName"
+                      bindValue="userId"
+                      [clearable]="false"
+                      formControlName="AssignedTo"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Agent
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select Agent"
+                      [items]="agents"
+                      bindLabel="userName"
+                      bindValue="userId"
+                      [clearable]="false"
+                      formControlName="Agent"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    RM
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select RM"
+                      [items]="RMs"
+                      bindLabel="userName"
+                      bindValue="userId"
+                      [clearable]="false"
+                      formControlName="RM"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Country
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select Country"
+                      [items]="countries"
+                      bindLabel="countryName"
+                      bindValue="countryId"
+                      [clearable]="false"
+                      formControlName="Country"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Source
+                  </li>
+                  <li class="nav-item px-3">
+                    <ng-select
+                      placeholder="Select Source"
+                      [items]="sources"
+                      bindLabel="referenceName"
+                      bindValue="referenceId"
+                      [clearable]="false"
+                      formControlName="Source"
+                      multiple="true"
+                    >
+                    </ng-select>
+                  </li>
+                  <li class="nav-item-header nav-item" style="color: black">
+                    Application Name
+                  </li>
+                  <li class="nav-item px-3 pb-2">
+                    <input
+                      type="text"
+                      class="form-control"
+                      placeholder="search application"
+                      formControlName="ApplicantName"
+                    />
+                  </li>
+                </perfect-scrollbar>
+                <li class="nav-item-divider nav-item"></li>
+                <li class="text-center nav-item">
+                  <button type="submit" class="btn btn-primary btn-sm">
+                    Submit
+                  </button>
+                  &nbsp;
+                  <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    (click)="clearFilterData()"
+                  >
+                    Clear
+                  </button>
+                </li>
+              </form>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="overflow-auto">
+   <div class="d-flex offer-dashboard">
+    <app-kanban-header
+      titleHeader="Ready To Offer"
+      headerClass="bg-warning"
+      newTextClass="text-warning"
+      tooltip="Application to whom offer can be sent or they are good enough to offer"
+      [newCount]="newReadyForOfferCount"
+      [total]="totalReadyForOffer"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Issued Offer"
+      headerClass="bg-warning"
+      newTextClass="text-warning"
+      tooltip="Application whom offer has been sent or issued"
+      [newCount]="newInprogresssCount"
+      [total]="totalInprogress"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Deferal Requested Offer"
+      headerClass="bg-primary"
+      newTextClass="text-primary"
+      tooltip="Application where the deferral offer has been requested"
+      [newCount]="newdeferCount"
+      [total]="totaldefer"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Accepted By Student"
+      headerClass="bg-success"
+      newTextClass="text-success"
+      tooltip="Application where the student/prospect has accepted the offer"
+      [newCount]="newReceiveCount"
+      [total]="totalAccepted"
+    ></app-kanban-header>
+    <app-kanban-header
+    *ngIf="offerType===1"
+    titleHeader="Ratified Offer"
+      headerClass="bg-success"
+      newTextClass="text-success"
+      tooltip="Application whose offer has been ratified"
+      [newCount]="newRatifyOfferCount"
+      [total]="newRatifyOfferCount"
+    ></app-kanban-header>
+    <app-kanban-header
+      titleHeader="Archived"
+      headerClass="bg-danger"
+      newTextClass="text-danger"
+      tooltip="Application archived due to various reasons"
+      [total]="totalarchive"
+    ></app-kanban-header>
+  </div>
+
+  <div class="d-flex mt-2 w-100" cdkDropListGroup>
+    <div
+      class="Offer-kaban-row application-row overflow-auto"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="readyForOffer"
+      [cdkDropListEnterPredicate]="noDrop"
+      cdkDropList
+      (wheel)="ScrollHandeler($event, 5)"
+    >
+      <div
+        class="card mb-4 me-2 card-warning"
+        cdkDrag
+        *ngFor="let application of readyForOffer"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+      >
+        <div class="card-header row mx-0">
+          <div class="col-md-12 ps-0">
+            <div class="float-start text-capitalize">
+              <span class="stage-text" style="letter-spacing: 0px; color: black"
+                ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                {{ application.lastName }} </span
+              >, <span>{{ application.firstName }}</span>
+            </div>
+            <div
+              class="float-end text-warning fw-normal new-label"
+              *ngIf="application.isNew"
+            >
+              NEW
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="title fsize-1 mb-3 fw-600 course-name">
+              {{ application.course.courseName }}
+            </div>
+            <div>
+              <div class="fw-normal new-label">
+                <span
+                  class="text-warning"
+                  *ngIf="application.totalUploaded != 0"
+                  >+ {{ application.totalUploaded }}</span
+                >
+                <i class="vsm-icon pe-7s-file"></i>
+                {{ application.totalAccepted }}/{{ application.totalRequested }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <div class="me-2 text-end">
+                <div class="title">DATE</div>
+                <div class="date">
+                  {{ application.createdDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+
+              <div
+                class="me-2 border-left ps-2"
+                *ngIf="application.totalComment != 0"
+              >
+                <div class="title icon">
+                  <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                </div>
+                <div class="fw-bold text-center">
+                  {{ application.totalComment }}
+                </div>
+              </div>
+            </div>
+
+            <div class="text-end">
+              <span
+                class="first-circle"
+                title="{{ application.agentDetail.userName }}"
+                *ngIf="application.isAssignedToAgent"
+              >
+                AG
+              </span>
+              <span
+                title="{{ application.regionalManagerDetail.userName }}"
+                [ngClass]="{
+                  'second-circle': application.isAssignedToAgent,
+                  'first-circle': !application.isAssignedToAgent
+                }"
+                *ngIf="application.isAssignedToRegionalManager"
+              >
+                RM
+              </span>
+            </div>
+            <div>
+              <div class="title icon text-center">
+                <i class="vsm-icon pe-7s-cash fsize-3"></i>
+              </div>
+              <div class="text-center" *ngIf="application.isPaidDeposit">
+                Verified
+              </div>
+              <div class="text-center" *ngIf="!application.isPaidDeposit">
+                Un-Verified
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-warning"
+        >
+          <div class="border-top-0 float-start">
+            Type: <span class="fw-bold">{{ application.offerName }}</span>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-warning"
+          *ngIf="application.isAssignedToRegionalManager"
+        >
+          <div class="float-start">Call information</div>
+          <div class="float-end text-primary">Regional Manager</div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="Offer-kaban-row application-row overflow-auto"
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="inprogressOffer"
+      [cdkDropListEnterPredicate]="noDrop"
+      cdkDropList
+      (wheel)="ScrollHandeler($event, 1)"
+    >
+      <div
+        class="card mb-4 me-2 card-warning"
+        cdkDrag
+        *ngFor="let application of inprogressOffer"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+      >
+        <div class="card-header row mx-0">
+          <div class="col-md-12 ps-0">
+            <div class="float-start text-capitalize">
+              <span class="stage-text" style="letter-spacing: 0px; color: black"
+                ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                {{ application.lastName }} </span
+              >, <span>{{ application.firstName }}</span>
+            </div>
+            <div
+              class="float-end text-warning fw-normal new-label"
+              *ngIf="application.isNew"
+            >
+              NEW
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="title fsize-1 mb-3 fw-600 course-name" *ngIf="application?.course?.courseName">
+              {{ application.course.courseName }}
+            </div>
+            <div>
+              <div class="fw-normal new-label">
+                <span
+                  class="text-warning"
+                  *ngIf="application.totalUploaded != 0"
+                  >+ {{ application.totalUploaded }}</span
+                >
+                <i class="vsm-icon pe-7s-file"></i>
+                {{ application.totalAccepted }}/{{ application.totalRequested }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <div class="me-2 text-end">
+                <div class="title">DATE</div>
+                <div class="date">
+                  {{ application.createdDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+
+              <div
+                class="me-2 border-left ps-2"
+                *ngIf="application.totalComment != 0"
+              >
+                <div class="title icon">
+                  <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                </div>
+                <div class="fw-bold text-center">
+                  {{ application.totalComment }}
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <span
+                class="first-circle"
+                title="{{ application.agentDetail.userName }}"
+                *ngIf="application.isAssignedToAgent"
+              >
+                AG
+              </span>
+              <span
+                title="{{ application.regionalManagerDetail.userName }}"
+                [ngClass]="{
+                  'second-circle': application.isAssignedToAgent,
+                  'first-circle': !application.isAssignedToAgent
+                }"
+                *ngIf="application.isAssignedToRegionalManager"
+              >
+                RM
+              </span>
+            </div>
+            <div>
+              <div class="title icon text-center">
+                <i class="vsm-icon pe-7s-cash fsize-3"></i>
+              </div>
+              <div class="text-center" *ngIf="application.isPaidDeposit">
+                Verified
+              </div>
+              <div class="text-center" *ngIf="!application.isPaidDeposit">
+                Un-Verified
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-warning"
+        >
+          <div class="border-top-0 float-start">
+            Type: <span class="fw-bold">{{ application.offerName }}</span>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-warning"
+          *ngIf="application.isAssignedToRegionalManager"
+        >
+          <div class="float-start">Call information</div>
+          <div class="float-end text-primary">Regional Manager</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="Offer-kaban-row application-row overflow-auto"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="deferOffer"
+      [cdkDropListEnterPredicate]="noDrop"
+      (wheel)="ScrollHandeler($event, 2)"
+    >
+      <div
+        class="card mb-4 me-2 card-primary"
+        *ngFor="let defer of deferOffer"
+        cdkDrag
+        (click)="getApplication(applicationDetailModal, defer.applicationId)"
+      >
+        <div class="card-header row mx-0">
+          <div class="col-md-12 ps-0">
+            <div class="float-start text-capitalize">
+              <!-- <i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                            {{defer.lastName}} {{defer.firstName}} -->
+              <span class="stage-text" style="letter-spacing: 0px; color: black"
+                ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                {{ defer.lastName }} </span
+              >, <span>{{ defer.firstName }}</span>
+            </div>
+            <div
+              class="float-end text-primary fw-normal new-label"
+              *ngIf="defer.isNew"
+            >
+              NEW
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="title fsize-1 mb-3 fw-600 course-name">
+              {{ defer.course.courseName }}
+            </div>
+            <div>
+              <div class="fw-normal new-label">
+                <span class="text-primary" *ngIf="defer.totalUploaded != 0"
+                  >+ {{ defer.totalUploaded }}</span
+                >
+                <i class="vsm-icon pe-7s-file"></i>
+                {{ defer.totalAccepted }}/{{ defer.totalRequested }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <div class="me-2 text-end">
+                <div class="title">APPLIED</div>
+                <div class="date">
+                  {{ defer.createdDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div class="me-2 border-left ps-2">
+                <div class="title">RECEIVED</div>
+                <div class="date">
+                  {{ defer.updatedDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div
+                class="me-2 border-left ps-2"
+                *ngIf="defer.totalComment != 0"
+              >
+                <div class="title icon">
+                  <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                </div>
+                <div class="fw-bold text-center">{{ defer.totalComment }}</div>
+              </div>
+            </div>
+            <div class="text-end">
+              <span
+                class="first-circle"
+                title="{{ defer.agentDetail.userName }}"
+                *ngIf="defer.isAssignedToAgent"
+              >
+                AG
+              </span>
+              <span
+                title="{{ defer.regionalManagerDetail.userName }}"
+                [ngClass]="{
+                  'second-circle': defer.isAssignedToAgent,
+                  'first-circle': !defer.isAssignedToAgent
+                }"
+                *ngIf="defer.isAssignedToRegionalManager"
+              >
+                RM
+              </span>
+            </div>
+            <div>
+              <div class="title icon text-center">
+                <i class="vsm-icon pe-7s-cash fsize-3"></i>
+              </div>
+              <div class="text-center" *ngIf="defer.isPaidDeposit">
+                Verified
+              </div>
+              <div class="text-center" *ngIf="!defer.isPaidDeposit">
+                Un-Verified
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-primary"
+        >
+          <div class="border-top-0 float-start">
+            Type: <span class="fw-bold">{{ defer.offerName }}</span>
+          </div>
+        </div>
+        <div class="mx-0 px-2 card-footer card-ft-primary" *ngIf="defer.reason">
+          <div class="float-start">
+            Reason: <span class="fw-bold">{{ defer.reason }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="Offer-kaban-row application-row overflow-auto"
+      cdkDropList
+      (cdkDropListDropped)="drop($event)"
+      [cdkDropListData]="receiveOffer"
+      [cdkDropListEnterPredicate]="noDrop"
+      cdkDrag
+      (wheel)="ScrollHandeler($event, 3)"
+    >
+      <div
+        class="card mb-4 me-2 card-success"
+        cdkDrag
+        *ngFor="let application of receiveOffer"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+      >
+        <div class="card-header row mx-0">
+          <div class="col-md-12 ps-0">
+            <div class="float-start text-capitalize">
+              <span class="stage-text" style="letter-spacing: 0px; color: black"
+                ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                {{ application.lastName }} </span
+              >, <span>{{ application.firstName }}</span>
+            </div>
+            <div
+              class="float-end text-success fw-normal new-label"
+              *ngIf="application.isNew"
+            >
+              NEW
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div
+              class="title fsize-1 mb-3 fw-600 course-name"
+              *ngIf="application.course.courseName"
+            >
+              {{ application.course.courseName }}
+            </div>
+            <div>
+              <div class="fw-normal new-label">
+                <span
+                  class="text-success"
+                  *ngIf="application.totalUploaded != 0"
+                  >+ {{ application.totalUploaded }}</span
+                >
+                <i class="vsm-icon pe-7s-file"></i>
+                {{ application.totalAccepted }}/{{ application.totalRequested }}
+              </div>
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <div class="me-2 text-end">
+                <div class="title">APPLIED</div>
+                <div class="date">
+                  {{ application.createdDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div class="me-2 border-left ps-2">
+                <div class="title">APPROVED</div>
+                <div class="date">
+                  {{ application.updatedDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div
+                class="me-2 border-left ps-2"
+                *ngIf="application.totalComment != 0"
+              >
+                <div class="title icon">
+                  <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                </div>
+                <div class="fw-bold text-center">
+                  {{ application.totalComment }}
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <span
+                class="first-circle"
+                title="{{ application.agentDetail.userName }}"
+                *ngIf="application.isAssignedToAgent"
+              >
+                AG
+              </span>
+              <span
+                title="{{ application.regionalManagerDetail.userName }}"
+                [ngClass]="{
+                  'second-circle': application.isAssignedToAgent,
+                  'first-circle': !application.isAssignedToAgent
+                }"
+                *ngIf="application.isAssignedToRegionalManager"
+              >
+                RM
+              </span>
+            </div>
+            <div>
+              <div class="title icon text-center">
+                <i class="vsm-icon pe-7s-cash fsize-3"></i>
+              </div>
+              <div class="text-center" *ngIf="application.isPaidDeposit">
+                Verified
+              </div>
+              <div class="text-center" *ngIf="!application.isPaidDeposit">
+                Un-Verified
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-success"
+        >
+          <div class="border-top-0 float-start">
+            Type : <span class="ms-1 fw-bold">{{ application.offerName }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="offerType===1" class="Offer-kaban-row application-row overflow-auto" cdkDropList (cdkDropListDropped)="drop($event)"
+            [cdkDropListData]="ratifyOffer" (wheel)="ScrollHandeler($event,6)">
+
+
+            <div class="card mb-4 me-2 card-success" *ngFor="let application of ratifyOffer"
+                (click)="getApplication(applicationDetailModal, application.applicationId)">
+                <div class="card-header row mx-0">
+                    <div class="col-md-12 ps-0">
+                        <div class="float-start text-capitalize">
+                            <i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                            {{application.lastName}} {{application.firstName}}
+                        </div>
+                        <div class="float-end text-success fw-normal new-label" *ngIf="application.isNew">
+                            NEW
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div class="title fsize-1 mb-3 fw-600 course-name" *ngIf="application.course.courseName">
+                            {{application.course.courseName}}
+
+                        </div>
+                        <div>
+                            <div class="fw-normal new-label">
+                                <span class="text-success" *ngIf="application.totalUploaded != 0">+
+                                    {{application.totalUploaded}}</span>
+                                <i class="vsm-icon pe-7s-file"></i>
+                                {{application.totalAccepted}}/{{application.totalRequested}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <div class="d-flex">
+                            <div class="me-2 text-end">
+                                <div class="title">APPLIED</div>
+                                <div class="date">{{application.createdDate | date:"dd MMM ''yy"}}</div>
+
+                            </div>
+                            <div class="me-2 border-left ps-2">
+                                <div class="title">APPROVED</div>
+                                <div class="date">{{application.updatedDate | date:"dd MMM ''yy"}}</div>
+
+                            </div>
+                            <div class="me-2 border-left ps-2" *ngIf="application.totalComment != 0">
+                                <div class="title icon">
+                                    <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                                </div>
+                                <div class="fw-bold text-center">{{application.totalComment}}</div>
+                            </div>
+                        </div>
+                        <div class="text-end">
+                            <span class="first-circle" title="{{application.agentDetail.userName}}"
+                                *ngIf="application.isAssignedToAgent">
+
+                                AG
+                            </span>
+                            <span title="{{application.regionalManagerDetail.userName}}"
+                                [ngClass]="{'second-circle':application.isAssignedToAgent,'first-circle':!application.isAssignedToAgent}"
+                                *ngIf="application.isAssignedToRegionalManager">
+                                RM
+                            </span>
+                        </div>
+                        <div>
+                            <div class="title icon text-center">
+                                <i class="vsm-icon pe-7s-cash fsize-3"></i>
+                            </div>
+                            <div class="text-center" *ngIf="application.isPaidDeposit">Verified</div>
+                            <div class="text-center" *ngIf="!application.isPaidDeposit">Un-Verified</div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mx-0 px-2 card-footer card-ft-success">
+                    <div class="border-top-0 float-start">
+                        Type : <span class="ms-1 fw-bold">{{application.offerName}}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <div
+      class="Offer-kaban-row application-row overflow-auto"
+      cdkDropList
+      [cdkDropListData]="archivedOffer"
+      (cdkDropListDropped)="dropOnArchive(changeOfferStatus, $event)"
+      (wheel)="ScrollHandeler($event, 4)"
+    >
+      <div
+        class="card mb-4 me-2 card-danger"
+        cdkDrag
+        *ngFor="let application of archivedOffer"
+        (click)="
+          getApplication(applicationDetailModal, application.applicationId)
+        "
+      >
+        <div class="card-header row mx-0">
+          <div class="col-md-12 ps-0">
+            <div class="float-start text-capitalize">
+              <span class="stage-text" style="letter-spacing: 0px; color: black"
+                ><i class="fa fa-user fsize-3 me-2 header-icon"></i>
+                {{ application.lastName }} </span
+              >, <span>{{ application.firstName }}</span>
+            </div>
+            <div
+              class="float-end text-danger fw-normal new-label text-uppercase"
+            >
+              {{ application.stageName }}
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between">
+            <div class="title fsize-1 mb-3 fw-600 course-name" *ngIf="application?.course?.courseName">
+              {{ application.course.courseName }}
+            </div>
+            <div>
+              <!-- <i class="vsm-icon pe-7s-file"></i> -->
+            </div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <div class="d-flex">
+              <div class="me-2 text-end">
+                <div class="title">APPLIED</div>
+                <div class="date">
+                  {{ application.createdDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div class="me-2 border-left ps-2">
+                <div class="title">ARCHIVED</div>
+                <div class="date">
+                  {{ application.updatedDate | date : "dd MMM ''yy" }}
+                </div>
+              </div>
+              <div
+                class="me-2 border-left ps-2"
+                *ngIf="application.totalComment > 0"
+              >
+                <div class="title icon">
+                  <i class="vsm-icon pe-7s-comment fsize-2"></i>
+                </div>
+                <div class="fw-bold text-center">
+                  {{ application.totalComment }}
+                </div>
+              </div>
+            </div>
+            <div class="text-end">
+              <span
+                class="first-circle"
+                title="{{ application.agentDetail.userName }}"
+                *ngIf="application.isAssignedToAgent"
+              >
+                AG
+              </span>
+              <span
+                class="second-circle"
+                title="{{ application.regionalManagerDetail.userName }}"
+                [ngClass]="{
+                  'second-circle': application.isAssignedToAgent,
+                  'first-circle': !application.isAssignedToAgent
+                }"
+                *ngIf="application.isAssignedToRegionalManager"
+              >
+                RM
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #changeOfferStatus let-modal>
+  <form [formGroup]="applicationStatusForm" (ngSubmit)="updateOfferArchive()">
+    <div class="modal-header border-0">
+      <h4 class="modal-title" id="modal-basic-title">
+        Application Status Change
+      </h4>
+      <button
+        type="button"
+        class="close btn"
+        aria-label="Close"
+        (click)="modal.dismiss()"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="contentId" />
+          <label class="form-label"
+            >Application Status <span class="text-danger">*</span></label
+          >
+
+          <ng-select
+            formControlName="statusId"
+            bindLabel="stageId"
+            placeholder="Select application status"
+            [searchable]="false"
+            [clearable]="false"
+          >
+            <ng-option
+              [value]="item.stageId"
+              [disabled]="item.disabled"
+              *ngFor="let item of archiveStatuses"
+            >
+              <!-- <img src="./assets/{{item.image}}" width="20px" height="20px" /> -->
+              {{ item.stageName }}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="f['statusId'].touched && f['statusId'].errors">
+            <span *ngIf="f['statusId'].errors['required']" class="text-danger"
+              >Please select status.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Reason <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            class="form-control"
+            formControlName="comment"
+            placeholder="Reason"
+          />
+          <div *ngIf="f['comment'].touched && f['comment'].errors">
+            <span *ngIf="f['comment'].errors['required']" class="text-danger"
+              >Reason is required.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!applicationStatusForm.valid"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>

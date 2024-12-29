@@ -1,0 +1,98 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Application of Sponsor
+
+    </div>
+    <div class="table-responsive p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle mb-0 table table-borderless table-striped table-hover display nowrap">
+            <thead>
+                <tr>
+
+                    <th class="text-left">
+                        Application Name
+                    </th>
+                    <th class="text-left">
+                        Campus Name
+                    </th>
+                    <th class="text-left">
+                        Course Detail
+                    </th>
+
+                    <th class="text-left">
+                        Intake
+                    </th>
+
+                    <th class="text-left">
+                        CreatedOn
+                    </th>
+                    <th class="text-left">
+                        CreatedBy
+                    </th>
+
+                    <th class="text-left">
+                        Action
+                    </th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+
+                <!-- <tr>
+                    <td colspan="3" class="text-center">No Emails found.</td>
+                </tr> -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- <ng-template #sponsorModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-basic-title">
+            <b>{{modalTitle}}</b>
+        </h3>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">
+                <h3>×</h3>
+            </span>
+        </button>
+    </div>
+    <form [formGroup]="form">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Application Name </label>
+                    <input type="text" formControlName="ApplicationName" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Campus Name </label>
+                    <input type="text" formControlName="CampusName" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Course Detail </label>
+                    <input type="text" formControlName="CourseDetail" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Intake </label>
+                    <input type="text" formControlName="Intake" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">CreatedOn </label>
+                    <input type="text" formControlName="CreatedOn" class="form-control">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">CreatedBy </label>
+                    <input type="text" formControlName="CreatedBy" class="form-control">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+        </div>
+    </form>
+</ng-template> -->
+
+<!-- <input type="hidden" (click)="clickDelete($event)" id="hdnClickDelete" />-->
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />

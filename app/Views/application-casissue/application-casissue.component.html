@@ -1,0 +1,56 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Application CAS Issue
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 5%;">
+            No.
+          </th>
+          <th class="text-left" style="width: 22%;">
+            Application Name
+          </th>
+          <th class="text-left" style="width: 23%;">
+            Email
+          </th>
+          <th class="text-left" style="width: 22%;">
+            File Name
+          </th>
+          <th class="text-left" style="width: 23%;">
+            Issue Date
+          </th>
+          <th class="text-left" style="width: 5%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let CSA of AllCSAIssue; let i=index">
+          <td class="text-left">
+            {{CSA.index}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{CSA.applicationName}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{CSA.email}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{CSA.fileName}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{CSA.issueDate | date:'dd/MM/yyyy hh:mm'}}
+          </td>
+          <td class="text-left text-nowrap">
+            <button class="btn btn-primary btn-sm">Show</button>
+          </td>
+        </tr>
+        <tr *ngIf="AllCSAIssue.length==0">
+          <td colspan="3" class="text-center">No CSAIssue found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

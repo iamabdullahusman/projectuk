@@ -1,0 +1,98 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Term
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal(termModal)">Add Term</button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 40%">
+            Term Name
+          </th>
+          <th class="text-left" style="width: 25%;">
+            Start Month
+          </th>
+          <th class="text-left" style="width: 25%;">
+            End Month
+          </th>
+          <th class="text-left" style="width: 10%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let term of terms">
+          <td>{{term.termName}}</td>
+          <td class="text-capitalize">{{term.startMonth}}</td>
+          <td class="text-capitalize">{{term.endMonth}}</td>
+          <td><button class="me-1 btn btn-success btn-sm" (click)="onUpdateClick(term.termId)" title="Edit"><i
+                class="fa fa-pencil"></i></button>
+
+            <button class="btn btn-danger btn-sm" (click)="deleteTerm(term.termId)" title="Delete"><i
+                class="fa fa-trash"></i></button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #termModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click');">
+      <span aria-hidden=" true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="termForm" (ngSubmit)="saveTerm()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="termId">
+          <label class="form-label">Term Name <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="termName" />
+          <div *ngIf="tf['termName'].errors && tf['termName'].touched">
+            <span *ngIf="tf['termName'].errors['required']" class="text-danger">Term name is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Start Month <span class="text-danger">*</span></label>
+          <select formControlName="startMonth" class="form-control">
+            <option value="" hidden>Select Month</option>
+            <option [value]="month.toLowerCase()" *ngFor="let month of months">{{month}}</option>
+          </select>
+          <div *ngIf="tf['startMonth'].errors && tf['startMonth'].touched">
+            <span *ngIf="tf['startMonth'].errors['required']" class="text-danger">Start month is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">End Month <span class="text-danger">*</span></label>
+          <select formControlName="endMonth" class="form-control">
+            <option value="" hidden>Select Month</option>
+            <option [value]="month.toLowerCase()" *ngFor="let month of months">{{month}}</option>
+          </select>
+          <div *ngIf="tf['endMonth'].errors && tf['endMonth'].touched">
+            <span *ngIf="tf['endMonth'].errors['required']" class="text-danger">End month is
+              required.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
+    </div>
+  </form>
+</ng-template>

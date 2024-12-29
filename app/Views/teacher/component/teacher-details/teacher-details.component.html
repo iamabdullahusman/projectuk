@@ -1,0 +1,119 @@
+<div class="container">
+  <div class="row mb-3">
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item label="First Name" [value]="teacher.name"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item label="Last Name" [value]="teacher.surname"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item
+        label="Email"
+        [value]="teacher.email"
+      ></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item
+        label="Mobile Number"
+        [value]="teacher.mobileNumber"
+      ></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item
+        label="Home Number"
+        [value]="teacher.homeNumber"
+      ></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item
+        label="Date Of Birth"
+        [value]="DOB"
+      ></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+      <app-teacher-item
+        label="CV"
+        value="cv.pdf"
+        customClass="text-CAS pointer"
+        (labelClick)="viewCV()"
+      ></app-teacher-item>
+    </div>
+  </div>
+  <div class="fw-600 fsize-2 lh-0">
+    Address
+    <hr />
+  </div>
+  <div class="row mb-3">
+    <div class="col-sm-6 mb-3">
+        <app-teacher-item label="Address" [value]="teacher.address"></app-teacher-item>
+    </div>
+    <!-- <div class="col-sm-3 mb-3">
+        <app-teacher-item label="City" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="State" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Country" value="NA"></app-teacher-item>
+    </div> -->
+  </div>
+  <div class="fw-600 fsize-2 lh-0">
+    First Emergency Contact
+    <hr />
+  </div>
+  <div class="row mb-3">
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Name" [value]="teacher.emergencyContactName1"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Contact Number" [value]="teacher.emergencyNumber1"></app-teacher-item>
+    </div>
+    <div class="col-sm-6 mb-3">
+        <app-teacher-item label="Address" [value]="teacher.emergencyAddress1"></app-teacher-item>
+    </div>
+    <!-- <div class="col-sm-3 mb-3">
+        <app-teacher-item label="City" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="State" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Country" value="NA"></app-teacher-item>
+    </div> -->
+  </div>
+  <div class="fw-600 fsize-2 lh-0">
+    Second Emergency Contact
+    <hr />
+  </div>
+  <div class="row mb-3">
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Name" [value]="teacher.emergencyContactName2"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Contact Number" [value]="teacher.emergencyNumber2"></app-teacher-item>
+    </div>
+    <div class="col-sm-6 mb-3">
+        <app-teacher-item label="Address" [value]="teacher.emergencyAddress2"></app-teacher-item>
+    </div>
+    <!-- <div class="col-sm-3 mb-3">
+        <app-teacher-item label="City" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="State" value="NA"></app-teacher-item>
+    </div>
+    <div class="col-sm-3 mb-3">
+        <app-teacher-item label="Country" value="NA"></app-teacher-item>
+    </div> -->
+  </div>
+</div>
+<ng-template #viewFile let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">View CV</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click');">
+      <span aria-hidden=" true">×</span>
+    </button>
+  </div>
+    <div class="modal-body">
+      <iframe *ngIf="fileUrl" class="w-100 h-[100dvh-9rem]" [src]="fileUrl" frameborder="0"></iframe>
+    </div>
+</ng-template>

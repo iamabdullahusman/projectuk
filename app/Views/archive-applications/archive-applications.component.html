@@ -1,0 +1,65 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Archive Application
+    <div class="btn-actions-pane-right">
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-hover">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 5%;">
+            No.
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Application Name
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Course Name
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Status
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Archive From
+          </th>
+          <th class="text-left" style="width: 10%;">
+            Archive By
+          </th>
+          <th class="text-left" style="width: 15%;">
+            Archive Date
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let archive of ArchiveApplication;let i=index">
+          <td class="text-left">
+            {{archive.index}}
+          </td>
+          <td class="text-left">
+            {{archive.lastName}} {{archive.firstName}} 
+          </td>
+          <td class="text-left ">
+            {{archive.courseName}}
+          </td>
+          <td class="text-left">
+            {{archive.applicationStatus}}
+          </td>
+          <td class="text-left">
+            {{archive.archiveOn}}
+          </td>
+          <td class="text-left">
+            {{archive.archiveBy}}
+          </td>
+          <td class="text-left">
+            {{archive.archiveDate+'Z' | date:'dd/MM/yyyy hh:mm a'}}
+          </td>
+
+        </tr>
+        <tr *ngIf="ArchiveApplication.length==0">
+          <td colspan="8" class="text-center">No Archive Application Found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

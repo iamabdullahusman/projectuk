@@ -1,0 +1,34 @@
+<div class="dashboard overflow-auto" *ngIf="HistoryData && !permissionMessageImage">
+    <h4 class="fw-600" *ngIf="userType == 5">My Timeline</h4>
+    <h4 class="fw-600" *ngIf="userType > 5">{{studentName}}'s Timeline</h4>
+    <div class="row">
+        <div class="col-sm-12 mt-4 scroll-timeline">
+
+            <div class="vertical-time-icons vertical-timeline vertical-timeline--animate vertical-timeline--one-column">
+                <!-- <h4 class="fs-5">Application {{application.stageName}} StageId {{application.stageId}}</h4> -->
+                <ng-container *ngFor="let application of HistoryData">
+
+                    <div class="vertical-timeline-item vertical-timeline-element">
+                        <div>
+                            <span class="vertical-timeline-element-icon bounce-in">
+                                <div class="timeline-icon {{application.borderStageClass}}"><i
+                                        class={{application.stageClass}}></i>
+                                </div>
+                            </span>
+                            <div class="vertical-timeline-element-content bounce-in">
+                                <h4 class="fs-5 fw-600">{{application.parentStage}} {{application.stageName}}</h4>
+                                <div class="date text-primary"><span class="text-muted">Date:</span>
+                                    {{application.createdDate| date:"dd/MM/yyyy"}}
+                                </div>
+                                <p>{{application.comment}}</p>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>

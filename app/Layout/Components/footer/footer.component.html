@@ -1,0 +1,725 @@
+
+<div class="app-footer" *ngIf="isShowAddApplicationBtn">
+  <div class="app-footer__inner">
+    <div class="app-footer-right">
+      <button class="btn-transition btn btn-outline-success" (click)="openModal(applicationModal)">Add
+        Application</button> 
+    </div>
+  </div>
+</div>
+<ng-template #applicationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <i class="fa fa-user"></i>
+      {{modaltitle}}
+    </h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <div class="modal-body overflow-auto">
+    <div class="d-flex justify-content-between">
+      <div>
+        <span class="me-1">
+          <i class="fa fa-user step-icon-circle" [ngClass]="{'active-step':currentStep==1}" *ngIf="currentStep==1"></i>
+          <i class="fa fa-user step-icon-circle active-step" *ngIf="currentStep>1"></i>
+        </span>
+        Personal
+      </div>
+      <div>
+        <span class="me-1">
+          <i class="pe-7s-study step-icon-circle active-step" *ngIf="currentStep==2"></i>
+          <i class="pe-7s-study step-icon-circle" [ngClass]="{'active-step':currentStep>2}" *ngIf="currentStep!=2"></i>
+        </span>
+        Education
+      </div>
+      <div>
+        <span class="me-1">
+          <i class="pe-7s-file step-icon-circle active-step" *ngIf="currentStep==3"></i>
+          <i class="pe-7s-file step-icon-circle" [ngClass]="{'active-step':currentStep>3}" *ngIf="currentStep!=3"></i>
+        </span>
+        Medical / Visa / Docs
+      </div>
+    </div>
+    <form [formGroup]="Applicationform" *ngIf="currentStep==1" (ngSubmit)="saveApplication()">
+      <!-- <input 
+      id="phoneInputId"
+        type="tel"
+      /> -->
+      <div class="row mt-4">
+        <div class="col-md-12 d-flex justify-content-between mb-3 border-bottom fsize-1 border-2 fw-600">
+          <div> Step 1: Introduction</div>
+          <div class="text-success step-complete-label" *ngIf="isFirstStepCompleted"> COMPLETED <i
+              class="vms-icon pe-7s-check fsize-1"></i> </div>
+        </div>
+        <div class="col-lg-6 mb-3">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input type="text" formControlName="firstName" class="form-control" placeholder="Enter Given/First Name">
+          <div *ngIf="isSubmitted && f['firstName'].errors">
+            <span *ngIf="f['firstName'].errors['required']" class="text-danger">First name is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Surname <span class="text-danger">*</span></label>
+          <input type="text" formControlName="lastName" class="form-control" placeholder="Enter Surname/Family Name">
+          <div *ngIf="isSubmitted && f['lastName'].errors">
+            <span *ngIf="f['lastName'].errors['required']" class="text-danger">Last name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Email <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" formControlName="email" placeholder="Enter Email" />
+          <div *ngIf="isSubmitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']" class="text-danger">Email is required.</span>
+            <span *ngIf="f['email'].errors['pattern']" class="text-danger">Please enter valid email.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Phone Number <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <input  class="form-control col-md-1" formControlName="phoneNo"  placeholder="Enter Phone Number"  id="phoneInputId" type="tel"/>
+          </div>
+          <div *ngIf="isSubmitted && f['phoneNo'].errors">
+            <span *ngIf="f['phoneNo'].errors['required']" class="text-danger">Phone number is
+              required.</span>
+            <span *ngIf="f['phoneNo'].errors['pattern']" class="text-danger">Please enter a valid phone number (must not start with 0).
+              </span>
+          </div>
+        </div>
+            <!-- <select class="form-select" formControlName="countryCode"  [(ngModel)]="selectedCountryCode" (change)="onCountryCodeChange($event)" >
+              <option *ngFor="let code of countryCodes" [value]="code.dial_code" [selected]="code.dial_code === selectedCountryCode" >
+              {{ code.dial_code }} {{ code.name }}
+              </option>
+            </select>
+            <input type="text" class="form-control col-md-1" formControlName="phoneNo"  placeholder="Enter Phone Number" style="width: 100px;" /> -->
+          
+              <!-- <select class="form-select" formControlName="countryCode" style="max-width: 0px;">
+                <option  *ngFor="let code of countryCodes" [value]="code.dial_code">
+                  {{ code.name }} ({{ code.dial_code }}) 
+                </option>
+              </select>
+           <input type="text" class="form-control" formControlName="phoneNo" placeholder="Enter Phone Number" />  -->
+            
+          
+          
+        <!-- <div class="col-md-12 d-flex justify-content-between mb-3 mt-4 border-bottom fsize-1 border-2 fw-600">
+          <div> Step 2: Brief Information</div>
+          <div class="text-success step-complete-label" *ngIf="isSecondStepCompleted"> COMPLETED <i
+              class="vms-icon pe-7s-check fsize-1"></i> </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" formControlName="dateOfBirth" max="{{todaydate}}" placeholder="Enter Date of Birth" />
+          <div *ngIf="isSubmitted && f['dateOfBirth'].errors">
+            <span *ngIf="f['dateOfBirth'].errors['required']" class="text-danger">Date of birth is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Country of Nationality <span class="text-danger">*</span></label>
+          <ng-select formControlName="nationality" bindLabel="nationality" placeholder="Select Country of Nationality"
+            [searchable]="true" [clearable]="false">
+            <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of nationalitydata">
+              {{item.countryName}}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="isSubmitted && f['nationality'].errors">
+            <span *ngIf="f['nationality'].errors['required']" class="text-danger">Country of Nationality is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Country of Residence <span class="text-danger">*</span></label>
+          <ng-select formControlName="countryOfResident" bindLabel="countryOfResident"
+            placeholder="Select Country Of Residence" [searchable]="true" [clearable]="false">
+            <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of coutryofresidentdata">
+              {{item.countryName}}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="isSubmitted && f['countryOfResident'].errors">
+            <span *ngIf="f['countryOfResident'].errors['required']" class="text-danger">Country of Nationality is required.</span>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-6 mb-3">
+          <label class="form-label">Address <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="adress" placeholder="Enter Address">
+          <div *ngIf="isSubmitted && f['adress'].errors">
+            <span *ngIf="f['adress'].errors['required']" class="text-danger">Address is required.</span>
+          </div>
+        </div> -->
+        <!-- <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600">Parent/Legal Guardian Details</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian First Name <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentFirstName" placeholder="Enter First Name" />
+          <div *ngIf="isSubmitted && f['parentFirstName'].errors">
+            <span *ngIf="f['parentFirstName'].errors['required']" class="text-danger">Parent/Guardian first
+              name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Last Name <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentLastName" placeholder="Enter Last Name" />
+          <div *ngIf="isSubmitted && f['parentLastName'].errors">
+            <span *ngIf="f['parentLastName'].errors['required']" class="text-danger">Parent/Guardian last
+              name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Phone Number  <span class="text-danger">*</span></label>
+          <div class="input-group">
+              <select class="form-select" formControlName="parentCountryCode"  [(ngModel)]="selectedParentCountryCode" (change)="onParentCountryCodeChange($event)" >
+                <option  *ngFor="let code of countryCodes" [value]="code.dial_code" [selected]="code.dial_code === selectedCountryCode" >
+                  {{ code.dial_code }}  {{ code.name }} 
+                </option>
+              </select>
+              <input type="text" class="form-control" formControlName="parentPhoneNo" placeholder="Enter Phone Number" style="width: 125px;" />
+            </div>
+          
+          <div *ngIf="isSubmitted && f['parentPhoneNo'].errors">
+            <span *ngIf="f['parentPhoneNo'].errors['required']" class="text-danger">Parent/Guardian phone
+              number is required.</span>
+            <span *ngIf="f['parentPhoneNo'].errors['pattern']" class="text-danger">Please enter valid phone
+              number.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Email <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentEmail" placeholder="Enter Email" />
+          <div *ngIf="isSubmitted && f['parentEmail'].errors">
+            <span *ngIf="f['parentEmail'].errors['required']" class="text-danger">Parent/Guardian email is
+              required.</span>
+            <span *ngIf="f['parentEmail'].errors['pattern']" class="text-danger">Please enter valid email.</span>
+            <span *ngIf="f['parentEmail'].errors['matched']" class="text-danger">Student email and parent email can't be
+              same.</span>
+          </div>
+        </div> -->
+        <div class="col-md-6">
+          <button type="button" class="btn-transition btn btn-outline-primary me-2 application-form-button"
+            (click)="saveAsDraft()">Save</button>
+        </div>
+        <div class="col-md-6 text-end text-nowrap">
+          <button type="button" class="btn-transition btn btn-outline-dark me-2 application-form-button"
+            (click)="modal.dismiss()">Cancel</button>
+          <button type="submit" class="btn btn-success application-form-button">Next</button>
+        </div>
+      </div>
+    </form>
+    <form [formGroup]="Applicationform" *ngIf="currentStep==2" (ngSubmit)="saveApplication()">
+      <div class="col-md-12 d-flex justify-content-between mb-3 mt-4 border-bottom fsize-1 border-2 fw-600">
+        <div> Step 2: Application Details</div>
+        <div class="text-success step-complete-label" *ngIf="isSecondStepCompleted"> COMPLETED <i
+            class="vms-icon pe-7s-check fsize-1"></i> </div>
+      </div>
+      <div class="row mt-4">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+        <input type="date" class="form-control" formControlName="dateOfBirth" max="{{todaydate}}" placeholder="Enter Date of Birth" />
+        <div *ngIf="isSubmitted && f['dateOfBirth'].errors">
+          <span *ngIf="f['dateOfBirth'].errors['required']" class="text-danger">Date of birth is
+            required.</span>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Country of Nationality <span class="text-danger">*</span></label>
+        <ng-select formControlName="nationality" bindLabel="nationality" placeholder="Select Country of Nationality"
+          [searchable]="true" [clearable]="false">
+          <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of nationalitydata">
+            {{item.countryName}}
+          </ng-option>
+        </ng-select>
+        <div *ngIf="isSubmitted && f['nationality'].errors">
+          <span *ngIf="f['nationality'].errors['required']" class="text-danger">Country of Nationality is required.</span>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Country of Residence <span class="text-danger">*</span></label>
+        <ng-select formControlName="countryOfResident" bindLabel="countryOfResident"
+          placeholder="Select Country Of Residence" [searchable]="true" [clearable]="false">
+          <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of coutryofresidentdata">
+            {{item.countryName}}
+          </ng-option>
+        </ng-select>
+        <div *ngIf="isSubmitted && f['countryOfResident'].errors">
+          <span *ngIf="f['countryOfResident'].errors['required']" class="text-danger">Country of Nationality is required.</span>
+        </div>
+      </div>
+    </div>
+      <div class="col-md-12 my-3 fsize-1">
+        <div class="fw-600">Parent/Legal Guardian Details</div>
+      </div>
+      <div class="row mt-4">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Parent/Guardian First Name <span class="text-danger">*</span></label>
+        <input class="form-control" formControlName="parentFirstName" placeholder="Enter First Name" />
+        <div *ngIf="isSubmitted && f['parentFirstName'].errors">
+          <span *ngIf="f['parentFirstName'].errors['required']" class="text-danger">Parent/Guardian first
+            name is required.</span>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Parent/Guardian Last Name <span class="text-danger">*</span></label>
+        <input class="form-control" formControlName="parentLastName" placeholder="Enter Last Name" />
+        <div *ngIf="isSubmitted && f['parentLastName'].errors">
+          <span *ngIf="f['parentLastName'].errors['required']" class="text-danger">Parent/Guardian last
+            name is required.</span>
+        </div>
+      </div>
+      <!-- <input  class="form-control  col-md-1"id="phoneInputId" type="tel" /> -->
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Parent/Guardian Phone Number  <span class="text-danger">*</span></label>
+        <div class="input-group">
+            <!-- <select class="form-select" formControlName="parentCountryCode"  [(ngModel)]="selectedParentCountryCode" (change)="onParentCountryCodeChange($event)" >
+              <option  *ngFor="let code of countryCodes" [value]="code.dial_code" [selected]="code.dial_code === selectedCountryCode" >
+                {{ code.dial_code }}  {{ code.name }} 
+              </option>
+            </select> -->
+            <!-- <input type="text" class="form-control" formControlName="parentPhoneNo" placeholder="Enter Phone Number" style="width: 100px;"  /> -->
+            <!-- <input type="tel" class="form-control  col-md-1" id="parentPhoneInputId" formControlName="parentPhoneNo" placeholder="Enter Phone Number" /> -->
+            <!-- <input  class="form-control col-md-1" formControlName="phoneNo"  placeholder="Enter Phone Number"  id="parentPhoneInputId" type="tel"/> -->
+            <input  class="form-control col-md-1" formControlName="parentPhoneNo"  placeholder="Enter Phone Number"  id="phoneInputId" type="tel"/>
+          </div>
+        
+        <div *ngIf="isSubmitted && f['parentPhoneNo'].errors">
+          <span *ngIf="f['parentPhoneNo'].errors['required']" class="text-danger">Parent/Guardian phone
+            number is required.</span>
+          <span *ngIf="f['parentPhoneNo'].errors['pattern']" class="text-danger">Please enter valid phone
+            number.</span>
+        </div>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Parent/Guardian Email <span class="text-danger">*</span></label>
+        <input class="form-control" formControlName="parentEmail" placeholder="Enter Email" />
+        <div *ngIf="isSubmitted && f['parentEmail'].errors">
+          <span *ngIf="f['parentEmail'].errors['required']" class="text-danger">Parent/Guardian email is
+            required.</span>
+          <span *ngIf="f['parentEmail'].errors['pattern']" class="text-danger">Please enter valid email.</span>
+          <span *ngIf="f['parentEmail'].errors['matched']" class="text-danger">Student email and parent email can't be
+            same.</span>
+        </div>
+      </div>
+    </div>
+
+
+      <div class="row mt-4">
+        <!-- <div class="col-md-6 mb-3">
+          <label class="form-label">Date of Study <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="dateOfStudy">
+            <option [ngValue]="null">Select Date</option>
+            <option value="{{year}}" *ngFor="let year of dateofStudies">{{year}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['dateOfStudy'].errors">
+            <span *ngIf="f['dateOfStudy'].errors['required']" class="text-danger">Study of date is
+              required.</span>
+          </div>
+        </div> -->
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Study Location <span class="text-danger">*</span></label>
+          <select class="form-control" (change)="getCourseByCampus()" formControlName="studyLocation">
+            <option [ngValue]="null">Select Study Location</option>
+            <option *ngFor="let campuse of campuses" value="{{campuse.campusId}}">
+              {{campuse.campusName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['studyLocation'].errors">
+            <span *ngIf="f['studyLocation'].errors['required']" class="text-danger">Study location is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Course <span class="text-danger">*</span></label>
+          <select class="form-control" (change)="getIntakeByCampusCourse()" formControlName="courseName">
+            <option [ngValue]="null">Select Course</option>
+            <option *ngFor="let course of courses" value="{{course.courseId}}">
+              {{course.courseName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['courseName'].errors">
+            <span *ngIf="f['courseName'].errors['required']" class="text-danger">Course is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Intake <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="intake">
+            <option [ngValue]="null">Select Intake</option>
+            <option *ngFor="let intake of intakes" value="{{intake.intakeId}}">{{intake.intakeName}} -
+              {{intake.startDate | date: " YYYY"}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['intake'].errors">
+            <span *ngIf="f['intake'].errors['required']" class="text-danger">Intake is
+              required.</span>
+          </div>
+        </div>
+        <!-- <div class="col-md-12 mb-3">
+          <label class="form-label">Where would You Like to Study at University? <span
+              class="text-danger">*</span></label> -->
+          <!-- <input class="form-control" formControlName="suggestedUniversity"
+            placeholder="Enter Ideal Progression University"> -->
+
+            <!-- <select class="form-control"  formControlName="suggestedUniversity" id="suggestedUniversityId">   -->
+              <!-- <option value="0">Select Ideal Progression University</option> -->
+              <!-- <option [ngValue]="null">Select  Ideal Progression University</option>
+              <option *ngFor="let unisity of universitylist" value="{{unisity.id}}">{{unisity.name}}
+              </option>
+            </select> 
+
+          <div *ngIf="isSubmitted && f['suggestedUniversity'].errors">
+            <span *ngIf="f['suggestedUniversity'].errors['required']" class="text-danger">Please suggest university to
+              us.</span>
+          </div>
+        </div> -->
+        <div class="col-md-12 my-3 fsize-1">
+          <div class="fw-600">School Leaving Qualification</div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Last School Leaving Qualification<span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="lastSchoolQualification"
+            placeholder="Enter School Leaving Qualification" />
+          <div *ngIf="isSubmitted && f['lastSchoolQualification'].errors">
+            <span *ngIf="f['lastSchoolQualification'].errors['required']" class="text-danger">School Leaving
+              Qualification is
+              required.</span>
+          </div>
+        </div>
+        <!-- <div class="col-md-6 mb-3">
+          <label class="form-label">Name of Secondary School<span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="secondarySchoolName" placeholder="Name of Secondary school" />
+          <div *ngIf="isSubmitted && f['secondarySchoolName'].errors">
+            <span *ngIf="f['secondarySchoolName'].errors['required']" class="text-danger">Name of secondary
+              school is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">School Completion Year<span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="schoolCompletionYear">
+            <option [ngValue]="null">Select year</option>
+            <option value="{{year}}" *ngFor="let year of completionYears">{{year}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['schoolCompletionYear'].errors">
+            <span *ngIf="f['schoolCompletionYear'].errors['required']" class="text-danger">School completion
+              year is
+              required.</span>
+          </div>
+        </div> -->
+        <div class="col-md-6"></div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Who Will be Paying Your Fee?<span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="feePayby" id="SponcerTypeID" (change)="ChangeFeepay()">
+            <option [ngValue]="null">Select Fee Payer Person</option>
+            <option *ngFor="let feePayOption of feePayOptions" value="{{feePayOption.feePaybyId}}">
+              {{feePayOption.feePaidPerson}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['feePayby'].errors">
+            <span *ngIf="f['feePayby'].errors['required']" class="text-danger">Who will be paying your Fee,
+              is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3" *ngIf="IsSponcer" >
+          <label class="form-label">Choose Sponsor<span class="text-danger">*</span></label> 
+          <select class="form-control"  formControlName="sponsorId"  id="sponsorIds" (change)="ChangeSponcer()">
+            <option [ngValue]="null">Select Sponsor</option>
+            <option *ngFor="let Sponcer of SponcerList" value="{{Sponcer.sponsorId}}">
+              {{Sponcer.sponcerName}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['sponsorId'].errors">
+            <span *ngIf="f['sponsorId'].errors['required']" class="text-danger">Please Choose Sponsor.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More Detail of Fee Payer</label>
+          <input class="form-control" formControlName="feePaybyDetail" placeholder="Detail of Fee Payer" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">How Did You Hear About UFP?</label>
+          <select class="form-control" formControlName="socialRefrenceType" placeholder = "Select">
+            <option [ngValue]="null">Select</option>
+            <option *ngFor="let SocialPreference of SocialPreferences" value="{{SocialPreference.referenceId}}">
+              {{SocialPreference.referenceName}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More Details</label>
+          <input class="form-control" formControlName="socialRefrenceTypeDetails" placeholder="Reference Type Detail" />
+        </div>
+        <div class="col-md-6" *ngIf="IsSponcer"></div>
+        <div class="col-md-6">
+          <button type="button" class="btn-transition btn btn-outline-primary me-2 application-form-button"
+            (click)="saveAsDraft()">Save</button>
+        </div>
+        <div class="col-md-6 text-end text-nowrap">
+          <button type="button" class="btn-transition btn btn-outline-dark me-2 application-form-button"
+            (click)="previousStep()">Previous</button>
+          <button type="submit" class="btn btn-success application-form-button">Next</button>
+        </div>
+      </div>
+    </form>
+    <form [formGroup]="Applicationform" *ngIf="currentStep==3" (ngSubmit)="InquiryLinkUnLink()">
+      <div class="row mt-4">
+        <div class="col-md-12 d-flex justify-content-between mb-3 border-bottom fsize-1 border-2 fw-600">
+          <div> Step 3: Medical History & Visa Information</div>
+          <div class="text-success step-complete-label" *ngIf="isThirdStepCompleted"> COMPLETED <i
+              class="vms-icon pe-7s-check fsize-1"></i> </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Existing Medical Conditions <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="hasExistMedicalCondition">
+            <option [ngValue]="null">Select Medical Condition</option>
+           
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+          <div *ngIf="isSubmitted && f['hasExistMedicalCondition'].errors">
+            <span *ngIf="f['hasExistMedicalCondition'].errors['required']" class="text-danger">Existing
+              medical conditions is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label text-nowrap">More Details of Medical Conditions </label>
+          <input type="text" class="form-control" formControlName="medicalConditionDetail" />
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Have You Had Any Previous/Current UK Visa? <span
+              class="text-danger">*</span></label>
+          <select class="form-control" formControlName="hasVisa">
+            <option [ngValue]="null">Select</option>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+          <div *ngIf="isSubmitted && f['hasVisa'].errors">
+            <span *ngIf="f['hasVisa'].errors['required']" class="text-danger">Existing
+              Please give UK visa confirmation</span>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Please Select the Visa Type <span class="text-danger">*</span></label>
+          <select type="text" (change)="changevisa()" class="form-control" formControlName="visaType">
+            <option [ngValue]="null">Select Visa Type</option>
+            <option value="{{visa.id}}" *ngFor="let visa of visaTypes">{{visa.visaTypeName}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['visaType'].errors">
+            <span *ngIf="f['visaType'].errors['required']" class="text-danger">Existing
+              visa type is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3" *ngIf="IsvisaTypeDetail">
+          <label class="form-label">You selected other please add details <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="visaTypeDetail" />
+        </div>
+        <div *ngIf="isSubmitted && f['visaTypeDetail'].errors">
+          <span *ngIf="f['visaTypeDetail'].errors['required']" class="text-danger">You selected other please add details.</span>
+        </div>
+          <!-- Checkbox for terms and conditions -->
+    <div class="col-md-12 mb-3">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="terms" formControlName="acceptTerms" />
+        <label class="form-check-label" for="terms">I accept all terms and conditions</label>
+      </div>
+      <div *ngIf="isSubmitted && f['acceptTerms'].errors">
+        <span *ngIf="f['acceptTerms'].errors['required']" class="text-danger">You must accept the terms and conditions to submit.</span>
+      </div>
+    </div>
+        <!-- <div class="col-md-12 d-flex justify-content-between mb-3 mt-4 border-bottom fsize-1 border-2 fw-600">
+          <div> Step 4: Attached Documents</div>
+          <div class="text-success step-complete-label" *ngIf="isFourthtStepCompleted"> COMPLETED <i
+              class="vms-icon pe-7s-check fsize-1"></i> </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Qualification </label>
+          <div class="form-control">
+            <input type="file" id="Qualification" (change)="changeQualification($event)">
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Passport </label>
+          <div class="form-control">
+            <input type="file" id="Passport" (change)="changePassport($event)">
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">IELTS (Optional) </label>
+          <div class="form-control">
+            <input type="file" id="IELTS" (change)="changeIELTS($event)">
+          </div>
+        </div> -->
+        <div class="col-md-4">
+          <button type="button" class="btn-transition btn btn-outline-primary me-2 application-form-button"
+            (click)="saveAsDraft()">Save</button>
+        </div>
+        <div class="col-md-8 text-end text-nowrap">
+          <button type="button" class="btn-transition btn btn-outline-dark me-2 application-form-button"
+            (click)="previousStep()">Previous</button>
+          <button type="submit" class="btn btn-success"  [disabled]="!Applicationform.valid">Submit Application </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</ng-template>
+<ng-template #LinkInquiry let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Link Inquiry</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="LinkInquiryForm" (ngSubmit)="LinkInquiryToApplication()">
+    <div class="modal-body">
+      <div class="mt-2 mb-2">
+        <div class="col-sm-12 mb-2">
+          <label class="form-label">Inquiry <span class="text-danger">*</span>
+          </label>
+          <ng-select bindLabel="firstName" bindValue="inquiryId" [items]="Inquiries" [searchable]="true"
+            [(ngModel)]="matchedInquiry" placeholder="Please select inquiry" [clearable]=" false"
+            style="width: 90% !important" formControlName="inquiryId">
+          </ng-select>
+          <div *ngIf="fl['inquiryId'].touched && fl['inquiryId'].errors">
+            <span *ngIf="fl['inquiryId'].errors['required']" class="text-danger">Please
+              select inquiry.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex card-footer justify-content-between">
+      <div>
+      </div>
+      <div>
+        <button type="button" class="btn btn-outline-danger ms-1" (click)="modal.dismiss('Cross click')">Close</button>
+        <input type="submit" class="btn btn-success ms-2" value="Link" />
+      </div>
+    </div>
+  </form>
+</ng-template>
+<ng-template #SponcerModal let-modal>
+  <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add Sponsor Details</h4>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">×</span>
+      </button>
+  </div>
+  <form [formGroup]="SponcerForm" (ngSubmit)="SaveSponcer()">
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <input type="hidden" formControlName="sponsorId">
+                  <label class="form-label fw-600 text-capitalize">Sponsor First Name <span
+                          class="text-danger">*</span></label>
+                  <input type="text" formControlName="FirstName" class="form-control"
+                      placeholder="Enter Sponsor Name">
+                  <div *ngIf="fsponcer['FirstName'].touched && fsponcer['FirstName'].errors">
+                      <span *ngIf="fsponcer['FirstName'].errors['required']" class="text-danger">Sponsor
+                          first name is
+                          required.</span>
+                  </div>
+              </div>
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Sponsor Last Name <span
+                          class="text-danger">*</span></label>
+                  <input type="text" formControlName="LastName" class="form-control"
+                      placeholder="Enter Sponsor Name">
+                  <div *ngIf="fsponcer['LastName'].touched && fsponcer['LastName'].errors">
+                      <span *ngIf="fsponcer['LastName'].errors['required']" class="text-danger">Sponsor
+                         last name is
+                          required.</span>
+                  </div>
+              </div>
+
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Authorized Person Name <span
+                          class="text-danger">*</span></label>
+                  <input type="text" formControlName="AuthorizedPersonName" class="form-control"
+                      placeholder="Enter Authorized Person Name">
+                  <div *ngIf="fsponcer['AuthorizedPersonName'].touched && fsponcer['AuthorizedPersonName'].errors">
+                      <span *ngIf="fsponcer['AuthorizedPersonName'].errors['required']" class="text-danger">Authorized Person
+                          Name is Required </span>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Email Id<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="EmailId" class="form-control" placeholder="Enter Email Id">
+                  <div *ngIf="fsponcer['EmailId'].touched && fsponcer['EmailId'].errors">
+                      <span *ngIf="fsponcer['EmailId'].errors['required']" class="text-danger">Email Id is
+                          Required</span>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Country<span class="text-danger">*</span></label>
+                  <ng-select formControlName="CountryId" bindLabel="CountryId" (ngModelChange)="changeContry($event)"
+                      placeholder="Select Your Country" [searchable]="true" [clearable]="false">
+                      <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of Countrydata">
+                          {{item.countryName}}
+                      </ng-option>
+                  </ng-select>
+                  <div *ngIf="isSubmitted && fsponcer['CountryId'].errors">
+                      <span *ngIf="fsponcer['CountryId'].errors['required']" class="text-danger">Country is
+                          required.</span>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">City <span class="text-danger">*</span></label>
+                  <ng-select formControlName="CityId" bindLabel="cityName" placeholder="Select City"
+                      [searchable]="true" [clearable]="false" bindValue="cityId">
+                      <ng-option *ngFor="let city of citydata" [value]="city.cityId" [disabled]="city.disabled">
+                          {{city.cityName}}
+                      </ng-option>
+                  </ng-select>
+                  <div *ngIf="isSubmitted && fsponcer['CityId'].errors">
+                      <span *ngIf="fsponcer['CityId'].errors['required']" class="text-danger">Please choose city</span>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3 ">
+                  <label class="form-label fw-600 text-capitalize">Address<span class="text-danger">*</span></label>
+                  <textarea ng-model="Address" formControlName="Address" class="form-control"
+                      placeholder="Enter Your Address"></textarea>
+                  <div *ngIf="fsponcer['Address'].touched && fsponcer['Address'].errors">
+                      <span *ngIf="fsponcer['Address'].errors['required']" class="text-danger">Address is Required</span>
+                  </div>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Postal Code<span
+                          class="text-danger">*</span></label>
+                  <input type="text" formControlName="PostalCode" class="form-control"
+                      placeholder="Enter Postal Code">
+                  <div *ngIf="fsponcer['PostalCode'].touched && fsponcer['PostalCode'].errors">
+                      <span *ngIf="fsponcer['PostalCode'].errors['required']" class="text-danger">Postal Code is
+                          Required</span>
+                  </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                  <label class="form-label fw-600 text-capitalize">Contact Number<span
+                          class="text-danger">*</span></label>
+                  <input type="text" formControlName="ContactDetail" class="form-control"
+                      placeholder="Enter Contact Number">
+                  <div *ngIf="fsponcer['ContactDetail'].touched && fsponcer['ContactDetail'].errors">
+                      <span *ngIf="fsponcer['ContactDetail'].errors['required']" class="text-danger">Email Id is
+                          Required</span>
+                  </div>
+              </div>
+          </div>
+
+      </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+          <input type="submit" class="btn btn-primary" *ngIf="!hasViewModel" value="Save">
+      </div>
+  </form>
+</ng-template>
+<app-application-details></app-application-details>

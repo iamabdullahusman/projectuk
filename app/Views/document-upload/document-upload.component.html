@@ -1,0 +1,534 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Document
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openDocModal(DocumentModal)">Add Document</button>
+      </div>
+    </div>
+  </div>
+  <mat-tab-group (selectedTabChange)="tabClick($event)">
+    <mat-tab label="Request" (click)="loadDocument(2)">
+
+      <div class="table-responsive p-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 == 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive"
+                    title="Active">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive"
+                    title="DeActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                       downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 != 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive"
+                    title="Active">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive"
+                    title="DeActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                        downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                        downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <!-- <mat-tab (click)="loadDocument(1)" label="Offer Kit">
+      <div class="table-responsive p-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 == 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-success me-2"
+                      (click)="openUploadDocModal(documentModel,Doc.documentTypeId)">Upload</button>
+                        <button class="btn btn-sm btn-secondary" (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 != 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                          downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-success me-2"
+                      (click)="openUploadDocModal(documentModel,Doc.documentTypeId)">Upload</button>
+                        <button class="btn btn-sm btn-secondary" (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab> -->
+    <mat-tab label="Guide">
+      <div class="table-responsive p-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 == 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-sm btn-danger me-2" (click)="deleteDoc(Doc.documentTypeId)">Delete</button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 != 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-sm btn-danger me-2" (click)="deleteDoc(Doc.documentTypeId)">Delete</button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                          downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Welcome Kit">
+
+      <div class="table-responsive p-3">
+        <div class="row">
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 == 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive"
+                    title="Active">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive"
+                    title="DeActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+              downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div *ngFor="let Doc of DocUpload;let i=index">
+              <div class="main-card mb-3 card card-warning" *ngIf="i % 2 != 0">
+                <div class="card-header">
+                  <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                  </div>
+                  <div class="col-md-6 text-end">
+                    <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+
+                  </div>
+                </div>
+                <div class=" card-body">
+                  <p class="mb-0">{{Doc.documentDescription}}</p>
+                </div>
+                <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                  <button class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="Doc.isActive"
+                    title="Active">Active</button>
+                  <button class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill"
+                    (click)="ActiveDoc(Doc.documentTypeId, Doc.isActive)" *ngIf="!Doc.isActive"
+                    title="DeActive">DeActive</button>
+                  <div>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.sampleDocumentUrl!=''" (click)="
+                        downloadMyFile(Doc.sampleDocumentUrl)">Download File
+                    </button>
+                    <button class="btn btn-info btn-sm ng-star-inserted me-2" *ngIf="Doc.formOrLetterUrl" (click)="
+                                            downloadMyFile(Doc.formOrLetterUrl)">Form/Letter
+                    </button>
+                    <button class="btn btn-sm btn-secondary"
+                      (click)="openDocModal(DocumentModal,Doc.documentTypeId)">Edit</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</div>
+
+<ng-template #DocumentModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="Closemodel()">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="documentForm" (ngSubmit)="SaveDocUpload()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="documentTypeId">
+          <label class="form-label">Title of document <span class="text-danger">*</span></label>
+          <input type="text" formControlName="documentName" class="form-control" placeholder="Enter Title of document">
+          <div *ngIf="isSubmitted && f['documentName'].errors">
+            <span *ngIf="f['documentName'].errors['required']" class="text-danger">Document Name is
+              required.</span>
+          </div>
+        </div>
+        <ng-container *ngIf="FormInputChange == true">
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Instructions <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="documentDescription"
+              placeholder="Enter Instructions" />
+            <div *ngIf="isSubmitted && f['documentDescription'].errors">
+              <span *ngIf="f['documentDescription'].errors['required']" class="text-danger">Instructions are
+                required.</span>
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Document Type <span class="text-danger">*</span></label>
+            <ng-select formControlName="documentType" bindLabel="documentType" placeholder="Select Document Type"
+              [searchable]="true" [clearable]="true" [(ngModel)]="DocTypeval">
+              <ng-option [value]=1>Legal </ng-option>
+              <ng-option [value]=2>Academic </ng-option>
+              <ng-option [value]=3>Legal & Academic </ng-option>
+            </ng-select>
+            <div *ngIf="isSubmitted && f['documentType'].errors">
+              <span *ngIf="f['documentType'].errors['required']" class="text-danger">Please choose documentType.
+              </span>
+            </div>
+          </div>
+
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Sample Document</label>
+            <input type="file" class="form-control" formControlName="sampleDocumentUrl"
+              (change)="changeDocument($event)" multiple />
+            <div *ngIf="fileNameHTML">{{fileNameHTML}} <i class="fa fa-trash fa-1x ms-2" (click)="RemoveFile()" title="Remove"></i></div>
+            <div *ngIf="isSubmitted && f['sampleDocumentUrl'].errors">
+              <span *ngIf="f['sampleDocumentUrl'].errors['required']" class="text-danger">Please upload document.
+              </span>
+            </div>
+            <div class="text-danger" *ngIf="!isValidFile">
+              Please select valid file
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Document to be filled</label>
+            <input type="file" class="form-control" formControlName="formOrLetter"
+              (change)="changeFormLetterDocument($event)" />
+              <div *ngIf="IsDocFilled">{{IsDocFilled}} <i class="fa fa-trash fa-1x ms-2" (click)="RemoveFileForFileLocad()" title="Remove"></i>
+              </div>
+            <div class="text-danger" *ngIf="!isformLetterValid">
+              Please select valid file
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="FormInputChange == false">
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Description <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" formControlName="documentDescription"
+              placeholder="Enter Description" />
+            <div *ngIf="isSubmitted && f['documentDescription'].errors">
+              <span *ngIf="f['documentDescription'].errors['required']" class="text-danger">Instructions are
+                required.</span>
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label">Upload Document</label>
+            <input type="file" class="form-control" formControlName="sampleDocumentUrl" (change)="changeDocument($event)"
+              multiple />
+            <div *ngIf="fileNameHTML">{{fileNameHTML}}</div>
+          </div>
+          <div class="col-sm-6 pb-2">
+            <label class="form-label">Intake<span class="text-danger">*</span></label>
+            <ng-select [items]="AllIntake" bindLabel="intakeName" multiple="true" placeholder="Select Intake"
+              [searchable]="true"  formControlName="IntakeId" [clearable]="true" bindValue="intakeId" >
+            </ng-select>
+            <!-- (change)="onIntakeChange($event)" -->
+            <!-- (change)="FeeAvailable()" -->
+            <div *ngIf="f['IntakeId'].touched && f['IntakeId'].errors">
+              <span *ngIf="f['IntakeId'].errors['required']" class="text-danger">Please select
+                Intake.</span>
+            </div>
+          </div>
+          <!-- <div class="col-sm-4 pb-2">
+            <label class="form-label">Campus<span class="text-danger">*</span></label>
+            <ng-select [items]="AllCampus" bindLabel="campusName" placeholder="Select Campus" [searchable]="true"
+              [clearable]="true" bindValue="campusId" >
+            </ng-select>
+          </div> -->
+          <div class="col-sm-6 pb-2">
+            <label class="form-label">Course<span class="text-danger">*</span></label>
+            <ng-select [items]="AllCourse"  formControlName="CourseId" multiple="true"  bindLabel="courseName" placeholder="Select Course" [searchable]="true" [clearable]="true"
+              bindValue="courseId"  >
+              <!-- (change)="getIntakeByCampusCourse()" -->
+              <!-- (change)="onCourseChecked($event)" -->
+            </ng-select>
+            <div *ngIf="f['CourseId'].touched && f['CourseId'].errors">
+              <span *ngIf="f['CourseId'].errors['required']" class="text-danger">Please select
+                Course.</span>
+            </div>
+          </div>
+          <!-- <div class="row mt-2">
+            <div class="col-sm-7 text-center">
+              <div class="d-flex">
+                <div class="col-sm-5">Couse Name</div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">Start Date</div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">End Date</div>
+              </div>
+            </div>
+            <div class="col-sm-5 text-center">
+              <div class="d-flex">
+                <div class="col-sm-4 me-2">Intake Month</div>
+                <div class="col-sm-3">Start Date</div>
+                <div class="col-sm-1 me-2"></div>
+                <div class="col-sm-2">End Date</div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-2" *ngFor="let c of courses">
+            <div class="position-relative col-sm-7">
+              <div>
+                <div class="custom-checkbox custom-control form-check">
+                  <input type="checkbox" id="course{{c.courseId}}" class="form-check-input" value="{{c.courseId}}"
+                    [checked]="checkedCourse(c.courseId)" (change)="onCourseChecked($event)">
+                  <label for="course{{c.courseId}}" class="form-label mx-1 row form-check-label">
+                    <div class="col-sm-6">{{c.courseName}}</div>
+                    <div class="col-sm-3">{{c.startDate | date:"dd MMM ''yy"}}</div>
+                    <div class="col-sm-3">{{c.endDate | date:"dd MMM ''yy"}}</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="position-relative col-sm-5">
+              <div>
+                <div class="form-check " *ngFor="let i of c.intakes">
+                  <input class="form-check-input" type="checkbox" id="i{{c.courseId}}{{i.intakeId}}"
+                    value="{{c.courseId}},{{i.intakeId}}" [checked]="checkhedIntake(c.courseId, i.intakeId)"
+                    (change)="onIntakeChange($event)">
+                  <label class="form-check-label mx-1
+                   row" for="i{{c.courseId}}{{i.intakeId}}">
+                    <div class="col-sm-4">{{i.intakeName}}</div>
+                    <div class="col-sm-4">{{i.startDate | date:"dd MMM ''yy"}}</div>
+                    <div class="col-sm-4">{{i.endDate | date:"dd MMM ''yy"}}</div>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <!-- <div *ngIf="isSubmitted && f['course'].errors">
+            <span *ngIf="f['course'].errors['required']" class="text-danger">Course and Intake are required.</span>
+            <span *ngIf="f['course'].errors && !f['course'].errors['required']" class="text-danger">Please select
+              Intake of course.</span>
+          </div> -->
+        </ng-container>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
+    </div>
+  </form>
+</ng-template>
+
+<ng-template #documentModel let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="Closemodel()">
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12">
+          <input type="hidden" formControlName="doctypeId">
+          <input type="hidden" formControlName="docTypecontent">
+          <!-- <input type="hidden" formControlName="doctypeId"> -->
+          <!-- <input type="hidden" formControlName="applicationId"> -->
+          <!-- <input type="file" formControlName="documentFile" class="form-control" (change)="convertFileToBase64($event)">
+          <div *ngIf="!isValidFile && f['documentFile'].errors">
+            <span *ngIf="f['documentFile'].errors['required']" class="text-danger">Pleaseee chose file</span>
+          </div> -->
+
+          <input type="file" class="form-control" (change)="convertFileToBase64($event)" multiple>
+          <div *ngIf="!isValidFile">
+            <span class="text-danger">Please choose valid file
+              type.</span>
+          </div>
+          <div *ngIf="isFormSubmitted && f1['docTypecontent'].errors && isValidFile">
+            <span *ngIf="f1['docTypecontent'].errors['required']" class="text-danger">Please choose file</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-success">Save</button>
+    </div>
+  </form>
+</ng-template>

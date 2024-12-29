@@ -1,0 +1,433 @@
+<div class="row">
+  <div class="col-md-6 col-xl-3" (click)="getStageRecorId(inprogressId)">
+    <div
+      class="card mb-3 widget-chart widget-chart2 text-start card-btm-border card-shadow-warning border-warning mt-0">
+      <div class="widget-chat-wrapper-outer">
+        <div class="widget-chart-content">
+          <div class="widget-chart-flex">
+            <div class="widget-numbers mt-2">
+              <div class="widget-chart-flex">
+                <i class="vsm-icon pe-7s-mail fsize-3"></i>
+                <span class="ms-2 fsize-4">{{totalInprogress}}</span>
+
+              </div>
+            </div>
+          </div>
+          <h6 class="widget-subheading mb-0 opacity-5">Applications In-Progress</h6>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3" (click)="getStageRecorId(receivedId)">
+    <div
+      class="card mb-3 widget-chart widget-chart2 text-start card-btm-border card-shadow-primary border-primary mt-0">
+      <div class="widget-chat-wrapper-outer">
+        <div class="widget-chart-content">
+          <div class="widget-chart-flex">
+            <div class="widget-numbers mt-2">
+              <div class="widget-chart-flex">
+                <i class="vsm-icon pe-7s-mail-open fsize-3"></i>
+                <span class="ms-2 fsize-4">{{totalReceived}}</span>
+              </div>
+            </div>
+          </div>
+          <h6 class="widget-subheading mb-0 opacity-5">Received Applications</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3" (click)="getStageRecorId(acceptedId)">
+    <div
+      class="card mb-3 widget-chart widget-chart2 text-start card-btm-border card-shadow-success border-success mt-0">
+      <div class="widget-chat-wrapper-outer">
+        <div class="widget-chart-content">
+          <div class="widget-chart-flex">
+            <div class="widget-numbers mt-2">
+              <div class="widget-chart-flex">
+                <div class="fsize-4">
+                  <i class="vsm-icon pe-7s-check fsize-3"></i>
+                  <span class="ms-2 fsize-4">{{totalAccepted}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h6 class="widget-subheading mb-0 opacity-5">Accepted Applications</h6>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-xl-3" (click)="getStageRecorId(rejectedId)">
+    <div class="card mb-3 widget-chart widget-chart2 text-start card-btm-border card-shadow-danger border-danger mt-0">
+      <div class="widget-chat-wrapper-outer">
+        <div class="widget-chart-content">
+          <div class="widget-chart-flex">
+            <div class="widget-numbers mt-2">
+              <div class="widget-chart-flex">
+                <div class="fsize-4">
+                  <i class="vsm-icon pe-7s-close-circle fsize-3"></i>
+                  <span class="ms-2 fsize-4">{{totalRejected}}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <h6 class="widget-subheading mb-0 opacity-5">Rejected Applications </h6>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <div class="card-header-title font-size-lg text-capitalize fw-normal">
+      Recent Application
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="align-middle text-truncate mb-0 table table-borderless table-hover">
+      <thead>
+        <tr>
+          <th class="text-center">#</th>
+          <th class="text-center">Avatar</th>
+          <th class="text-center">Name</th>
+          <th class="text-center">Country</th>
+          <th class="text-center">Status</th>
+          <th class="text-center">Due Date</th>
+          <th class="text-center">Application Progress</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of studentApplications;let i=index">
+          <td class="text-center text-muted" style="width: 80px;">#{{student.applicationId}}</td>
+          <td class="text-center" style="width: 80px;">
+            <img width="40" class="rounded-circle" src="./assets/images/avatars/1.jpg" alt="" />
+          </td>
+          <td class="text-center"><a [routerLink]="">{{student.lastName}} {{student.firstName}}</a></td>
+          <td class="text-center"><a [routerLink]="">{{student.countryOfResident}}</a></td>
+          <td class="text-center">
+            <div class="badge bg-pill bg-warning" *ngIf="student.applicationStatus==2">In Progress</div>
+            <div class="badge bg-pill bg-primary" *ngIf="student.applicationStatus==3">Received</div>
+            <div class="badge bg-pill bg-success" *ngIf="student.applicationStatus==4">Accepted</div>
+            <div class="badge bg-pill bg-danger" *ngIf="student.applicationStatus==5">Rejected</div>
+          </td>
+          <td class="text-center">
+            <span class="pe-2 opacity-6">
+              <i class="fa fa-business-time"></i>
+            </span>
+            12 Dec
+          </td>
+          <td class="text-center" style="width: 200px;">
+            <div class="widget-content p-0">
+              <div class="widget-content-outer">
+                <div class="widget-content-wrapper">
+                  <div class="widget-content-left pe-2">
+                    <div class="widget-numbers fsize-1 text-warning" *ngIf="student.applicationStatus==2">25%</div>
+                    <div class="widget-numbers fsize-1 text-primary" *ngIf="student.applicationStatus==3">50%</div>
+                    <div class="widget-numbers fsize-1 text-success" *ngIf="student.applicationStatus==4">100%</div>
+                    <div class="widget-numbers fsize-1 text-danger" *ngIf="student.applicationStatus==5">75%</div>
+                  </div>
+                  <div class="widget-content-right w-100">
+                    <div class="progress-bar-xs progress">
+                      <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 25%;" *ngIf="student.applicationStatus==2"></div>
+                      <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="50" aria-valuemin="0"
+                        aria-valuemax="100" style="width:50%;" *ngIf="student.applicationStatus==3"></div>
+                      <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 100%;" *ngIf="student.applicationStatus==4"></div>
+                      <div class="progress-bar bg-danger" role="progressbar" aria-valuenow="75" aria-valuemin="0"
+                        aria-valuemax="100" style="width: 75%;" *ngIf="student.applicationStatus==5"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="text-center text-nowrap">
+            <button class="me-1 btn btn-success btn-sm"
+              (click)="openApplication(applicationModal,student.applicationId,'edit')">Edit</button>
+            <button class="btn btn-warning btn-sm"
+              (click)="openApplication(applicationModal,student.applicationId,'view')">View</button>
+          </td>
+        </tr>
+        <tr *ngIf="studentApplications.length==0">
+          <td colspan="8" class="text-center">No new student application</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="d-block p-4 text-center card-footer">
+    <a href="/course/studentApplication" class="btn-pill btn-shadow btn-wide fsize-1 btn btn-dark btn-lg">
+      <span class="me-2 opacity-7">
+        <i class="fa fa-cog fa-spin"></i>
+      </span>
+      <span class="me-1">View Complete Report</span>
+    </a>
+  </div>
+</div>
+
+<ng-template #applicationModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="Applicationform" (ngSubmit)="SaveApplication()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-lg-6 mb-3">
+          <label class="form-label">First Name <span class="text-danger">*</span></label>
+          <input type="text" formControlName="firstName" class="form-control">
+          <div *ngIf="isSubmitted && f['firstName'].errors">
+            <span *ngIf="f['firstName'].errors['required']" class="text-danger">First name is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Last Name <span class="text-danger">*</span></label>
+          <input type="text" formControlName="lastName" class="form-control">
+          <div *ngIf="isSubmitted && f['lastName'].errors">
+            <span *ngIf="f['lastName'].errors['required']" class="text-danger">Last name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Email <span class="text-danger">*</span></label>
+          <input type="email" class="form-control" formControlName="email" />
+          <div *ngIf="isSubmitted && f['email'].errors">
+            <span *ngIf="f['email'].errors['required']" class="text-danger">Email is required.</span>
+            <span *ngIf="f['email'].errors['pattern']" class="text-danger">Please enter valid email.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Phone Number  <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="phoneNo" />
+          <div *ngIf="isSubmitted && f['phoneNo'].errors">
+            <span *ngIf="f['phoneNo'].errors['required']" class="text-danger">Phone number is
+              required.</span>
+            <span *ngIf="f['phoneNo'].errors['pattern']" class="text-danger">Please enter valid phone
+              number.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Date of Birth <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" formControlName="dateOfBirth" />
+          <div *ngIf="isSubmitted && f['dateOfBirth'].errors">
+            <span *ngIf="f['dateOfBirth'].errors['required']" class="text-danger">Date of birth is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Country of Nationality <span class="text-danger">*</span></label>
+
+          <input type="text" class="form-control" formControlName="nationality" />
+          <div *ngIf="isSubmitted && f['nationality'].errors">
+            <span *ngIf="f['nationality'].errors['required']" class="text-danger">Country of Nationality is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Course of Residency <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" formControlName="countryOfResident" />
+          <div *ngIf="isSubmitted && f['countryOfResident'].errors">
+            <span *ngIf="f['countryOfResident'].errors['required']" class="text-danger">Country of resident
+              is required.</span>
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Address <span class="text-danger">*</span></label>
+          <textarea class="form-control" formControlName="adress"></textarea>
+          <div *ngIf="isSubmitted && f['adress'].errors">
+            <span *ngIf="f['adress'].errors['required']" class="text-danger">Address is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian First Name <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentFirstName" />
+          <div *ngIf="isSubmitted && f['parentFirstName'].errors">
+            <span *ngIf="f['parentFirstName'].errors['required']" class="text-danger">Parent/Guardian first
+              name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Last Name <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentLastName" />
+          <div *ngIf="isSubmitted && f['parentLastName'].errors">
+            <span *ngIf="f['parentLastName'].errors['required']" class="text-danger">Parent/Guardian last
+              name is required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Phone Number <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentPhoneNo" />
+          <div *ngIf="isSubmitted && f['parentPhoneNo'].errors">
+            <span *ngIf="f['parentPhoneNo'].errors['required']" class="text-danger">Parent/Guardian phone
+              number is required.</span>
+            <span *ngIf="f['parentPhoneNo'].errors['pattern']" class="text-danger">Please enter valid phone
+              number.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Parent/Guardian Email <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="parentEmail" />
+          <div *ngIf="isSubmitted && f['parentEmail'].errors">
+            <span *ngIf="f['parentEmail'].errors['required']" class="text-danger">Parent/Guardian email is
+              required.</span>
+            <span *ngIf="f['parentEmail'].errors['pattern']" class="text-danger">Please enter valid phone
+              number.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Study Of Date <span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="dateOfStudy" />
+          <div *ngIf="isSubmitted && f['dateOfStudy'].errors">
+            <span *ngIf="f['dateOfStudy'].errors['required']" class="text-danger">Study of date is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Intake <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="intake">
+            <option value="">Select</option>
+            <option *ngFor="let intake of intakes" value="{{intake.intakeId}}">{{intake.intakeName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['intake'].errors">
+            <span *ngIf="f['intake'].errors['required']" class="text-danger">Intake email is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Course <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="courseName">
+            <option value="">Select</option>
+            <option *ngFor="let course of courses" value="{{course.courseId}}">{{course.courseName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['courseName'].errors">
+            <span *ngIf="f['courseName'].errors['required']" class="text-danger">Course is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Study Location <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="studyLocation">
+            <option value="">Select</option>
+            <option *ngFor="let campuse of campuses" value="{{campuse.campusId}}">{{campuse.campusName}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['studyLocation'].errors">
+            <span *ngIf="f['studyLocation'].errors['required']" class="text-danger">Study Location is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">School Leaving Qualification<span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="lastSchoolQualification" />
+          <div *ngIf="isSubmitted && f['lastSchoolQualification'].errors">
+            <span *ngIf="f['lastSchoolQualification'].errors['required']" class="text-danger">School leaving
+              qualification is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Name of Secondary School<span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="secondarySchoolName" />
+          <div *ngIf="isSubmitted && f['secondarySchoolName'].errors">
+            <span *ngIf="f['secondarySchoolName'].errors['required']" class="text-danger">Name of secondary
+              school is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">School Completion Year<span class="text-danger">*</span></label>
+          <input class="form-control" formControlName="schoolCompletionYear" />
+          <div *ngIf="isSubmitted && f['schoolCompletionYear'].errors">
+            <span *ngIf="f['schoolCompletionYear'].errors['required']" class="text-danger">School completion
+              year is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Who will be paying your Fee?<span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="feePayby">
+            <option value="">Select</option>
+            <option *ngFor="let feePayOption of feePayOptions" value="{{feePayOption.feePaybyId}}">
+              {{feePayOption.feePaidPerson}}</option>
+          </select>
+          <div *ngIf="isSubmitted && f['feePayby'].errors">
+            <span *ngIf="f['feePayby'].errors['required']" class="text-danger">Who will be paying your Fee
+              is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More detail of Fee payer</label>
+          <input class="form-control" formControlName="feePaybyDetail" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">How did you hear about UFP?</label>
+          <select class="form-control" formControlName="socialRefrenceType">
+            <option value="">Select</option>
+            <option *ngFor="let SocialPreference of SocialPreferences" value="{{SocialPreference.referenceId}}">
+              {{SocialPreference.referenceName}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More Details</label>
+          <input class="form-control" formControlName="socialRefrenceTypeDetails" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Existing Medical Conditions <span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="hasExistMedicalCondition">
+            <option value="">Select</option>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+          <div *ngIf="isSubmitted && f['hasExistMedicalCondition'].errors">
+            <span *ngIf="f['hasExistMedicalCondition'].errors['required']" class="text-danger">Existing
+              medical conditions is
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More details of Medical Conditions </label>
+          <input type="text" class="form-control" formControlName="medicalConditionDetail" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Have you had any previous/current UK Visa?</label>
+          <select class="form-control" formControlName="hasVisa">
+            <option value="">Select</option>
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+          </select>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">Please select the visa type</label>
+          <input type="text" class="form-control" formControlName="visaType" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label">More details for visa </label>
+          <input type="text" class="form-control" formControlName="visaTypeDetail" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="Qualification" class="form-label">Your Qualification</label>
+          <input class="form-control" type="file" id="Qualification">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="Passport" class="form-label">Your Passport</label>
+          <input class="form-control" type="file" id="Passport">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="IELTS" class="form-label">Your IELTS Certificate</label>
+          <input class="form-control" type="file" id="IELTS">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" *ngIf="!isView" class="btn btn-primary" value="Submit">
+    </div>
+  </form>
+</ng-template>

@@ -1,0 +1,171 @@
+<div *ngIf="!permissionMessageImage">
+    <div class="row">
+      <div class="col-md-12 application-detail">
+        <div class="modal-header shadow-lg">
+          <div class="row w-100">
+            <div class="fsize-2 fw-600 card-header" *ngIf="userType == 5">
+              Finance
+            </div>
+            <div class="fsize-2 fw-600 card-header" *ngIf="userType > 5">
+              {{studentName}}'s Finance
+            </div>
+          </div>
+        </div>
+        <div class="modal-body">
+          <div class="table-responsive px-3 mx-3">
+            <div class="row">
+  
+              <div class="col-md-6 ps-0 position-relative">
+                <div class="row mx-0">
+                  <form [formGroup]="UploadDepositReceiptForm" (ngSubmit)="uploadDepositeReceipt()">
+                    <div class="col-sm-12 mb-2">
+                      <label class="form-label">
+                        Fee/Deposit Type <span class="text-danger">*</span>
+                      </label>
+                      <ng-select formControlName="installmentId" placeholder="Select any" [searchable]="true"
+                        [clearable]="false" [(ngModel)]="inquiryCampusId">
+                        <ng-option [value]="i" [disabled]="item.disabled"
+                          *ngFor="let item of installmentList;let i=index">
+  
+                          {{item.installmentType}}
+                        </ng-option>
+                      </ng-select>
+                      <div *ngIf="f['installmentId'].touched && f['installmentId'].errors">
+                        <span *ngIf="f['installmentId'].errors['required']" class="text-danger">Select Type</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                      <label class="form-label">
+                        Amount <span class="text-danger">*</span>
+                      </label>
+                      <input type="text" formControlName="amount" class="form-control"
+                        placeholder="Enter Deposited Amount">
+                      <div *ngIf="f['amount'].touched && f['amount'].errors">
+                        <span *ngIf="f['amount'].errors['required']" class="text-danger">Amount is required.</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                      <label class="form-label">
+                        Upload Fee Receipt (.jpg , .jfif ,.png and .pdf )<span class="text-danger">*</span>
+                      </label>
+                      <input type="file" class="form-control" formControlName="dReceipt"
+                        (change)="convertFileToBase64($event)">
+                        <div *ngIf="f['dReceipt'].touched && f['dReceipt'].errors">
+                          <span *ngIf="f['dReceipt'].errors['required']" class="text-danger">Receipt File is
+                            required.</span>
+                        </div>
+                        <div *ngIf="!isValidFile">
+                          <span class="text-danger">Please choose valid file
+                            type.</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 mb-2">
+                      <label class="form-label">
+                        Payment Date <span class="text-danger">*</span>
+                      </label>
+                      <input type="date" class="form-control" max="{{SetDate}}" formControlName="paymentDate">
+                      <div *ngIf="f['paymentDate'].touched && f['paymentDate'].errors">
+                        <span *ngIf="f['paymentDate'].errors['required']" class="text-danger">Payment Date is
+                          required.</span>
+                      </div>
+                    </div>
+                    <div class="col-sm-12">
+                      <button type="submit" class="btn btn-success me-2">Submit</button>
+                      <button type="button" class="btn btn-outline-danger">Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col-md-12 position-relative">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Installment Type</th>
+                      <th>Total Amount</th>
+                      <th>Paid Amount</th>
+                      <th>Payment Date</th>
+                      <th>Due Date</th>
+                      <th>Status</th>
+                      <th>Receipt</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let installment of installmentList">
+                      <td>{{installment.installmentType}}</td>
+                      <td>{{installment.totalInstallmentAmount}}</td>
+                      <td>{{installment.paidInstallmentAmount}}</td>
+                      <td>{{installment.paymentDate | date:'dd/MM/YYYY'}}</td>
+                      <td>{{installment.installmentDueDate | date:'dd/MM/YYYY'}}</td>
+                      <td class="text-uppercase">
+                        <span class="badge rounded-pill"
+                          [ngClass]="installment.status.toLowerCase()=='paid'? 'bg-success':'bg-warning'">
+                          <ng-container
+                            *ngIf="installment.paidInstallmentAmount>0 && installment.totalInstallmentAmount!=installment.paidInstallmentAmount">
+                            Partially</ng-container>
+                          {{installment.status}}
+                        </span>
+                      </td>
+                      <td class="text-uppercase">
+                        <button class="btn py-0 px-2"
+                          [ngClass]="installment.paidInstallmentAmount>0? 'btn-info':'btn-secondary'"
+                          
+                          (click)="GetAllReceipt(installment.applicationId,installment.installmentNo,installment.installmentType)">View</button>
+                          <!-- [disabled]="installment.paidInstallmentAmount==0" -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>
+  
+  
+  <ng-template #ReceiptView let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">
+          <h3>×</h3>
+        </span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="mt-2 mb-2">
+        <div class="mb-4" *ngIf="PaymentReceipts?.length>0">
+          <div *ngFor="let receipt of PaymentReceipts">
+            <div class="d-flex justify-content-between mt-2 p-2 align-items-center border rounded">
+              <div>
+                <label>{{receipt.receiptName}}</label>
+                <span class="text-success" *ngIf="receipt.status == 1">-
+                  Paid</span>
+                <span class="text-danger" *ngIf="receipt.status == 2">- Rejected
+                  (Reason:-{{receipt.reason}})</span>
+                <span class="text-warning" *ngIf="receipt.status == 0">- Unverify</span>
+              </div>
+              <div>
+                <button class="text-end btn btn-success ms-2" (click)="downloadFile(receipt.paymentReceiptUrl)"><i
+                    class="fa fa-download" title="Download"></i></button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="d-flex card-footer justify-content-between">
+          <div>
+          </div>
+          <div>
+            <button type="button" class="btn btn-outline-danger ms-1"
+              (click)="modal.dismiss('Cross click')">Close</button>
+            </div>
+        </div>
+  
+      </div>
+    </div>
+  </ng-template>

@@ -1,0 +1,185 @@
+<div class="row" *ngIf="!permissionMessageImage">
+  <div class="col-md-12 card">
+    <div class="card-header">
+      <div class="row w-100">
+        <div class="fsize-2 fw-600" *ngIf="userType == 5">
+          My CAS
+        </div>
+        <div class="fsize-2 fw-600" *ngIf="userType > 5">
+          {{ studentName }}'s CAS
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive p-3 m-3" *ngIf="VisaLinkDataList.length>0">
+        <table class="table m-2">
+          <thead>
+            <tr>
+              <th>Link Created Date</th>
+              <th>Status</th>
+              <th style="width: 300px">Reason</th>
+              <th>Link</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let VisaLink of VisaLinkDataList">
+              <td>{{ VisaLink.createdDate | date : "HH:mm dd/MM/YYYY" }}</td>
+              <td>
+                <i
+                  *ngIf="VisaLink.visaLinkStatus == 1"
+                  class="text-warning fw-500 ms-1"
+                >
+                  Review Pending
+                </i>
+                <i
+                  *ngIf="VisaLink.visaLinkStatus == 2"
+                  class="text-success fw-500 ms-1"
+                >
+                  All Is Good
+                </i>
+                <i
+                  *ngIf="VisaLink.visaLinkStatus == 3"
+                  class="text-danger fw-500 ms-1"
+                >
+                  Correction needed
+                </i>
+              </td>
+              <td style="width: 300px">{{ VisaLink.reason }}</td>
+              <td><a href="{{ VisaLink.link }}" target="_blank">View</a></td>
+              <td>
+                <div class="me-2 btn-success btn fsize-1 doc-icon py-0">
+                  <a (click)="changeStatus(VisaLink.id, 2)" title="Approve"
+                    >All Is Good</a
+                  >
+                </div>
+                <div class="me-2 btn-danger btn fsize-1 doc-icon py-0">
+                  <a (click)="changeStatus(VisaLink.id, 3)" title="Reject"
+                    >Correction needed</a
+                  >
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!--
+      
+      Remove this check from download button
+      
+      *ngIf="CASData[0]?.file?.split('.').pop() != 'pdf'" -->
+      <hr *ngIf="VisaLinkDataList.length>0" />
+      <div class="table-responsive p-3 m-3">
+        <div class="row">
+          <div class="col-md-6 position-relative">
+            <i
+              class="fa fa-download fs-5 btn-success p-2 rounded-3 position-absolute"
+              style="right: 1.5rem; top: 10px; cursor: pointer"
+              
+              (click)="downloadFile(CASData[0]?.file)"
+            ></i>
+
+            <iframe [src]="urlSafe" class="vh-74"></iframe>
+          </div>
+          <div class="col-md-6 position-relative">
+            <div class="row mt-4 mx-0" *ngFor="let CsaIssue of CASData">
+              <div class="col-md-4">
+                <div class="fsize-2 fw-600 text-capitalize mb-1">
+                  {{ CsaIssue.issueDate | date : "dd/MM/YYYY" }}
+                </div>
+                <div>
+                  <label class="doc-label fsize-1 text-capitalize"
+                    >CAS Issue Date</label
+                  >
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="fsize-2 fw-600 text-capitalize mb-1">
+                  {{ CsaIssue.casNumber }}
+                </div>
+                <div>
+                  <label class="doc-label fsize-1 text-capitalize"
+                    >CAS Reference Number</label
+                  >
+                </div>
+              </div>
+              <div class="col-md-4 ps-4">
+                <!-- <div class="fsize-2 fw-600 text-capitalize mb-1 text-danger" *ngIf="CsaIssue.statusName=='Expired'">
+                    {{CsaIssue.statusName}}
+                  </div>
+                  <div class="fsize-2 fw-600 text-capitalize mb-1 text-danger" *ngIf="CsaIssue.statusName=='Withdraw'">
+                    {{CsaIssue.statusName}}
+                  </div> -->
+                <div
+                  class="fsize-2 fw-600 text-capitalize mb text-success"
+                  *ngIf="CsaIssue.statusName == 'Active'"
+                >
+                  {{ CsaIssue.statusName }}
+                </div>
+                <div
+                  class="fsize-2 fw-600 text-capitalize mb text-danger"
+                  *ngIf="CsaIssue.statusName != 'Active'"
+                >
+                  {{ CsaIssue.statusName }}
+                </div>
+                <div>
+                  <label class="doc-label fsize-1 text-capitalize"
+                    >CAS Status</label
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>
+
+<ng-template #StatusReason let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Cas Status Change</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <form>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Reason <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            class="form-control"
+            id="reason"
+            placeholder="Reason"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="row">
+      <div class="col-md-12 text-end">
+        <button
+          type="button"
+          class="btn btn-success"
+          (click)="changeStatuswithreason()"
+        >
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

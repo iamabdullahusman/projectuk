@@ -1,0 +1,161 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Intake
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal(intakeModal)">Add Intake</button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 5%;">
+            No.
+          </th>
+          <th class="text-left" style="width: 30%">
+            Year Of Study
+          </th>
+          <th class="text-left" style="width: 20%;">
+            Intake Month
+          </th>
+          <th class="text-left" style="width: 20%;">
+            Start Date
+          </th>
+          <th class="text-left" style="width: 20%;">
+            End Date
+          </th>
+          <th class="text-left" style="width: 5%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let intake of intakes;let i=index">
+          <td class="text-left">
+            {{intake.index}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{intake.yearOfStudy}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{intake.intakeName}}
+          </td>
+          <td class="text-left">
+            {{intake.startDate | date:"dd/MM/yyyy"}}
+          </td>
+          <td class="text-left">
+            {{intake.endDate | date:"dd/MM/yyyy"}}
+          </td>
+          <td class="text-left text-nowrap">
+            <button class="me-1 btn btn-primary btn-sm" (click)="openModal(intakeModal,intake.intakeId)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteIntake(intake.intakeId)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="intakes.length==0">
+          <td colspan="3" class="text-center">No intake found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #intakeModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click'); closeDP()">
+      <span aria-hidden=" true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="intakeForm" (ngSubmit)="SaveIntake()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="intakeId">
+          <label class="form-label">Intake Month <span class="text-danger">*</span></label>
+          <!-- <input type="text" formControlName="intakeDate" class="form-control" placeholder="Enter Intake Month"> -->
+          <ng-select formControlName="intakeDate" [items]="IntakeMonthData" bindLabel="name" bindValue="name"
+            placeholder="Select intake month" [clearable]="true">
+          </ng-select>
+          <div *ngIf="isSubmitted && f['intakeDate'].errors">
+            <span *ngIf="f['intakeDate'].errors['required']" class="text-danger">Intake month is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <!-- <input type="text" class="form-control" placeholder="Enter the year of study" formControlName="yearOfStudy" /> -->
+          <div class="row">
+            <div class="col-md-6">
+              <label class="form-label">Academic Start Year <span class="text-danger">*</span></label>
+              <div class="form-control">
+                <div class="d-flex justify-content-between">
+                  <input matInput class="remove-border" (click)="dp.open()" [matDatepicker]=" dp"
+                    placeholder="Select start year" formControlName="startYear" />
+                  <mat-datepicker-toggle matIconSuffix [for]="dp"></mat-datepicker-toggle>
+                </div>
+                <mat-datepicker #dp startView="multi-year" (yearSelected)="setStartYear($event, dp)"
+                  panelClass="example-month-picker">
+                </mat-datepicker>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Academic End Year<span class="text-danger">*</span></label>
+              <div class="form-control">
+                <div class="d-flex justify-content-between">
+                  <input matInput class="remove-border"  (click)="dp1.open();" [min]="minEndYear" [matDatepicker]="dp1"
+                    placeholder="Select end year" formControlName="endYear" />
+                  <mat-datepicker-toggle matIconSuffix [for]="dp1"></mat-datepicker-toggle>
+                </div>
+                <mat-datepicker #dp1 startView="multi-year" (yearSelected)="setEndYear($event, dp1)"
+                  panelClass="example-month-picker">
+                </mat-datepicker>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div *ngIf="isSubmitted && f['startYear'].errors">
+                <span *ngIf="f['startYear'].errors['required']" class="text-danger">Start year is required.</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div *ngIf="isSubmitted && f['endYear'].errors">
+                <span *ngIf="f['endYear'].errors['required']" class="text-danger">End year is required.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Start date <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [min]="MinStartDate" [max]="MaxStartDate" (change)="StartDateOnChange()" formControlName="startDate" />
+          <!-- [min]="MinStartDate" [max]="MaxStartDate" -->
+          <div *ngIf="isSubmitted && f['startDate'].errors">
+            <span *ngIf="f['startDate'].errors['required']" class="text-danger">Start date
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">End date <span class="text-danger">*</span></label>
+          <input type="date" class="form-control" [min]="StartDate" [max]="MaxEndDate" formControlName="endDate"  />
+          <!-- [min]="MinEndDate" [max]="MaxEndDate" -->
+          <div *ngIf="isSubmitted && f['endDate'].errors">
+            <span *ngIf="f['endDate'].errors['required']" class="text-danger">End date
+              required.</span>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save">
+    </div>
+  </form>
+</ng-template>

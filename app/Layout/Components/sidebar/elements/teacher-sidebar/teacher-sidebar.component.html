@@ -1,0 +1,93 @@
+<div class="app-sidebar-content">
+  <div class="app-sidebar-scroll">
+    <perfect-scrollbar
+      [autoPropagation]="true"
+      class="scroll-container"
+      [config]="config"
+      [scrollIndicators]="true"
+      style="max-width: 600px; max-height: 95vh"
+    >
+      <div class="v-sidebar-menu vsm-default">
+        <div class="vsm-list">
+          <div class="vsm-header">Navigation</div>
+
+          <div class="vsm-item">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/teacher/dashboard"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-plugin"></i>
+              <span class="vsm-title">Dashboard</span>
+            </a>
+          </div>
+          <div class="vsm-item">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/teacher/attendance"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon fa fa-calendar"></i>
+              <span class="vsm-title">Attendance</span>
+            </a>
+          </div>
+          
+          <div class="vsm-item"> 
+          <a 
+          routerLinkActive="active-item"
+          routerLink="/teacher/deatils"
+          class="vsm-link mt-2">
+            <i class="vsm-icon fa fa-id-badge"></i>
+            <span class="vsm-title">Teacher Details</span>
+          </a>
+          </div>
+          
+          <!-- <div class="vsm-item"> 
+            <a 
+            routerLinkActive="active-item"
+            routerLink="/teacher/deatils  "
+            class="vsm-link mt-2"
+            >
+              <i class="vsm-icon fa fa-book"></i>
+              <span class="vsm-title">Subject</span>
+            </a>
+            </div> -->
+           <div class="vsm-item">
+            <a 
+            routerLinkActive="active-item"
+            routerLink="/teacher/subject"
+            class="vsm-link mt-2">
+              <i class="vsm-icon fa fa-book"></i>
+              <span class="vsm-title">Subject</span>
+            </a>
+           </div>
+            <div class="vsm-item"> 
+              <a class="vsm-link mt-2"
+              routerLinkActive="active-item"
+              routerLink="/teacher/timetable">
+                <i class="vsm-icon fa fa-bell-o"></i>
+                <span class="vsm-title">TimeTable</span>
+              </a>
+              </div>
+          
+          <div class="vsm-item"> 
+            <a class="vsm-link mt-2">
+              <i class="vsm-icon fa fa-check"></i>
+              <span class="vsm-title">Result</span>
+            </a>
+            </div>
+            <div class="vsm-item">
+              <a
+                routerLinkActive="active-item"
+                routerLink="/todoList"
+                class="vsm-link mt-2"
+              >
+                <i class="vsm-icon pe-7s-clock"></i>
+                <span class="vsm-title">To Do List</span>
+              </a>
+            </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+</div>

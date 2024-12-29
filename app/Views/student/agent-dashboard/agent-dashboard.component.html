@@ -1,0 +1,42 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Application of Agent
+    </div>
+    <div class="table-responsive p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle mb-0 table table-borderless table-striped table-hover display nowrap">
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        Application Name
+                    </th>
+                    <th class="text-left">
+                        Campus Name
+                    </th>
+                    <th class="text-left">
+                        Course Detail
+                    </th>
+
+                    <th class="text-left">
+                        Intake
+                    </th>
+
+                    <th class="text-left">
+                        CreatedOn
+                    </th>
+                    <th class="text-left">
+                        CreatedBy
+                    </th>
+
+                    <th class="text-left">
+                        Action
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />

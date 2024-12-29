@@ -1,0 +1,186 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    University Course Details
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal(Universitycoursemodel)">
+          <!-- (click)="openModal(campusModal)" -->
+        Add University Course
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <!-- <th class="text-left" style="width: 5%;">
+            No.
+          </th> -->
+          <th class="text-center" style="width: 20%;">
+            University Name
+          </th>
+          <th class="text-center" style="width: 25%;">
+            Course Name
+          </th>
+          <th class="text-center" style="width: 15%;">
+            Entry Requirements
+          </th>
+          <th class="text-center" style="width: 30%;">
+            Date Count
+          </th>
+          <th class="text-center" style="width: 5%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of UniversityCourseList;let i=index">
+          <!-- <td class="text-left">
+            {{i + 1}}
+          </td> -->
+          <td class="text-center text-capitalize">
+            {{data.universityName}}
+          </td>
+          <td class="text-center">
+            {{data.courseName}}
+          </td>
+          <td class="text-center text-capitalize">
+            {{data.entryRequirements}}
+          </td>
+          <td class="text-center text-capitalize">
+            {{data.date}}
+          </td>
+
+          <td class="text-center text-nowrap">
+            <button *ngIf="data.isactive" (click)="ActiveDeActive(data.id, false)" class="btn btn-primary btn-sm"
+              title="Deactivate"><i class="fa fa-eye"></i></button>
+            <button *ngIf="!data.isactive" (click)="ActiveDeActive(data.id, true)" class="btn btn-primary btn-sm"
+              title="Deactivate"><i class="fa  fa-power-off"></i></button>
+            <button (click)="viewdata(Universitycoursemodel,data.id)" class="btn btn-primary btn-sm ms-2" title="view"><i
+              class="fa fa-eye"></i></button>
+              <button (click)="EditData(Universitycoursemodel,data.id)" class="btn btn-primary btn-sm ms-2" title="edit"><i
+                  class="fa fa-pencil"></i></button>
+          </td>
+        </tr>
+        <tr *ngIf="UniversityCourseList.length==0">
+          <td colspan="5" class="text-center">No University found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #Universitycoursemodel let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add University Course</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="AddUniversityCourse" (ngSubmit)="SaveUniversityCourse()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="Id">
+          <label class="form-label">University<span class="text-danger">*</span></label>
+          <select class="form-control" formControlName="UniversityId">
+            <option value="">Select University</option>
+            <option *ngFor="let unisity of universitylist" value="{{unisity.id}}">{{unisity.name}}
+            </option>
+          </select>
+          <div *ngIf="isSubmitted && f['UniversityId'].errors">
+            <span *ngIf="f['UniversityId'].errors['required']" class="text-danger">University is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Course<span class="text-danger">*</span></label>
+          <input type="text" formControlName="CourseName" class="form-control" placeholder="Enter Course Name">
+          <!-- <select class="form-control" formControlName="CourseId">
+            <option value="">Select Course</option>
+            <option *ngFor="let cours of CourseData" value="{{cours.courseId}}">{{cours.courseName}}
+            </option>
+          </select> -->
+          <!-- <div *ngIf="isSubmitted && f['CourseId'].errors">
+            <span *ngIf="f['CourseId'].errors['required']" class="text-danger">Course is
+              required.</span>
+          </div> -->
+            <div *ngIf="isSubmitted && f['CourseName'].errors">
+              <span *ngIf="f['CourseName'].errors['required']" class="text-danger">Course is
+                required.</span>
+            </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Entry Requirements</label>
+          <!-- <span class="text-danger">*</span> -->
+          <input type="text" placeholder="Enter Entry Requirements" formControlName="EntryRequirements" class="form-control">
+          <div *ngIf="isSubmitted && f['EntryRequirements'].errors">
+            <span *ngIf="f['EntryRequirements'].errors['required']" class="text-danger">Entry Requirements are
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Date</label>
+          <!-- <span class="text-danger">*</span> -->
+          <!-- <input type="text" formControlName="Date" id="Extradate0" placeholder="Enter Date" class="form-control" > -->
+          <div *ngIf="isSubmitted && f['Date'].errors">
+            <span *ngIf="f['Date'].errors['required']" class="text-danger">Date is
+              required.</span>
+          </div>
+          </div>
+          <!-- <div class="col-md-2 mb-3" style="padding-top: 27px;">
+          <button class="btn btn-primary" type="button"  (click)="AddDate()">Add Date</button>
+        </div> -->
+        <div *ngFor="let data of AddnewdateCountList;let i=index">
+          <div class="row" id="maindaterow{{i+1}}">
+            <div class="col-md-10 mb-3">
+              <input type="text" *ngIf="data.date" value="{{data.date}}" id="Extradate{{i+1}}" placeholder="Enter Date" class="form-control">
+              <input type="text" *ngIf="!data.date"  id="Extradate{{i+1}}" placeholder="Enter Date" class="form-control">
+            </div>
+            <div class="col-md-2 mb-3"  style="padding-top: 10px;" (click)="RemoveDate(i+1)">
+              <i class="fa fa-trash"></i>
+            </div>
+            </div>
+
+          </div>
+            <div class="col-md-2 mb-3" style="padding-top: 27px;">
+              <button class="btn btn-primary" type="button" (click)="AddDate()">Add Date</button>
+            </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Progression Info</label>
+          <!-- <span class="text-danger">*</span> -->
+          <input type="text" formControlName="ProgressionInfo" class="form-control">
+          <div *ngIf="isSubmitted && f['ProgressionInfo'].errors">
+            <span *ngIf="f['ProgressionInfo'].errors['required']" class="text-danger">Progression Info is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Notes</label>
+          <!-- <span class="text-danger">*</span> -->
+          <input type="text" formControlName="Notes" class="form-control">
+          <div *ngIf="isSubmitted && f['Notes'].errors">
+            <span *ngIf="f['Notes'].errors['required']" class="text-danger">Notes is
+              required.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="submit" *ngIf="IsSaveUniversitycourse" id="SaveUniversitycourse" class="btn btn-success" disabled>Save</button>
+      <button type="submit" *ngIf="!IsSaveUniversitycourse" id="SaveUniversitycourse" class="btn btn-success">Save</button>
+      <button type="button" class="btn btn-danger" (click)="modal.dismiss('Cross click')">Cancel</button>
+    </div>
+  </form>
+</ng-template>

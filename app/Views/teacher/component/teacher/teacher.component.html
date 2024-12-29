@@ -1,0 +1,61 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Teacher
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <a class="btn btn-primary float-end my-2 mr-2" routerLink="add"
+          >Add Teacher</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="align-middle mb-0 table table-borderless table-striped table-hover"
+    >
+      <thead>
+        <tr>
+          <th style="width: 10%">Name</th>
+          <th style="width: 10%">Surname</th>
+          <th style="width: 15%">Email</th>
+          <th style="width: 15%">Mobile Number</th>
+          <th style="width: 35%">Subject</th>
+          <th style="width: 15%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let teacher of teachers">
+          <td>{{ teacher.name }}</td>
+          <td>{{ teacher.surname }}</td>
+          <td>{{ teacher.email }}</td>
+          <td>{{ teacher.mobileNumber }}</td>
+          <td [innerHtml]=subject[teacher.teacherId]></td>
+          <td>
+            <a
+              class="me-1 btn btn-success btn-sm"
+              routerLink="edit/{{ teacher.teacherId }}"
+              title="Edit"
+              ><i class="fa fa-pencil"></i
+            ></a>
+            <a
+              class="me-1 btn btn-primary btn-sm"
+              routerLink="view/{{ teacher.teacherId }}"
+              title="View"
+              ><i class="fa fa-eye"></i
+            ></a>
+
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteTeacher(teacher.teacherId)"
+              title="Delete"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

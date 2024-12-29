@@ -1,0 +1,194 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        <div class="d-flex align-items-sm-center">
+            <div class="btn btn-outline-dark pointer me-2" (click)="back()">
+              <i class="fa fa-arrow-left"></i>
+            </div>
+            <div>Slot</div>
+          </div>
+      <div class="btn-actions-pane-right">
+        <div role="group" class="btn-group-sm btn-group">
+          <button
+            class="btn btn-primary float-end my-2 mr-2"
+            (click)="openModal(slotModal)"
+          >
+            Add slot
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-responsive p-3">
+      <div class="mb-2 text-primary text-capitalize" *ngIf="timetableDetails">
+        Timetable for {{timetableDetails.intakeMaster.intakeName}}, {{timetableDetails.term.termName}}, {{timetableDetails.year}}, {{timetableDetails.startDate | date:'dd/MM/YYYY'}} - {{timetableDetails.endDate | date:'dd/MM/YYYY'}}
+        <mat-slide-toggle [matTooltip]="timetableDetails.isActive? 'Active':'In-Active'"
+                            matTooltipPosition="above" class="example-margin" [color]="color" [checked]="timetableDetails.isActive"
+                            (change)="activeInactiveTimetable($event)">
+                        </mat-slide-toggle>
+      </div>
+      <table
+        datatable
+        [dtOptions]="dtOptions"
+        class="align-middle mb-0 table table-borderless table-striped table-hover"
+      >
+        <thead>
+          <tr>
+            <th class="text-left" style="width: 10%">Day</th>
+            <th class="text-left" style="width: 10%">Time</th>
+            <th class="text-left" style="width: 60%;">Subject</th>
+            <th class="text-left" style="width: 10%">Room</th>
+            <th class="text-left" style="width: 10%">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let slot of slots">
+              <td class="text-capitalize">{{slot.day}}</td>
+              <td>{{slot.startTime}} - {{slot.endTime}}</td>
+              <td class="text-capitalize">{{slot.subjectManagement.fullSubjectName}}</td>
+              <td>{{slot.room.roomName}}</td>
+              <td><button class="me-1 btn btn-success btn-sm" (click)="onUpdateClick(slot.timeTableSlotId)" title="Edit"><i
+                    class="fa fa-pencil"></i></button>
+    
+                <button class="btn btn-danger btn-sm" (click)="deleteSlot(slot.timeTableSlotId)" title="Delete"><i
+                    class="fa fa-trash"></i></button>
+              </td>
+            </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  
+  <ng-template #slotModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4>
+      <button
+        type="button"
+        class="close btn"
+        aria-label="Close"
+        (click)="modal.dismiss('Cross click')"
+      >
+        <span aria-hidden=" true">×</span>
+      </button>
+    </div>
+    <form [formGroup]="slotForm" (ngSubmit)="saveSlot()">
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-12 mb-3">
+            <input type="hidden" formControlName="timeTableSlotId" />
+            <label class="form-label"
+              >Subject<span class="text-danger">*</span></label
+            >
+            <ng-select
+              formControlName="subjectManagementId"
+              placeholder="Select Subject"
+              [searchable]="true"
+              [clearable]="false"
+            >
+              <ng-option [value]="item.id" *ngFor="let item of subjectManagements">
+                {{ item.intakeMaster.intakeName }}, {{item.term.termName}}, {{item.subject.subjectName}} {{item.group.groupName}}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="sf['subjectManagementId'].errors && sf['subjectManagementId'].touched">
+              <span *ngIf="sf['subjectManagementId'].errors['required']" class="text-danger"
+                >Subject is required.</span
+              >
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label"
+              >Day<span class="text-danger">*</span></label
+            >
+            <ng-select
+              formControlName="day"
+              placeholder="Select Day"
+              [searchable]="false"
+              [clearable]="false"
+            >
+              <ng-option [value]="item.toLowerCase()" *ngFor="let item of days">
+                {{ item }}
+              </ng-option>
+            </ng-select>
+            <div *ngIf="sf['day'].errors && sf['day'].touched">
+              <span *ngIf="sf['day'].errors['required']" class="text-danger"
+                >Day is required.</span
+              >
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label"
+              >Start Time <span class="text-danger">*</span></label
+            >
+            <input
+              type="time"
+              formControlName="startTime"
+              class="form-control"
+            />
+            <div *ngIf="sf['startTime'].errors && sf['startTime'].touched">
+              <span
+                *ngIf="sf['startTime'].errors['required']"
+                class="text-danger"
+                >Start Time is required.</span
+              >
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label"
+              >End Time <span class="text-danger">*</span></label
+            >
+            <input
+              type="time"
+              formControlName="endTime"
+              class="form-control"
+            />
+            <div *ngIf="sf['endTime'].errors && sf['endTime'].touched">
+              <span
+                *ngIf="sf['endTime'].errors['required']"
+                class="text-danger"
+                >End Time is required.</span
+              >
+              <span
+                *ngIf="sf['endTime'].errors['invalidRange']"
+                class="text-danger"
+                >Start time must be before end time.</span
+              >
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label"
+              >Room <span class="text-danger">*</span></label
+            >
+            <ng-select
+            formControlName="roomId"
+            [items]="rooms"
+            bindValue="roomId"
+            bindLabel="roomName"
+            placeholder="Select Room"
+            [searchable]="true"
+            [clearable]="false"
+          >
+          </ng-select>
+            <div *ngIf="sf['roomId'].errors && sf['roomId'].touched">
+              <span *ngIf="sf['roomId'].errors['required']" class="text-danger"
+                >Room is required.</span
+              >
+            </div>
+          </div>
+          <div class="col-md-12 mb-3">
+            <label class="form-label"
+              >Students <span class="text-danger">*</span></label
+            >
+            <ng-multiselect-dropdown [settings]="options" [data]="students" formControlName="userId"></ng-multiselect-dropdown>
+            <div *ngIf="sf['userId'].errors && sf['userId'].touched">
+              <span *ngIf="sf['userId'].errors['required']" class="text-danger"
+                >Student is required.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-primary" value="Save" />
+      </div>
+    </form>
+  </ng-template>
+  

@@ -1,0 +1,182 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Subject 
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button
+          class="btn btn-primary float-end my-2 me-2"
+          (click)="openModal(subjectManageModal)"
+        >
+          Manage Subject
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="align-middle mb-0 table table-borderless table-striped table-hover"
+    >
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 20%">Subject Name</th>
+          <th class="text-left" style="width: 15%">Intake Name</th>
+          <th class="text-left" style="width: 20%">Term Name</th>
+          <th class="text-left" style="width: 20%">Group Name</th>
+          <th class="text-left" style="width: 15%">Teacher Name</th>
+          <th class="text-left" style="width: 10%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let subjectManage of subjectManages">
+          <td>{{ subjectManage.subjectName }}</td>
+          <td>{{ subjectManage.intakeName }}</td>
+          <td>{{ subjectManage.termName }}</td>
+          <td>{{ subjectManage.groupName }}</td>
+          <td>{{ subjectManage.teacherName }}</td>
+          <td>
+            <button
+              class="me-1 btn btn-success btn-sm"
+              (click)="getManageById(subjectManage.subjectManagementId)"
+              title="Edit"
+            >
+              <i class="fa fa-pencil"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="subjectManages.length === 0">
+          <td colspan="6">No record found</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #subjectManageModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Manage Subject</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden=" true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="subjectManageForm" (ngSubmit)="save()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="subjectManagementId" />
+          <label class="form-label"
+            >Subject<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="subjectId"
+            bindValue="subjectId"
+            bindLabel="subjectName"
+            [items]="subjects"
+            placeholder="Select Subject"
+            [searchable]="true"
+            [clearable]="false"
+          >
+          </ng-select>
+          <div *ngIf="smf['subjectId'].errors && smf['subjectId'].touched">
+            <span
+              *ngIf="smf['subjectId'].errors['required']"
+              class="text-danger"
+              >Subject is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Intake<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="intakeId"
+            placeholder="Select Intake"
+            [searchable]="true"
+            [clearable]="false"
+          >
+            <ng-option [value]="item.intakeId" *ngFor="let item of intakes">
+              {{ item.intakeName }} - {{ item.startDate | date : "YYYY" }}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="smf['intakeId'].errors && smf['subjectId'].touched">
+            <span *ngIf="smf['intakeId'].errors['required']" class="text-danger"
+              >Intake is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Term<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="termId"
+            placeholder="Select Term"
+            [searchable]="true"
+            [clearable]="false"
+          >
+            <ng-option [value]="item.termId" *ngFor="let item of terms">
+              {{ item.termName }} ({{ item.startMonth }} - {{ item.endMonth }})
+            </ng-option>
+          </ng-select>
+          <div *ngIf="smf['termId'].errors && smf['termId'].touched">
+            <span *ngIf="smf['termId'].errors['required']" class="text-danger"
+              >Term is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Group<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="groupId"
+            bindValue="groupId"
+            bindLabel="groupName"
+            [items]="groups"
+            placeholder="Select Group"
+            [searchable]="true"
+            [clearable]="false"
+          >
+          </ng-select>
+          <div *ngIf="smf['groupId'].errors && smf['groupId'].touched">
+            <span *ngIf="smf['groupId'].errors['required']" class="text-danger"
+              >Group is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Teacher<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="teacherId"
+            placeholder="Select Teacher"
+            [searchable]="true"
+            [clearable]="false"
+          >
+            <ng-option [value]="item.teacherId" *ngFor="let item of teachers">
+              {{ item.surname }} {{ item.name }}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="smf['teacherId'].errors && smf['teacherId'].touched">
+            <span
+              *ngIf="smf['teacherId'].errors['required']"
+              class="text-danger"
+              >Teacher is required.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+  </form>
+</ng-template>

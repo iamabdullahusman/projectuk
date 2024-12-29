@@ -1,0 +1,197 @@
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        Country of Nationality Category
+        <div class="btn-actions-pane-right">
+            <div role="group" class="d-flex justify-content-between">
+                <button class="btn btn-primary float-end my-2 mr-2 me-2" (click)="openModal('',false)">
+                    Add Category
+                </button>
+                <button class="btn btn-primary float-end my-2 mr-2" (click)="openModalMapping('',false)">
+                    Add Country of Nationality
+                </button>
+            </div>
+        </div>
+    </div>
+    <mat-tab-group [selectedIndex]="selectedindex" (selectedTabChange)="setmetgroupindex($event)">
+        <mat-tab label="Category">
+            <div class="table-responsive p-3">
+                <table datatable [dtOptions]="dtOptions" id="category" 
+                    class="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <thead>
+                        <tr>
+
+                            <th class="text-left">
+                                Category Name
+                            </th>
+                            <th class="text-left">
+                                Color Code
+                            </th>
+                            <th class="text-left">
+                              Age
+                            </th>
+                            <th class="text-left">
+                                Created By
+                            </th>
+                            <th class="text-left">
+                                Created Date
+                            </th>
+                            <th class="text-left">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </mat-tab>
+        <mat-tab label="Nationality Mapping">
+            <div class="table-responsive p-3">
+                <table datatable [dtOptions]="dtOptionsmap" id="Mapping" 
+                    class="align-middle mb-0 table table-borderless table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-left">
+                                Category
+                            </th>
+                            <th class="text-left">
+                                Country of Nationality
+                            </th>
+                            <th class="text-left">
+                                Created By
+                            </th>
+                            <th class="text-left">
+                                Created Date
+                            </th>
+                            <th class="text-left">
+                                Action
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
+</div>
+
+<input type="hidden" (click)="clickEdit($event)" id="hdnClickEdit" />
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />
+<input type="hidden" (click)="DeleteCategory($event)" id="hdnClickDelete" />
+<ng-template #CategoryModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <form [formGroup]="CategoryForm" (ngSubmit)="SaveCategory()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <input type="hidden" formControlName="CategoryId">
+                    <label class="form-label">Category<span class="text-danger">*</span></label>
+                    <input type="text" formControlName="CategoryName" class="form-control" placeholder="Enter Category">
+                    <div *ngIf="isSubmitted && f['CategoryName'].errors">
+                        <span *ngIf="f['CategoryName'].errors['required']" class="text-danger">Category is
+                            required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label">Color<span class="text-danger">*</span></label>
+
+                    <input type="color" formControlName="ColorCode" class="form-control" placeholder="Enter Color">
+
+                    <div *ngIf="isSubmitted && f['ColorCode'].errors">
+                        <span *ngIf="f['ColorCode'].errors['required']" class="text-danger">Color is
+                            required.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12 mb-3">
+                <label class="form-label">Age Limit<span class="text-danger">*</span></label>
+                <input type="number" formControlName="Age" class="form-control" placeholder="Enter Age">
+                <div *ngIf="isSubmitted && f['Age'].errors">
+                  <span *ngIf="f['Age'].errors['required']" class="text-danger">Age is
+                    required.</span>
+                </div>
+              </div>
+
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+            <input type="submit" class="btn btn-primary" *ngIf="!hasViewModel" value="Save">
+        </div>
+    </form>
+</ng-template>
+<ng-template #CountryMappingModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-titlemap">{{modalTitle}}</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
+    <form [formGroup]="CountryMappingForm" (ngSubmit)="SaveCountryMapping()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <input type="hidden" formControlName="MappingId">
+                    <label class="form-label">Category<span class="text-danger">*</span></label>
+                    <ng-select formControlName="CategoryId"  bindLabel="CategoryId" placeholder="Select Your Category"
+                        [searchable]="true" [clearable]="false">
+                              <ng-option [Value]="0">Select Your Category</ng-option>
+                        <ng-option [value]="item.categoryId" [disabled]="item.disabled"
+                            *ngFor="let item of CategoryList">
+<!-- (change)="ChangeCategory()" -->
+                            {{item.categoryName}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="isSubmitted && fmap['CategoryId'].errors">
+                        <span *ngIf="fmap['CategoryId'].errors['required']" class="text-danger">Please Select Category
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">Country of Nationality<span class="text-danger">*</span></label>
+                    <ng-select formControlName="CountryId" bindLabel="CountryId" [searchable]="true"
+                        placeholder="Select Country" [clearable]="false">
+                        
+                        <ng-option [Value]="0">Select Country of Nationality</ng-option>
+                        <ng-option [value]="item.countryId" [disabled]="item.disabled" *ngFor="let item of Countrydata">
+                            {{item.countryName}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="isSubmitted && fmap['CountryId'].errors">
+                        <span *ngIf="fmap['CountryId'].errors['required']" class="text-danger">Please Select
+                            Country of Nationality</span>
+                    </div>
+
+                </div>
+            </div>
+<!-- *ngIf="IsAgeshow" -->
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+            <input type="submit" class="btn btn-primary" *ngIf="!hasViewModel" value="Save">
+        </div>
+    </form>
+</ng-template>
+<input type="hidden" (click)="clickEditmap($event)" id="hdnClickEditmap" />
+<input type="hidden" (click)="clickViewmap($event)" id="hdnClickViewmap" />
+<input type="hidden" (click)="DeleteCategorymap($event)" id="hdnClickDeletemap" />

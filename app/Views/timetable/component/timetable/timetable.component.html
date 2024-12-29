@@ -1,0 +1,170 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    Timetable
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button
+          class="btn btn-primary float-end my-2 mr-2"
+          (click)="openModal(timetableModal)"
+        >
+          Add Timetable
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="align-middle mb-0 table table-borderless table-striped table-hover"
+    >
+      <thead>
+        <tr>
+          <th class="text-left" style="width: 20%">Inatake</th>
+          <th class="text-left" style="width: 20%">Term</th>
+          <th class="text-left" style="width: 15%;">Academic Year</th>
+          <th class="text-left" style="width: 15%">Start Date</th>
+          <th class="text-left" style="width: 15%">End Date</th>
+          <th class="text-left" style="width: 15%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let timetable of timetables">
+            <td class="text-capitalize">{{timetable.intakeMaster.intakeName}} - {{timetable.intakeMaster.startDate | date:'YYYY'}}</td>
+            <td class="text-capitalize">{{timetable.term.termName}}({{timetable.term.startMonth}}-{{timetable.term.endMonth}})</td>
+            <td>{{timetable.year}}</td>
+            <td>{{timetable.startDate | date:'dd/MM/yyyy'}}</td>
+            <td>{{timetable.endDate | date:'dd/MM/yyyy'}}</td>
+            <td><button class="me-1 btn btn-success btn-sm" (click)="onUpdateClick(timetable.timeTableId)" title="Edit"><i
+                  class="fa fa-pencil"></i></button>
+                <a routerLink="/timetable/slot/{{timetable.timeTableId}}" class="btn btn-warning btn-sm me-1" title="slot">
+                  <i class="fa fa-gear"></i>
+                </a>
+              <button class="btn btn-danger btn-sm" (click)="deleteTimetable(timetable.timeTableId)" title="Delete"><i
+                  class="fa fa-trash"></i></button>
+            </td>
+          </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #timetableModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ modalTitle }}</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <span aria-hidden=" true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="timetableForm" (ngSubmit)="saveTimetable()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="timeTableId" />
+          <label class="form-label"
+            >Intake<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="intakeId"
+            placeholder="Select Intake"
+            [searchable]="true"
+            [clearable]="false"
+          >
+            <ng-option [value]="item.intakeId" *ngFor="let item of intakes">
+              {{ item.intakeName }} - {{ item.startDate | date : "YYYY" }}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="tf['intakeId'].errors && tf['intakeId'].touched">
+            <span *ngIf="tf['intakeId'].errors['required']" class="text-danger"
+              >Intake is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3" id="timetable-term"> 
+          <label class="form-label"
+            >Term<span class="text-danger">*</span></label
+          >
+          <ng-select
+            formControlName="termId"
+            placeholder="Select Term"
+            [searchable]="true"
+            [clearable]="false"
+          >
+            <ng-option [value]="item.termId" *ngFor="let item of terms">
+              {{ item.termName }} ({{ item.startMonth }} - {{ item.endMonth }})
+            </ng-option>
+          </ng-select>
+          <div *ngIf="tf['termId'].errors && tf['termId'].touched">
+            <span *ngIf="tf['termId'].errors['required']" class="text-danger"
+              >Term is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Academic Year <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            formControlName="year"
+            class="form-control"
+            placeholder="2023-24"
+          />
+          <div *ngIf="tf['year'].errors && tf['year'].touched">
+            <span
+              *ngIf="tf['year'].errors['required']"
+              class="text-danger"
+              >Academic year is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Start Date <span class="text-danger">*</span></label
+          >
+          <input type="date" class="form-control" formControlName="startDate" [max]="maxDate" [min]="minDate" />
+          <div *ngIf="tf['startDate'].errors && tf['startDate'].touched">
+            <span *ngIf="tf['startDate'].errors['required']" class="text-danger"
+              >Start Date is required.</span
+            >
+            <span
+              *ngIf="tf['startDate'].errors['misMatchMonth']"
+              class="text-danger"
+              >The Start date is not aligned with the term.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >End Date <span class="text-danger">*</span></label
+          >
+          <input class="form-control" type="date" formControlName="endDate" [max]="maxDate" [min]="minDate" />
+          <div *ngIf="tf['endDate'].errors && tf['endDate'].touched">
+            <span *ngIf="tf['endDate'].errors['required']" class="text-danger"
+              >End Date is required.</span
+            >
+            <span
+              *ngIf="tf['endDate'].errors['misMatchMonth']"
+              class="text-danger"
+              >The End date is not aligned with the term.</span
+            >
+            <span
+              *ngIf="tf['endDate'].errors['invalidRange']"
+              class="text-danger"
+              >Start date is greater then end date.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <input type="submit" class="btn btn-primary" value="Save" />
+    </div>
+  </form>
+</ng-template>

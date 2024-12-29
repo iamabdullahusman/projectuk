@@ -1,0 +1,376 @@
+<div *ngIf="!permissionMessageImage">
+    <div class="main-card mb-3 card">
+      <mat-tab-group>
+        <mat-tab label="Required Documents">
+          <div class="table-responsive p-3">
+            <div class="row">
+              <div class="col-md-12">
+                <div *ngFor="let Doc of studentDocuments;let i=index">
+                  <div class="main-card mb-3 ms-5 me-5 card card-warning">
+                    <div class="card-header">
+                      <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                      </div>
+                      <div class="col-md-6 text-end">
+                        <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+                      </div>
+                    </div>
+                    <div class=" card-body pb-0">
+                      <p class="mb-0">{{Doc.documentDescription}}</p>
+                      <div class="text-muted pt-2">
+                        <p>Note :- Required file formats are .jpg ,.png and .pdf only. The file size must be lower than 2
+                          MB
+                          each.</p>
+                      </div>
+                    </div>
+                    <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                      <div>
+                        <button *ngIf="Doc.statusName.toLowerCase() == 'pending'"
+                          class="btn btn-warning btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'rejected' && Doc.uploadDocumentCount != Doc.uploadRejectedDocumentCount"
+                          class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill">Rejected</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'phyrejected' && Doc.uploadDocumentCount != Doc.physicalRejectedDocumentCount"
+                          class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill">Rejected</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'phyapproved' && Doc.uploadDocumentCount != Doc.physicalApproveDocumentCount"
+                          class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill">Awaiting</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'phyrejected' && Doc.uploadDocumentCount == Doc.physicalRejectedDocumentCount"
+                          class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'phyapproved' && Doc.uploadDocumentCount == Doc.physicalApproveDocumentCount"
+                          class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <button
+                          *ngIf="Doc.statusName.toLowerCase() == 'rejected' && Doc.uploadDocumentCount == Doc.uploadRejectedDocumentCount"
+                          class="btn btn-danger btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <button *ngIf="Doc.statusName.toLowerCase() == 'approved'"
+                          class="btn btn-success btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <button *ngIf="Doc.statusName.toLowerCase() == 'awaiting'"
+                          class="btn btn-warning btn-sm ng-star-inserted me-2 rounded-pill">{{Doc.statusName}}</button>
+                        <span class="text-danger ms-2" *ngIf="Doc.statusName.toLowerCase() == 'rejected'">
+                          Your documents are partially {{Doc.uploadRejectedDocumentCount}} out of {{Doc.uploadDocumentCount}} are
+                          Rejected.</span>
+                        <span class="text-danger ms-2" *ngIf="Doc.statusName.toLowerCase() == 'phyrejected'">
+                          Your documents are partially {{Doc.physicalRejectedDocumentCount}} out of {{Doc.uploadDocumentCount}} are 
+                          <b>Physical</b> Rejected.</span>
+                        <span class="text-success ms-2" *ngIf="Doc.statusName.toLowerCase() == 'phyapproved'">
+                          Your documents are partially {{Doc.physicalApproveDocumentCount}} out of {{Doc.uploadDocumentCount}} are 
+                          <b>Physical</b> Approved.</span>
+                        <span class="text-success ms-2"
+                          *ngIf="Doc.statusName.toLowerCase() == 'awaiting' && Doc.uploadApproveDocumentCount == 0">-- You
+                          have
+                          uploaded successfully. Please wait for the response from authorities.</span>
+                        <span class="text-success ms-2"
+                          *ngIf="Doc.statusName.toLowerCase() == 'awaiting' && Doc.uploadApproveDocumentCount != 0">--
+                          Your documents are partially {{Doc.uploadApproveDocumentCount}} out of {{Doc.uploadDocumentCount}} are 
+                          Approved.
+                        </span>
+                      </div>
+                      <div>
+                        <button class="btn btn-info btn-sm ng-star-inserted me-2"
+                          *ngIf="Doc.documentFormOrLetterUrl && Doc.status == 1" (click)="
+                                downloadForm(Doc.documentFormOrLetterUrl)">Download Form/Letter
+                        </button>
+                        <button class="btn btn-info btn-sm ng-star-inserted me-2"
+                          *ngIf="Doc.documentSampleUrl!='' &&  Doc.status != 2 && Doc.status != 3" (click)="
+                downloadForm(Doc.documentSampleUrl)">Sample File
+                        </button>
+                        <button class="btn btn-sm btn-secondary me-2" *ngIf="Doc.documentName!='Terms and Conditions'"
+                          (click)="DocumentUploadViewModel(DocumentUploadView,Doc.docId)">Upload
+                        </button>
+                        <button class="btn btn-sm btn-warning" (click)="OpenMultipleDocumentModal(Doc.docId)"> View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <mat-tab label="Guide">
+          <div class="table-responsive p-3">
+            <div class="row">
+              <div class="col-md-12">
+                <div *ngFor="let Doc of SupprotiongDocument;let i=index">
+                  <div class="main-card mb-3 ms-5 me-5 card card-warning">
+                    <div class="card-header">
+                      <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                      </div>
+                      <div class="col-md-6 text-end">
+                        <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+                      </div>
+                    </div>
+                    <div class=" card-body pb-0">
+                      <p class="mb-0">{{Doc.documentDescription}}</p>
+                      <div class="text-muted pt-2">
+                      </div>
+                    </div>
+                    <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                      <div>
+                      </div>
+                      <div>
+                        <button class="btn btn-info btn-sm ng-star-inserted me-2" (click)="
+                                      downloadForm(Doc.sampleDocumentUrl)">Download
+                        </button>
+                        <button class="btn btn-sm btn-warning" (click)="ViewMyFile(Doc.sampleDocumentUrl)"> View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+        <!-- *ngIf="WelcomeKitDocument && WelcomeKitDocument.length>0" -->
+        <mat-tab label="Welcome Kit" *ngIf="WelcomeKitDocument && WelcomeKitDocument.length>0" >
+          <div class="table-responsive p-3">
+            <div class="row">
+              <div class="col-md-12">
+                <div *ngFor="let Doc of WelcomeKitDocument;let i=index">
+                  <div class="main-card mb-3 ms-5 me-5 card card-warning">
+                    <div class="card-header">
+                      <div class="col-md-6"><span class="pe-7s-file fs-4 me-1 align-bottom"></span>{{Doc.documentName}}
+                      </div>
+                      <div class="col-md-6 text-end">
+                        <button class="btn btn-light btn-sm disabled rounded-pill me-2">{{Doc.documentTypeName}}</button>
+                      </div>
+                    </div>
+                    <div class=" card-body pb-0">
+                      <p class="mb-0">{{Doc.documentDescription}}</p>
+                      <div class="text-muted pt-2">
+                      </div>
+                    </div>
+                    <div class="d-flex card-footer border-0 justify-content-between pb-3">
+                      <div>
+                      </div>
+                      <div>
+                        <button class="btn btn-info btn-sm ng-star-inserted me-2" (click)="
+                                                      downloadForm(Doc.sampleDocumentUrl)">Download
+                        </button>
+                        <button class="btn btn-sm btn-warning" (click)="ViewMyFile(Doc.sampleDocumentUrl)"> View
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+    <ng-template #CasUrlModal let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Document</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">
+            <h3>×</h3>
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <iframe class="w-100 vh-74" [src]="fileUrl"></iframe>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+      </div>
+    </ng-template>
+  
+  
+    <input type="hidden" (click)="deleterowdoc($event)" id="hdnClickEdit" />
+    <input type="file" class="border-0" id="FileUploded" (change)="convertFileToBase64($event)" hidden>
+  
+  
+    <ng-template #DocumentUploadView let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{DocumentName}}</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">
+            <h3>×</h3>
+          </span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="text-muted mt-2 mb-2">
+          <p>Note :- Required file formats are .jpg , .jfif , .png and .pdf only. The file size must be lower than 2 MB each.</p>
+        </div>
+        <div class="mt-2 mb-2">
+          <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()">
+            <div class="Docmodal-body ps-2">
+              <div class="row">
+                <div class="col-md-12 pb-0">
+                  <input type="hidden" formControlName="docId">
+                  <input type="hidden" formControlName="applicationId">
+                  <label class="form-label mt-2">Choose Document <span class="text-danger">*</span></label>
+                  <input type="file" formControlName="documentFile" class="form-control "
+                    (change)="convertFileToBase64($event)">
+                  <div *ngIf="!isValidFile">
+                    <span class="text-danger mb-4">Please choose valid file
+                      type.</span>
+                  </div>
+                  <div *ngIf="fuploadsdoc['documentFile'].errors && isFormSubmitted">
+                    <span class="text-danger mb-4">Please choose file</span>
+                  </div>
+                  <div class="d-flex card-footer justify-content-between pe-0">
+                    <div>
+                    </div>
+                    <div>
+                      <button type="button" class="btn btn-outline-danger ms-1"
+                        (click)="resetUploadDocumentform()">Clear</button>
+                      <button type="submit" class="btn btn-success ms-2">submit</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div id="NewDocUPLoad" class="mb-2"></div>
+          <div [ngClass]="{ 'menu-opened': testcode }" class="mb-2"></div>
+  
+          <div class="mb-4" *ngIf="SubDocumentList.length>0">
+            <hr class="mt-0">
+            <label *ngIf="IsUploadMe"><b>Previously Uploaded file</b></label>
+            <div *ngFor="let document of SubDocumentList" class="mb-2">
+              <div class="d-flex justify-content-between mt-2 p-2 align-items-center border rounded"
+                *ngIf="document.isUploadByMe">
+                <div *ngIf="document.isUploadByMe">
+                  <label>{{document.document_Name}}</label><span class="text-success"
+                    *ngIf="document.documentStatus == 3">-
+                    Approved</span><span class="text-danger" *ngIf="document.documentStatus == 4">-
+                    Rejected (Reason:-{{document.reason}})</span><span class="text-warning"
+                    *ngIf="document.documentStatus == 2">- Awaiting</span><span class="text-success"
+                    *ngIf="document.documentStatus == 6">-
+                    Physical Approved</span><span class="text-danger" *ngIf="document.documentStatus == 7">-
+                    Physical Rejected (Reason:-{{document.reason}})</span>
+                </div>
+                <div *ngIf="document.isUploadByMe">
+                  <button class="text-end btn btn-primary ms-2" title="Show"
+                    (click)="OpenCASUrlModal(document.docPath)"><i class="fa fa-eye"></i></button>
+                  <button class="text-end btn btn-success ms-2" title="Download"
+                    (click)="downloadForm(document.docPath)"><i class="fa fa-download"></i></button>
+                  <button class="text-end btn btn-danger ms-2" title="Delete"
+                    *ngIf="DocumentSatus != 3 && document.isUploadByMe && document.documentStatus != 3 && document.documentStatus != 6 && document.documentStatus != 4 && document.documentStatus != 7"
+                    (click)="DeleteDocument(document.uploadDocId)"><i class="fa fa-trash"></i></button>
+                  <button class="text-end btn btn-warning ms-2" title="Upload"
+                    *ngIf="document.documentStatus == 4 || document.documentStatus == 7">
+                    <i class="fa fa-upload" title="Upload" style="color: white;"
+                      (click)="openModal(documentModel,document.docId,document.uploadDocId)"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <label class="mt-2" *ngIf="IsNotUploadMe"><b>Admin Uploaded file</b></label>
+            <div *ngFor="let document of SubDocumentList">
+              <div class="d-flex justify-content-between mt-2 p-2 align-items-center border rounded"
+                *ngIf="!document.isUploadByMe">
+                <div *ngIf="!document.isUploadByMe">
+                  <label>{{document.document_Name}}</label><span class="text-success"
+                    *ngIf="document.documentStatus == 3">-
+                    Approved</span><span class="text-danger" *ngIf="document.documentStatus == 4">-
+                    Rejected (Reason:-{{document.reason}})</span><span class="text-warning"
+                    *ngIf="document.documentStatus == 2">- Awaiting</span><span class="text-success"
+                    *ngIf="document.documentStatus == 6">-
+                    Physical Approved</span><span class="text-danger" *ngIf="document.documentStatus == 7">-
+                    Physical Rejected (Reason:-{{document.reason}})</span>
+                </div>
+                <div>
+                <button class="text-end btn btn-primary ms-2" title="Show" (click)="OpenCASUrlModal(document.docPath)"><i
+                    class="fa fa-eye"></i></button>
+                <button class="text-end btn btn-success ms-2" title="Download" (click)="downloadForm(document.docPath)"><i
+                    class="fa fa-download"></i></button>
+                <button class="text-end btn btn-warning ms-2" title="Upload"
+                  *ngIf="document.documentStatus == 4 || document.documentStatus == 7">
+                  <i class="fa fa-upload" title="Upload" style="color: white;"
+                    (click)="openModal(documentModel,document.docId,document.uploadDocId)"></i>
+                </button>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div class="d-flex card-footer justify-content-between">
+            <div>
+            </div>
+            <div>
+              <button type="button" class="btn btn-outline-danger ms-1"
+                (click)="modal.dismiss('Cross click')">Close</button>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+    </ng-template>
+  
+ 
+    <ng-template #documentModel let-modal>
+      <div class="modal-header py-2">
+        <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">
+            <h3>×</h3>
+          </span>
+        </button>
+      </div>
+      <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-12 pb-2">
+              <input type="hidden" formControlName="docId">
+              <input type="hidden" formControlName="applicationId">
+              <label class="form-label mt-2">Choose Document<span class="text-danger">*</span></label>
+              <input type="file" formControlName="documentFile" class="form-control"
+                (change)="convertFileToBase64($event)">
+              <div *ngIf="!isValidFile && isReSubmitFormSubmitted">
+                <span class="text-danger">Please choose valid file
+                  type.</span>
+              </div>
+              <div *ngIf="isReSubmitFormSubmitted && base64File==''">
+                <span class="text-danger">Please choose file</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" (click)="modal.dismiss('Cross click')">Cancel</button>
+          <button type="submit" class="btn btn-success">Save</button>
+        </div>
+      </form>
+    </ng-template>
+  
+    <ng-template #MultipleDocumentUrlModal let-modal>
+      <div class="modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Document Receipt</h4>
+            <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">
+                <h3>×</h3>
+              </span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="DocumentMultipleModel">
+              <div *ngFor="let DocName of MultipleDocUment">
+                <p><b>{{DocName.fileName}}</b></p>
+                <div *ngIf="DocName?.file.split('.').pop() == 'pdf'"><iframe class="w-100 vh-50 mb-2 mt-2"
+                    [src]="DocName.fileUrl"></iframe></div>
+                <div *ngIf="DocName?.file.split('.').pop() != 'pdf'" class="d-flex justify-content-center"><img class="mb-2 mt-2"
+                    [src]="DocName.fileUrl"></div>
+              </div>
+              <div *ngIf="MultipleDocUment.length == 0">
+                <p class="text-center"><b>No Document</b></p>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+  
+  <div class="bg-permissionBackGround" *ngIf="permissionMessageImage"></div>

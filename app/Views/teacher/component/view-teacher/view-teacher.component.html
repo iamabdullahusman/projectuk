@@ -1,0 +1,36 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <div class="d-flex align-items-sm-center">
+      <div class="btn btn-outline-dark pointer me-2" (click)="back()">
+        <i class="fa fa-arrow-left"></i>
+      </div>
+      <div class="text-capitalize">{{teacher.surname}} {{teacher.name}}</div>
+    </div>
+  </div>
+  <mat-tab-group>
+    <mat-tab label="Teacher Details">
+      <app-teacher-details [teacher]="teacher"></app-teacher-details>
+    </mat-tab>
+    <mat-tab label="Subjects">
+      <app-subject [subjects]="teacher.subjectManagement"></app-subject>
+    </mat-tab>
+    <mat-tab label="Timetable">
+      <div class="mx-2 margin-card">
+        <app-timetable [teacherId]="teacher.teacherId"></app-timetable>
+      </div>
+    </mat-tab>
+    <mat-tab label="Attendance">
+      <div class="h-[100dvh-13rem]">
+        <app-attendance [teacherId]="teacher.teacherId" [readonly]="true" [nestedView]="true"></app-attendance>
+      </div>
+    </mat-tab>
+    <!-- <mat-tab label="Home work"> </mat-tab> -->
+    <mat-tab label="Result"> </mat-tab>
+    <!-- <mat-tab label="UCAS"> </mat-tab> -->
+  </mat-tab-group>
+</div>
+<style>
+  .margin-card {
+    margin: 10px 0px 10px 0px;
+  }
+</style>

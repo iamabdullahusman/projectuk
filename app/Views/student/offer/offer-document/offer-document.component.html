@@ -1,0 +1,16 @@
+<div
+  class="card card-success mb-2 shadow-none"
+  *ngFor="let doc of documents"
+>
+  <div class="row pt-2 pb-2">
+    <div class="col-md-6 fw-bold pt-1">
+      <span class="pe-7s-file fs-4 me-1 align-bottom ms-2"></span
+      >{{ doc.documentName }}
+    </div>
+    <div class="col-md-6 text-end">
+      <button class="btn btn-sm btn-light me-2 rounded-pill text-muted">
+          {{ doc.documentTagName }}
+    </button>
+    </div>
+  </div>
+</div>

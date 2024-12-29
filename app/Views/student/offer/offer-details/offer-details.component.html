@@ -1,0 +1,46 @@
+<ng-template #applicationDetailModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{OfferData?.applicationOfferName}}</h4>
+      <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss()">
+        <span aria-hidden="true">
+          <h4>X</h4>
+        </span>
+      </button>
+    </div>
+    <div class="modal-body p-0">
+      <div class="modal-body">
+        <div class="row m-2">
+          <div class="col-md-12 fs-5 text-muted">
+            <!-- Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum
+            has been the industry's standard
+            dummy text ever since the 1500s.
+            unchanged. -->
+          </div>
+        </div>
+        <div class="row m-2">
+          <div class="col-md-4 col-sm-4">
+            <div class="fw-600 fs-5">{{OfferData?.campusName}}</div>
+            <div class="text-muted fs-5">Study Location</div>
+          </div>
+          <div class="col-md-4 col-sm-4">
+            <div class="fw-600 fs-5">{{OfferData?.courseName}}</div>
+            <div class="text-muted fs-5">Course</div>
+          </div>
+          <div class="col-md-4 col-sm-4">
+            <div class="fw-600 fs-5">{{OfferData?.intkeName}}</div>
+            <div class="text-muted fs-5">Applied For</div>
+          </div>
+        </div>
+        <div class="col-md-12 position-relative m-2">
+          <span class="pe-7s-file fs-4 me-1 mb-3"></span>
+          <span class="fs-4 mb-3">Offer Letter</span>
+          <i class="fa fa-download fs-5 btn-success p-2 rounded-3 position-absolute"
+            *ngIf="offerUrl.split('.').pop() != 'pdf'" style="right: 1.5rem;top: 10px;cursor: pointer;"
+            (click)="downloadFile(offerUrl)"></i>  
+          <iframe height="700px" frameBorder="0" [src]="urlSafe"
+            class="border border-1 border-light rounded-3 w-100"></iframe>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  

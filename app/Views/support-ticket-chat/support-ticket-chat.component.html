@@ -1,0 +1,77 @@
+<div class="card" *ngIf="ticketID>0">
+    <div class="card-header w-100">
+        <div class="d-flex justify-content-between w-100    ">
+            <div class="d-flex align-items-center">
+                <button class="btn btn-outline-dark me-2" (click)="backToTicket()"><i class="fa fa-arrow-left"
+                        aria-hidden="true"></i>
+                </button>
+                <h5 class="mb-0" *ngIf="chats.length>0">{{chats[0].title}}</h5>
+            </div>
+            <div>
+                <div class="d-inline-block" ngbDropdown>
+                    <button type="button" ngbDropdownToggle
+                        class="mb-2 me-2 btn btn-outline-primary px-2 py-1 text-uppercase">{{ticketStatus}}</button>
+                    <div ngbDropdownMenu>
+                        <ng-container *ngFor="let stage of supportStatus">
+                            <button class="dropdown-item" (click)="changeStatus(stage.id)">{{stage.name}}</button>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body chat-scroll">
+
+        <div class="chat-wrapper p-1">
+            <ng-container *ngFor="let chat of chats">
+                <div class="chat-box-wrapper"
+                    [ngClass]="{'flex-row-reverse':userid==chat.createdBy, 'pt-1':userid!=chat.createdBy}">
+
+                    <div *ngIf="userid==chat.createdBy">
+                        <div class="avatar-icon-wrapper">
+                            <div class="chat-user-right text-uppercase" title="{{chat.createdName}}">
+                                {{chat.createdName.substring(0,2)}}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="d-flex">
+                            <div *ngIf="userid!=chat.createdBy">
+                                <div class="avatar-icon-wrapper">
+                                    <div class="chat-user-left text-uppercase" title="{{chat.createdName}}">
+                                        {{chat.createdName.substring(0,2)}}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-box"
+                                [ngClass]="{ 'right-chat':userid==chat.createdBy,'left-chat':userid!=chat.createdBy}">
+                                {{chat.details}}
+                            </div>
+
+                        </div>
+                        <small class="opacity-6" [ngClass]="{'float-end':userid==chat.createdBy}">
+
+                            {{chat.createdDate+'Z' | date:'hh:mm a'}} |
+                            {{getDateFormat(chat.createdDate, 'DD-MM-YYYY')}}
+                        </small>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+
+    </div>
+    <div class="card-footer" *ngIf="!isCloseOrCancel">
+        <div class="d-flex justify-content-between w-100">
+            <form class="w-100" [formGroup]="SupportTicketsForm">
+                <div class=" d-flex">
+                    <input placeholder="Enter your Notes here" type="text" class="form-control-sm form-control"
+                        formControlName="details">
+                    <button type="submit" class="btn btn-success ms-2" (click)="addChat()"
+                        [disabled]="!SupportTicketsForm.valid">Send</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+

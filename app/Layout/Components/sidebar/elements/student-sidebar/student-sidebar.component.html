@@ -1,0 +1,184 @@
+<div class="app-sidebar-content">
+  <div class="app-sidebar-scroll">
+    <perfect-scrollbar
+      [autoPropagation]="true"
+      class="scroll-container"
+      [config]="config"
+      [scrollIndicators]="true"
+      style="max-width: 600px; max-height: 95vh"
+    >
+      <div class="v-sidebar-menu vsm-default">
+        <div class="vsm-list">
+          <div class="vsm-item" *ngIf="userType == 6">
+            <a
+              routerLinkActive="active-item"
+              routerLink="parent/dashboard"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-settings"></i>
+              <span class="vsm-title">Parent Dashboard</span>
+            </a>
+          </div>
+          <div class="vsm-item" *ngIf="userType == 7">
+            <a
+              routerLinkActive="active-item"
+              routerLink="sponsor/dashboard"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-settings"></i>
+              <span class="vsm-title">Sponsor Dashboard</span>
+            </a>
+          </div>
+          <div class="vsm-item" *ngIf="userType == 4">
+            <a
+              routerLinkActive="active-item"
+              routerLink="agent/dashboard"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-settings"></i>
+              <span class="vsm-title">Agent Dashboard</span>
+            </a>
+          </div>
+          <div class="vsm-item" *ngIf="applicationId > 0 || userType == 5">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student"
+              class="vsm-link mt-2"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <i class="vsm-icon pe-7s-settings"></i>
+              <span class="vsm-title">Dashboard</span>
+            </a>
+          </div>
+
+          <div class="vsm-item" *ngIf="applicationId > 0 || userType == 5">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/myapplication"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-plugin"></i>
+              <span class="vsm-title">Application</span>
+            </a>
+          </div>
+          <div class="vsm-item" *ngIf="applicationId > 0 || userType == 5">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/document"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-copy-file"></i>
+              <span class="vsm-title">Documentation</span>
+            </a>
+          </div>
+          <div
+            class="vsm-item"
+            *ngIf="hasOffer && (applicationId > 0 || userType == 5)"
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/offer"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-like2"></i>
+              <span class="vsm-title">Offer</span>
+            </a>
+          </div>
+          <div
+            class="vsm-item"
+            *ngIf="hasOffer && (applicationId > 0 || userType == 5)"
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/fee"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-cash"></i>
+              <span class="vsm-title">Finance</span>
+            </a>
+          </div>
+          <div
+            class="vsm-item"
+            *ngIf="hasCASIssue && (applicationId > 0 || userType == 5)"
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/cas"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-timer"></i>
+              <span class="vsm-title">CAS</span>
+            </a>
+          </div>
+          <div
+            class="vsm-item"
+            *ngIf="hasCASIssue && (applicationId > 0 || userType == 5) && conditional === 'true'"
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/visa"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-plane"></i>
+              <span class="vsm-title">Visa</span>
+            </a>
+          </div>
+
+          <div
+            class="vsm-item"
+            *ngIf="
+              (OnBoardStatus != 11 && OnBoardStatus != 0) &&
+              (applicationId > 0 || userType == 5)
+            "
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/airportArrival"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-map-2"></i>
+              <span class="vsm-title">Airport Arrival</span>
+            </a>
+          </div>
+          <div
+            class="vsm-item"
+            *ngIf=" (OnBoardStatus != 11 && OnBoardStatus != 0) &&
+            (applicationId > 0 || userType == 5)"
+          >
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/campusArrival"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-culture"></i>
+              <span class="vsm-title">Campus Arrival</span>
+            </a>
+          </div>
+
+          <!-- Taha said me to hide this. -->
+          <!-- <div class="vsm-item" *ngIf="applicationId > 0 || userType == 5">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/timetable"
+              class="vsm-link mt-2"
+            >
+              <i class="vsm-icon pe-7s-date"></i>
+              <span class="vsm-title">Time Table</span>
+            </a>
+          </div> -->
+          
+          <div class="vsm-item">
+            <a
+              routerLinkActive="active-item"
+              routerLink="/student/supportticket"
+              class="vsm-link mt-2"
+            >
+              <i class="fa fa-comments-o vsm-icon"></i>
+              <span class="vsm-title">Support Ticket</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </perfect-scrollbar>
+  </div>
+</div>

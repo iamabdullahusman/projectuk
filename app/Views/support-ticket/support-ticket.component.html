@@ -1,0 +1,122 @@
+<div class="main-card mb-3 card" *ngIf="ticketId === 0">
+  <div class="card-header">Support Ticket</div>
+
+  <br />
+  <div class="table-responsive p-3">
+    <table
+      datatable
+      [dtOptions]="dtOptions"
+      class="align-middle mb-0 table table-striped table-borderless table-hover"
+    >
+      <thead>
+        <tr>
+          <th class="text-left">Requested Date</th>
+          <th class="text-left">Requested By</th>
+
+          <th class="text-left">Title</th>
+          <th class="text-left">Ticket Status</th>
+
+          <th class="text-left" style="width: 5%">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of supportTickets; let i = index">
+          <td class="text-left">
+            {{ user.createdDate + "z" | date : "dd/MM/yyyy" }}
+          </td>
+          <td class="text-left">
+            {{ user.createdBy }}
+          </td>
+
+          <td class="text-left">
+            {{ user.title }}
+          </td>
+          <td class="text-left text-capitalize">
+            {{ user.statusName }}
+          </td>
+
+          <td class="text-left text-nowrap">
+            <button
+              class="btn btn-primary me-1"
+              (click)="ticketId = user.supportTicketId"
+            >
+              View
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="supportTickets.length == 0">
+          <td colspan="5" class="text-center">No new ticket.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #SupportTicketModel let-modal>
+  <div class="modal-header border-0">
+    <h4 class="modal-title" id="modal-visa-status">Create Support Ticket</h4>
+    <button
+      type="button"
+      class="close btn"
+      aria-label="Close"
+      (click)="modal.dismiss()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="SupportTicketsForm" (ngSubmit)="saveTicket()">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Title <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            class="form-control"
+            formControlName="title"
+            placeholder="Enter Title"
+          />
+          <div *ngIf="f['title'].touched && f['title'].errors">
+            <span *ngIf="f['title'].errors['required']" class="text-danger"
+              >Title is required.</span
+            >
+          </div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label"
+            >Details <span class="text-danger">*</span></label
+          >
+          <input
+            type="text"
+            class="form-control"
+            formControlName="details"
+            placeholder="Enter Details"
+          />
+          <div *ngIf="f['details'].touched && f['details'].errors">
+            <span *ngIf="f['details'].errors['required']" class="text-danger"
+              >Details is required.</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="row">
+        <div class="col-md-12 text-end">
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!SupportTicketsForm.valid"
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+</ng-template>
+<app-support-ticket-chat
+  [ticketID]="ticketId"
+  (back)="ticketId = 0"
+></app-support-ticket-chat>

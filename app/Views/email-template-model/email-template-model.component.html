@@ -1,0 +1,240 @@
+<div class="main-card mb-3 card">
+     <div class="card-header">
+          Email Template
+     </div>
+
+     <mat-tab-group [selectedIndex]="tabIndex">
+          <mat-tab label="Primary Email Template">
+
+               <!-- <label class="form-label fw-600 text-capitalize"></label> -->
+               <form [formGroup]="primaryEmailForm" (ngSubmit)="savePrimaryEmailTemplates()">
+                    <div class="modal-body bg-white">
+                         <div class="row">
+                              <div class="col-sm-12 pb-2">
+                                   <label class="form-label">Email Template Name<span
+                                             class="text-danger">*</span></label>
+                                   <ng-select [items]="emailTemplateType" bindLabel="emailTemplateName"
+                                        placeholder="Select email template" [searchable]="true" [clearable]="true"
+                                        bindValue="emailTemplateId" formControlName="EmailTemplateType"
+                                        (change)="emailTypeChange($event, EmailModal)">
+                                        <!-- <ng-select formControlName="EmailTemplateType" bindLabel="emailTemplateId"
+                              placeholder="Select email template" [(ngModel)]="addEmailTemplateType"
+                              (change)="emailTypeChange($event, EmailModal)" [searchable]="true" [clearable]="false"> -->
+                                        <!-- (change)=" emailTypeChange($event)"> -->
+                                        <!-- <ng-option *ngFor="let ett of emailTemplateType" [value]="ett.emailTemplateId"
+                                   [disabled]="ett.disabled">
+                                   {{ett.emailTemplateName}}
+                              </ng-option> -->
+                                   </ng-select>
+                                   <div *ngIf="fp['EmailTemplateType'].touched && fp['EmailTemplateType'].errors">
+                                        <span *ngIf="fp['EmailTemplateType'].errors['required']"
+                                             class="text-danger">Please
+                                             select
+                                             Emailtemplate type.</span>
+                                   </div>
+                              </div>
+                              <div class="col-sm-12 pb-2">
+                                   <label class="form-label">Subject<span class="text-danger">*</span></label>
+                                   <input type="text" formControlName="Subject" placeholder="Enter subject"
+                                        class="form-control col-sm-12">
+                                   <div *ngIf="fp['Subject'].touched && fp['Subject'].errors">
+                                        <span *ngIf="fp['Subject'].errors['required']" class="text-danger">Please enter
+                                             Subject.</span>
+                                   </div>
+                              </div>
+                              <!-- <div class="d-flex mb-2 overflow-auto">
+                         <div *ngFor="let Veriable of variableNameList" class="me-1">
+                              <button class="btn btn-primary"
+                                   (click)="clickOnButton(editor,Veriable.variableName)">{{Veriable.variableName}}</button>
+                         </div>
+                    </div> -->
+                         </div>
+                         <div class="col-sm-12 mb-2">
+                              <angular-editor #editor formControlName="PrimaryEmailBody" [config]="config">
+                              </angular-editor>
+                         </div>
+                         <div class="col-sm-12 mb-2">
+                              <label class="form-label">Role<span class="text-danger">*</span></label>
+                              <ng-select [items]="roleList" [disabled]="isView" [(ngModel)]="selectedPrimaryRoleList"
+                                   bindLabel="RoleName" bindValue="RoleId" placeholder="Select roles"
+                                   [searchable]="true" [ngModelOptions]="{standalone: true}"
+                                   (change)="primaryRoleChange($event)" [clearable]="true" multiple="true">
+                              </ng-select>
+                              <div *ngIf="fp['PrimaryRoleIds'].touched && fp['PrimaryRoleIds'].errors">
+                                   <span *ngIf="fp['PrimaryRoleIds'].errors['required']" class="text-danger">Please
+                                        select
+                                        Role.</span>
+                              </div>
+                         </div>
+                         <!-- <div class="col-sm-12 mb-2">
+                              <label class="form-label">Email Type<span class="text-danger">*</span></label>
+                              <ng-select [items]="PrimaryList" [disabled]="isView" bindLabel="primaryName"
+                                   bindValue="primaryId" placeholder="Select roles" [searchable]="true"
+                                   formControlName="IsPrimary" [clearable]="true">
+                              </ng-select>
+                              <div *ngIf="f['IsPrimary'].touched && f['IsPrimary'].errors">
+                                   <span *ngIf="f['IsPrimary'].errors['required']" class="text-danger">Please select
+                                        Email type.</span>
+                              </div>
+                         </div> -->
+                    </div>
+                    <!-- <div class="modal-footer"> -->
+                    <button type="submit" class="btn btn-success" *ngIf="!isView" hidden
+                         id="primaryEmailTemplatebtn">Save</button>
+                    <!-- <span>
+                              <button type="button" class="btn btn-danger"
+                                   (click)="closeemailtemplate()">Cancel</button>
+                         </span> -->
+                    <!-- </div> -->
+               </form>
+          </mat-tab>
+          <mat-tab label="Secondary Email Template">
+
+               <!-- <label class="form-label fw-600 text-capitalize"></label> -->
+               <form [formGroup]="secondaryEmailForm" (ngSubmit)="saveSecondaryEmailTemplates()">
+                    <div class="modal-body bg-white">
+                         <div class="row">
+                              <div class="col-sm-12 pb-2">
+                                   <label class="form-label">Email Template Name<span
+                                             class="text-danger">*</span></label>
+                                   <ng-select [items]="emailTemplateType" bindLabel="emailTemplateName"
+                                        placeholder="Select email template" [searchable]="true" [clearable]="true"
+                                        bindValue="emailTemplateId" formControlName="EmailTemplateType"
+                                        (change)="emailTypeChange($event, EmailModal)">
+                                        <!-- <ng-select formControlName="EmailTemplateType" bindLabel="emailTemplateId"
+                              placeholder="Select email template" [(ngModel)]="addEmailTemplateType"
+                              (change)="emailTypeChange($event, EmailModal)" [searchable]="true" [clearable]="false"> -->
+                                        <!-- (change)=" emailTypeChange($event)"> -->
+                                        <!-- <ng-option *ngFor="let ett of emailTemplateType" [value]="ett.emailTemplateId"
+                                   [disabled]="ett.disabled">
+                                   {{ett.emailTemplateName}}
+                              </ng-option> -->
+                                   </ng-select>
+                                   <div *ngIf="fs['EmailTemplateType'].touched && fs['EmailTemplateType'].errors">
+                                        <span *ngIf="fs['EmailTemplateType'].errors['required']"
+                                             class="text-danger">Please
+                                             select
+                                             Emailtemplate type.</span>
+                                   </div>
+                              </div>
+                              <div class="col-sm-12 pb-2">
+                                   <label class="form-label">Subject<span class="text-danger">*</span></label>
+                                   <input type="text" formControlName="Subject" placeholder="Enter subject"
+                                        class="form-control col-sm-12">
+                                   <div *ngIf="fs['Subject'].touched && fs['Subject'].errors">
+                                        <span *ngIf="fs['Subject'].errors['required']" class="text-danger">Please enter
+                                             Subject.</span>
+                                   </div>
+                              </div>
+                              <!-- <div class="d-flex mb-2 overflow-auto">
+                         <div *ngFor="let Veriable of variableNameList" class="me-1">
+                              <button class="btn btn-primary"
+                                   (click)="clickOnButton(editor,Veriable.variableName)">{{Veriable.variableName}}</button>
+                         </div>
+                    </div> -->
+                         </div>
+                         <div class="col-sm-12 mb-2">
+                              <angular-editor #editor formControlName="SecondaryEmailBody" [config]="config">
+                              </angular-editor>
+                         </div>
+                         <div class="col-sm-12 mb-2">
+                              <label class="form-label">Role<span class="text-danger">*</span></label>
+                              <ng-select [items]="roleList" [disabled]="isView" [(ngModel)]="selectedSecondaryRoleList"
+                                   bindLabel="RoleName" bindValue="RoleId" placeholder="Select roles"
+                                   [searchable]="true" [ngModelOptions]="{standalone: true}"
+                                   (change)="secondaryRoleChange($event)" [clearable]="true" multiple="true">
+                              </ng-select>
+                              <div *ngIf="fs['SecondaryRoleIds'].touched && fs['SecondaryRoleIds'].errors">
+                                   <span *ngIf="fs['SecondaryRoleIds'].errors['required']" class="text-danger">Please
+                                        select
+                                        Role.</span>
+                              </div>
+                         </div>
+                         <!-- <div class="col-sm-12 mb-2">
+                              <label class="form-label">Email Type<span class="text-danger">*</span></label>
+                              <ng-select [items]="PrimaryList" [disabled]="isView" bindLabel="primaryName"
+                                   bindValue="primaryId" placeholder="Select roles" [searchable]="true"
+                                   formControlName="IsPrimary" [clearable]="true">
+                              </ng-select>
+                              <div *ngIf="f['IsPrimary'].touched && f['IsPrimary'].errors">
+                                   <span *ngIf="f['IsPrimary'].errors['required']" class="text-danger">Please select
+                                        Email type.</span>
+                              </div>
+                         </div> -->
+                    </div>
+                    <!-- <div class="modal-footer"> -->
+                    <button type="submit" class="btn btn-success" *ngIf="!isView" hidden
+                         id="secondaryEmailTemplatebtn">Save</button>
+                    <!-- <span>
+                              <button type="button" class="btn btn-danger"
+                                   (click)="closeemailtemplate()">Cancel</button>
+                         </span> -->
+                    <!-- </div> -->
+               </form>
+          </mat-tab>
+     </mat-tab-group>
+     <div class="modal-footer">
+          <button type="submit" class="btn btn-success" (click)="submitForms()" *ngIf="!isView">Save</button>
+          <span>
+               <button type="button" class="btn btn-danger" (click)="closeemailtemplate()">Cancel</button>
+          </span>
+     </div>
+</div>
+
+<ng-template #EmailModal let-modal>
+     <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">{{modalTitle}}</h4>
+          <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+               <span aria-hidden="true">×</span>
+          </button>
+     </div>
+     <form [formGroup]="EmailTemplateForm" (ngSubmit)="SaveEmail()">
+          <div class="modal-body">
+               <div class="row">
+                    <div class="col-md-12 mb-3">
+                         <input type="hidden" formControlName="EmailTemplateTypeId">
+                         <label class="form-label">Email Template Type Name <span class="text-danger">*</span></label>
+                         <input type="text" formControlName="EmailTemplateTypeName" class="form-control"
+                              placeholder="Enter Email Template Name">
+                         <div *ngIf="f1['EmailTemplateTypeName'].touched && f1['EmailTemplateTypeName'].errors">
+                              <span *ngIf="f1['EmailTemplateTypeName'].errors['required']" class="text-danger">Email
+                                   Template
+                                   name is
+                                   required.</span>
+                         </div>
+                    </div>
+               </div>
+               <div class="row">
+                    <div class="col-md-12 mb-3">
+                         <label class="form-label">Email Template Type Title <span class="text-danger">*</span></label>
+                         <input type="text" formControlName="EmailTemplateTypeTitle" class="form-control"
+                              placeholder="Enter Email Template Title">
+                         <div *ngIf="f1['EmailTemplateTypeTitle'].touched && f1['EmailTemplateTypeTitle'].errors">
+                              <span *ngIf="f1['EmailTemplateTypeTitle'].errors['required']" class="text-danger">Email
+                                   Template
+                                   Title is
+                                   required.</span>
+                         </div>
+                    </div>
+               </div>
+               <!-- <div class="row">
+                 <div class="col-md-12 mb-3">
+                     <label class="form-label">Variables <span class="text-danger">*</span></label>
+                     <ng-multiselect-dropdown formControlName="Variables" placeholder="Select Variables"
+                         [Setting]="dropdownsetting" [data]="item.variableName" *ngFor="let item of emailvariables">
+                         <!-- <ng-option [value]="item.variableId" *ngFor="let item of emailvariables">
+                             {{item.variableName}
+                         </ng-option> -->
+               <!-- </ng-multiselect-dropdown>
+                     <div *ngIf="f['Variables'].touched && f['Variables'].errors">
+                         <span *ngIf="f['variables'].errors['required']" class="text-danger">Please select status.</span>
+                     </div>
+                 </div>
+             </div> -->
+          </div>
+
+          <div class="modal-footer">
+               <input type="submit" class="btn btn-primary" value="Save">
+          </div>
+     </form>
+</ng-template>

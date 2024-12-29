@@ -1,0 +1,295 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <div class="page-title-icon">
+      <h2 class="text-muted icon {{icon}}"></h2>
+    </div>
+    &nbsp;
+    &nbsp;
+    <h4 class="text-muted">My To Do List</h4>
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <div class="d-flex">
+          <div class="assign-label text-capitalize">
+            <div class="d-inline-block" ngbDropdown>
+              <button type="button" ngbDropdownToggle class="btn">
+                <span class="fa fa-filter btn btn-outline-dark fsize-1"></span>
+              </button>
+              <div ngbDropdownMenu class="dropdown-menu-xl">
+                <ul class="nav flex-column">
+                  <form [formGroup]="filterForm" (submit)="ApplyFilter()">
+                    <perfect-scrollbar [autoPropagation]="true" class="filter-scroll">
+                      <li class="nav-item-header nav-item" style="color:black">Due Date</li>
+                      <li class="nav-item px-3">
+                        <input name="daterange" ngxDaterangepickerMd (change)="datePickerChangeDueDate($event)"
+                          class="form-control" formControlName="DueDate" />
+                      </li>
+                      <li class="nav-item-header nav-item" style="color:black">Completion Date</li>
+                      <li class="nav-item px-3">
+                        <input name="daterange" ngxDaterangepickerMd (change)="datePickerChangeCompletionDate($event)"
+                          class="form-control" formControlName="CompletionDate" />
+                      </li>
+                      <li class="nav-item-header nav-item" style="color:black">Status</li>
+                      <li class="nav-item px-3">
+                        <ng-select formControlName="status" bindLabel="statusId" placeholder="Select task status"
+                          [searchable]="true" [clearable]="false" [(ngModel)]="taskStausId" multiple="true">
+                          <ng-option [value]="item.statusId" [disabled]="item.disabled" *ngFor="let item of statusList">
+                            {{item.statusName}}
+                          </ng-option>
+                        </ng-select>
+                      </li>
+                      <li class="nav-item-header nav-item" style="color:black">AssignBy</li>
+                      <li class="nav-item px-3">
+                        <ng-select placeholder="Select Assigned To" [items]="assignedTo" bindLabel="name"
+                          bindValue="userId" [clearable]="false" formControlName="AssignedTo" multiple="true">
+                        </ng-select>
+                      </li>
+                      <!-- <li class="nav-item-header nav-item" style="color:black">Agent</li>
+                      <li class="nav-item px-3">
+                        <ng-select placeholder="Select Agent" [items]="agents" bindLabel="name" bindValue="userId" [clearable]="false"
+                          formControlName="Agent" multiple="true">
+                        </ng-select>
+                      </li>
+                      <li class="nav-item-header nav-item" style="color:black">RM</li>
+                      <li class="nav-item px-3">
+                        <ng-select placeholder="Select RM" [items]="RMs" bindLabel="name" bindValue="userId" [clearable]="false"
+                          formControlName="RM" multiple="true">
+                        </ng-select>
+                      </li> -->
+                      <li class="nav-item-header nav-item" style="color:black">Task</li>
+                      <li class="nav-item px-3 pb-2">
+                        <input type="text" class="form-control" placeholder="search application"
+                          formControlName="ApplicantName">
+                      </li>
+                    </perfect-scrollbar>
+                    <li class="nav-item-divider nav-item"></li>
+                    <li class="text-center nav-item">
+                      <button class="btn btn-primary btn-sm">Filter</button>
+                    </li>
+                  </form>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <button class="text-end btn btn-primary ms-2 me-4 my-2 btn-group-radius" (click)="pagerefrance()"><i
+            class="fa fa-refresh m-2" title="Reference"></i></button>
+        <button class="btn-shadow d-inline-flex align-items-center btn btn-success my-2 btn-group-radius"
+          (click)="openLarge('', false)">Add
+          New </button>
+      </div>
+    </div>
+    <!-- <button type="button" class="btn-shadow d-inline-flex align-items-center btn btn-success"
+                    (click)="openLarge(inquiryModal)">
+                    <fa-icon [icon]="faPlus" class="me-2"></fa-icon>
+                    Create New
+                </button> -->
+  </div>
+  <div class="enquiryTable p-3">
+    <!-- <div class="table-responsive w-100"> -->
+    <table datatable [dtOptions]="dtOptions"
+      class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap w-100">
+      <thead>
+        <tr>
+
+          <th class="text-left" tyle="width: 10%">
+            Created Date
+          </th>
+          <th class="text-left" tyle="width: 20%">
+            Task Description
+          </th>
+          <th class="text-left" style="width: 10%">
+            Assigned By
+          </th>
+          <th class="text-left" style="width: 10%">
+            Assigned To
+          </th>
+          <th class="text-left" style="width: 10%">
+            Status
+          </th>
+          <th class="text-left" style="width: 10%">
+            Due Date
+          </th>
+          <th class="text-left" style="width: 10%">
+            Completion Date
+          </th>
+          <th class="text-left" style="width: 10%">
+            Attachment
+          </th>
+          <th class="text-left" style="width: 10%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- <tr *ngFor="let task of todoTasks;let i=index">
+          <td class="text-left text-muted">
+            {{task.createdDate | date:'dd/MM/yyyy'}}
+          </td>
+          <td class="text-left text-muted">
+            <span class="pointer" (click)="getApplication(task.applicationID,task.taskTypeId)"
+              *ngIf="task.applicationID">{{task?.task}}</span>
+            <span *ngIf="!task?.applicationID">{{task?.task}}</span>
+          </td>
+          <td class="text-left text-muted ">
+            {{task?.assignBy?.assignName | capitalize}}
+          </td>
+          <td class="text-left text-muted">
+            {{task?.assignTo?.assignName | capitalize}}
+          </td>
+          <td class="text-left text-muted fw-600">
+            <button class="btn rounded-pill btn-warning text-light"
+              *ngIf="task.status == 1">{{task?.statusName}}</button>
+            <button class="btn rounded-pill btn-success text-light"
+              *ngIf="task.status == 3">{{task?.statusName}}</button>
+            <button class="btn rounded-pill btn-info text-light" *ngIf="task.status == 2">{{task?.statusName}}</button>
+            <button class="btn rounded-pill btn-danger text-light"
+              *ngIf="task.status == 4">{{task?.statusName}}</button>
+          </td>
+
+          <td class="text-left text-muted">
+            {{task?.dueDate | date:'dd/MM/yyyy'}}
+          </td>
+          <td class="text-left text-muted ">
+            {{task?.completionDate | date:'dd/MM/yyyy'}}
+          </td>
+          <td>
+            <button class="btn-shadow btn btn-success"
+              *ngIf="task?.attachments.attachment != null && task?.attachments.attachment != ''"
+              (click)="downloadForm(task?.attachments.attachment)">Download</button>
+          </td>
+          <td>
+            <button class="btn-shadow btn btn-success" *ngIf="!task.taskTypeId"
+              (click)="openLarge(inquiryModal, i+1, false)">Edit</button>&nbsp;
+            <button class="btn-shadow btn btn-warning" *ngIf="!task.taskTypeId"
+              (click)="openLarge(inquiryModal, i+1, true)">View</button>
+          </td>
+        </tr> -->
+        <tr *ngIf="todoTasks.length == 0">
+          <td colspan="9" class="text-center">Task empty.</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- </div> -->
+  </div>
+</div>
+
+<ng-template #inquiryModal let-modal>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-basic-title">
+      <b>{{modalTitle}}</b>
+    </h3>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">
+        <h3>×</h3>
+      </span>
+    </button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="SaveTask()">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <input type="hidden" formControlName="taskId">
+          <label class="form-label fw-600 text-capitalize">Task <span class="text-danger">*</span></label>
+          <input type="text" placeholder="Enter task detail" formControlName="task" class="form-control">
+          <div *ngIf="isSubmitted && f['task'].errors">
+            <span *ngIf="f['task'].errors['required']" class="text-danger">Task
+              required.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-600 text-capitalize">Status <span class="text-danger">*</span></label>
+          <ng-select formControlName="status" bindLabel="statusId" placeholder="Select task status" [searchable]="true"
+            [clearable]="false" [(ngModel)]="taskStausId">
+            <ng-option [value]="item.statusId" [disabled]="item.disabled" *ngFor="let item of statusList">
+              <!-- <img src="./assets/{{item.image}}" width="20px" height="20px" /> -->
+              {{item.statusName}}
+            </ng-option>
+          </ng-select>
+          <div *ngIf="isSubmitted && f['status'].errors">
+            <span *ngIf="f['status'].errors['required']" class="text-danger">Please select task
+              status.</span>
+          </div>
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-600 text-capitalize">Assigned By</label>
+          <ng-select formControlName="assignById" placeholder="Select Assigned to" [items]="AssigedUserGroupDetail"
+            bindLabel="name" bindValue="userId" [groupBy]="groupByFn" [groupValue]="groupValueFn"
+            [(ngModel)]="taskAssignBy" [clearable]="false">
+            <ng-template ng-optgroup-tmp let-item="item">
+              <span style="vertical-align: middle;">{{item.name}}</span>
+              <!-- <span class="ml-1 badge badge-secondary">{{item.countryName}}</span> -->
+            </ng-template>
+          </ng-select>
+          <div *ngIf="isSubmitted && f['assignToId'].errors">
+            <span *ngIf="f['assignToId'].errors['required']" class="text-danger">Please select
+              Assigned By.</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3"> 
+          <label class="form-label fw-600 text-capitalize">Assigned To </label>
+          <ng-select formControlName="assignToId" placeholder="Select Assigned to" [items]="AssigedUserGroupDetail"
+            bindLabel="name" bindValue="userId" [groupBy]="groupByFn" [groupValue]="groupValueFn"
+            [(ngModel)]="taskAssignTo" [clearable]="false">
+            <ng-template ng-optgroup-tmp let-item="item">
+              <span style="vertical-align: middle;">{{item.name}}</span>
+              <!-- <span class="ml-1 badge badge-secondary">{{item.countryName}}</span> -->
+            </ng-template>
+          </ng-select>
+          <div *ngIf="isSubmitted && f['assignToId'].errors">
+            <span *ngIf="f['assignToId'].errors['required']" class="text-danger">Please choose
+              Assigned To.</span>
+          </div>
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <input type="date" placeholder="Enter due date" formControlName="dueDate" class="form-control"
+            min="{{currentDate}}">
+        </div>
+        <div class="col-md-6 mb-3">
+          <label class="form-label fw-600 text-capitalize">Completion Date
+          </label>
+          <!-- <input type="date" placeholder="Enter completion date" formControlName="completionDate" class="form-control"
+            min="{{currentDate}}" max="{{completionDate}}"> -->
+          <input type="date" placeholder="Enter completion date" formControlName="completionDate" class="form-control"
+            min="{{currentDate}}">
+          <!-- <div *ngIf="isSubmitted && f['completionDate'].errors">
+            <span *ngIf="f['completionDate'].errors['required']" class="text-danger">Reference
+              required.</span>
+          </div> -->
+          <div *ngIf="!isValidCompletionDate"><span class="text-danger">Incorrect completion Date</span></div>
+        </div>
+        <div class="col-md-12 mb-3">
+          <label class="form-label fw-600 text-capitalize">Attachment
+          </label>
+          <input type="file" placeholder="Enter completion date" class="form-control" formControlName="attachments"
+            (change)="convertFileToBase64($event)">
+          <label class="form-label text-capitalize" *ngIf="filename != null && filename != ''">{{filename}}
+          </label>
+          <!-- <div *ngIf="isSubmitted && f['completionDate'].errors">
+                        <span *ngIf="f['completionDate'].errors['required']" class="text-danger">Reference
+                            required.</span>
+                    </div> -->
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click')">Cancel</button>
+      <button type="submit" *ngIf="!hasViewModel" class="btn btn-success">Save</button>
+    </div>
+  </form>
+</ng-template>
+
+<form (ngSubmit)="openInquiryEditView()">
+  <input type="hidden" id="taskId">
+  <input type="hidden" id="action">
+  <button type="submit" style="display: none;" id="btninquiry"></button>
+</form>
+<form (ngSubmit)="getApplicationIDClick()">
+  <input type="hidden" id="appId">
+  <input type="hidden" id="tasktypeId">
+  <button type="submit" id="btnapp" style="display: none;"></button>
+</form>

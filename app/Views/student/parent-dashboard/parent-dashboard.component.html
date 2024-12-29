@@ -1,0 +1,43 @@
+<div class="main-card mb-3 card row">
+     <div class="card-header fsize-2 fw-600">
+          Student Application
+     </div>
+</div>
+
+
+<div class="col-md-12 application-detail">
+     <div class="row">
+          <div class="col-sm-4" *ngFor="let application of applicationsList">
+               <div class="card mb-4 me-2 card-warning ng-star-inserted"
+                    (click)="openApplication(application.applicationId)">
+                    <div class="card-header row mx-0">
+                         {{application.lastName}} {{application.firstName}} 
+                    </div>
+                    <div class="card-body">
+                         <div class="fw-600 fsize-1">
+                              {{application.email}}
+                         </div>
+                         <div class="text-muted mb-2">Email</div>
+
+                         <div class="fw-600 text-capitalize fsize-1">Intake -
+                              {{application.intakeData.intakeName}}
+                              {{application.dateOfStudy}}
+                         </div>
+                         <div class="text-muted mb-2">Applied For</div>
+
+
+                         <div class="fw-600 text-nowrap text-capitalize fsize-1">
+                              {{application.course.courseName}}</div>
+                         <div class="text-muted">Course</div>
+
+                    </div>
+               </div>
+          </div>
+
+
+     </div>
+</div>
+
+<div class="bg-permissionBackGround" *ngIf="permissionmessage">
+     
+</div>

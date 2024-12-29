@@ -1,0 +1,223 @@
+<!-- <app-page-title [heading]="heading" [subheading]="subheading" [icon]="icon" [clickEvent]="clickEvent"></app-page-title> -->
+
+<div class="main-card mb-3 card">
+    <div class="card-header">
+        <div class="page-title-icon">
+            <h2 class="text-muted icon {{icon}}"></h2>
+        </div>
+        <h4 class="text-muted">Inquiry</h4>
+        <div class="btn-actions-pane-right">
+            <div role="group" class="btn-group-sm btn-group">
+                <div ngbDropdown>
+                    <button type="button" ngbDropdownToggle class="me-2 btn btn-outline-primary text-uppercase">Columns
+                        Hide/Show</button>
+                    <div ngbDropdownMenu>
+                        <ng-container *ngFor="let btn of Buttons">
+
+                            <button class="dropdown-item" (click)="hideShowColumn(btn.id)">
+                                <input type="checkbox" [checked]="btn.isChecked" id="btnchk{{btn.id}}"
+                                    class="form-check-input me-1 mt-0">
+                                {{btn.name}}
+                            </button>
+                        </ng-container>
+                    </div>
+                </div>
+                <button class="btn-shadow d-inline-flex align-items-center btn btn-success"
+                    (click)="openLarge('', false)">Add Inquiry</button>
+            </div>
+        </div>
+    </div>
+    <div class="enquiryTable p-3">
+        <table datatable [dtOptions]="dtOptions"
+            class="align-middle text-truncate mb-0 table table-borderless table-hover display nowrap">
+            <thead>
+                <tr>
+                    <th class="text-left">
+                        Last Name
+                    </th>
+                    <th class="text-left">
+                        First Name
+                    </th>
+                    <th class="text-left">
+                        Email
+                    </th>
+                    <th class="text-left">
+                        Campus
+                    </th>
+                    <th class="text-left">
+                        Inquiry Status
+                    </th>
+                    <th class="text-left">
+                        Created On
+                    </th>
+                    <th class="text-left">
+                        Created By
+                    </th>
+                    <th class="text-left">
+                        Updated On
+                    </th>
+                    <th class="text-left">
+                        Updated By
+                    </th>
+                    <th class="text-left">
+                        Description
+                    </th>
+                    <th class="text-left">
+                        Actions
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<ng-template #inquiryModal let-modal>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-basic-title">
+            <b>{{modalTitle}}</b>
+        </h3>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">
+                <h3>×</h3>
+            </span>
+        </button>
+    </div>
+    <form [formGroup]="form" (ngSubmit)="SaveInquiry()">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <!-- <input type="hidden" formControlName="fullname"> -->
+                    <label class="form-label fw-600 text-capitalize">Student First Name <span
+                            class="text-danger">*</span></label>
+                    <input type="text" placeholder="Enter Student First Name" formControlName="firstName"
+                        class="form-control">
+                    <div *ngIf="f['firstName'].touched && f['firstName'].errors">
+                        <span *ngIf="f['firstName'].errors['required']" class="text-danger">Student First Name is
+                            required.</span>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <!-- <input type="hidden" formControlName="fullname"> -->
+                    <label class="form-label fw-600 text-capitalize">Student Last Name <span
+                            class="text-danger">*</span></label>
+                    <input type="text" placeholder="Enter Student Last Name" formControlName="lastName"
+                        class="form-control">
+                    <div *ngIf="f['lastName'].touched && f['lastName'].errors">
+                        <span *ngIf="f['lastName'].errors['required']" class="text-danger">Student Last Name is
+                            required.</span>
+                    </div>
+
+                </div>
+                <div class="col-md-6 mb-3">
+                    <!-- <input type="hidden" formControlName="email"> -->
+                    <label class="form-label fw-600 text-capitalize">Email <span class="text-danger">*</span></label>
+                    <input type="text" placeholder="Enter Student Email" formControlName="email" class="form-control">
+                    <div *ngIf="f['email'].touched && f['email'].errors">
+                        <span *ngIf="f['email'].errors['required']" class="text-danger">Email is required.</span>
+                    </div>
+                    <div *ngIf="f['email'].touched && f['email'].errors">
+                        <span *ngIf="f['email'].errors['pattern']" class="text-danger">Please enter valid email.</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Study Location <span
+                            class="text-danger">*</span></label>
+                    <ng-select formControlName="campusId" bindLabel="campusId" placeholder="Select Campus"
+                        [searchable]="true" [clearable]="false" [(ngModel)]="inquiryCampusId">
+                        <ng-option [value]="item.campusId" [disabled]="item.disabled" *ngFor="let item of campuses">
+                            <!-- <img src="./assets/{{item.image}}" width="20px" height="20px" /> -->
+                            {{item.campusName}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="f['campusId'].touched && f['campusId'].errors">
+                        <span *ngIf="f['campusId'].errors['required']" class="text-danger">Please choose study
+                            location.</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label fw-600 text-capitalize">Inquiry status</label>
+                    <ng-select formControlName="inquiryStatus" bindLabel="inquiryStatusId"
+                        placeholder="Select inquiry status" [searchable]="true" [clearable]="false"
+                        [(ngModel)]="inquiryStatusId">
+                        <ng-option [value]="item.id" [disabled]="item.disabled"
+                            *ngFor="let item of enquirystus">
+                            <!-- <img src="./assets/{{item.image}}" width="20px" height="20px" /> -->
+                            {{item.inquiryStatusName}}
+                        </ng-option>
+                    </ng-select>
+                    <div *ngIf="f['inquiryStatus'].touched && f['inquiryStatus'].errors">
+                        <span *ngIf="f['inquiryStatus'].errors['required']" class="text-danger">Please choose inquiry
+                            status.</span>
+                    </div>
+                </div>
+                <div class="col-md-12 mb-3">
+                    <!-- <input type="hidden" formControlName="message"> -->
+                    <label class="form-label fw-600 text-capitalize">Message </label>
+                    <input type="text" placeholder="Enter Message" formControlName="message" class="form-control">
+                    <div *ngIf="f['message'].touched && f['message'].errors">
+                        <span *ngIf="f['message'].errors['required']" class="text-danger">Message required.</span>
+                    </div>
+                </div>
+                <div class="col-md-12 row mb-3" *ngIf="messages != null">
+                    <label class="form-label fw-600 text-capitalize">Previous Messages</label>
+                    <ng-container *ngFor="let m of messages; let i = index">
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{m.message}}
+                            </div>
+                            <div class="col-md-4">
+                                {{m.createdDate | date: "dd MMM ''yy hh:mm a"}}
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+                <div class="col-md-12 mb-3">
+
+                    <label class="form-label fw-600 text-capitalize">Email File </label>
+                    <input type="file" *ngIf="IsView==true" class="form-control" (change)="convertFileToBase64($event)" readonly disabled>
+                    <input type="file" *ngIf="IsView==false" class="form-control" (change)="convertFileToBase64($event)">
+
+                    <span *ngIf="IsNew==false" (click)="openModelEmail()" class="mt-1 pointer">{{emailFileView}}</span>
+                    <div *ngIf="!isValidFile">
+                        <span class="text-danger">Please select valid EML.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-dark" (click)="modal.dismiss('Close click');">Cancel</button>
+            <button type="submit" *ngIf="!hasViewModel" class="btn btn-success">Save</button>
+        </div>
+
+    </form>
+</ng-template>
+
+<ng-template #EmailInquiryModal let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Email Inquiry</h4>
+        <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">
+                <h3>×</h3>
+            </span>
+        </button>
+    </div>
+    <!-- <form [formGroup]="uploadDocumentForm" (ngSubmit)="uploadDocument()"> -->
+    <div class="modal-body">
+        <ng-container *ngIf="receiptUrl">
+            <iframe class="w-100 vh-65" [src]="receiptUrl"></iframe>
+        </ng-container>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.dismiss('Cross click')">Close</button>
+    </div>
+    <!-- </form> -->
+</ng-template>
+<input type="hidden" (click)="clickEdit($event)" id="hdnClickEdit" />
+<input type="hidden" (click)="clickView($event)" id="hdnClickView" />
+<input type="hidden" (click)="deleteInquiry($event)" id="hdnClickDelete" />
+<input type="hidden" (click)="ConvertToApplication($event)" id="hdnClickConvert" />

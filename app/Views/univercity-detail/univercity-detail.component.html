@@ -1,0 +1,135 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    University Details
+    <div class="btn-actions-pane-right">
+      <div role="group" class="btn-group-sm btn-group">
+        <button class="btn btn-primary float-end my-2 mr-2" (click)="openModal(campusModal)">
+          <!-- (click)="openModal(campusModal)" -->
+          Add University Detail
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <table datatable [dtOptions]="dtOptions" class="align-middle mb-0 table table-borderless table-striped table-hover">
+      <thead>
+        <tr>
+          <!-- <th class="text-left" style="width: 5%;">
+            No.
+          </th> -->
+          <th class="text-left" style="width: 15%;">
+            Name
+          </th>
+          <th class="text-left" style="width: 16%;">
+            Logo
+          </th>
+          <th class="text-left" style="width: 20%;">
+            Location
+          </th>
+          <th class="text-left" style="width: 10%;">
+            No. Of Course
+          </th>
+          <th class="text-left" style="width: 25%;">
+            Use this logo on the offer letter
+          </th>
+          <th class="text-left" style="width: 5%">
+            Action
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of UnivercityList;let i=index">
+          <!-- <td class="text-left">
+            {{i + 1}}
+          </td> -->
+          <td class="text-left text-capitalize">
+            {{data.name}}
+          </td>
+
+          <td class="text-left">
+           <img src="{{baseurl}}{{data.logo}}" style="width: 50px;height: 50px;" alt="Italian Trulli">
+          </td>
+          <td class="text-left text-capitalize">
+            {{data.location}}
+          </td>
+          <td class="text-left text-capitalize">
+            {{data.nocourse}}
+          </td>
+          <td class="text-left">
+            <label *ngIf="data.isLogoShow">Yes</label>
+            <label *ngIf="!data.isLogoShow">No</label>
+            <!-- {{data.isLogoShow}} -->
+          </td>
+          <td class="text-left text-nowrap">
+            <button *ngIf="data.isActive" (click)="ActiveDeActive(data.id, false)" class="btn btn-primary btn-sm" title="Deactivate"><i
+                class="fa fa-eye"></i></button>
+            <button *ngIf="!data.isActive" (click)="ActiveDeActive(data.id, true)" class="btn btn-primary btn-sm" title="Deactivate"><i
+              class="fa fa-power-off"></i></button>
+            <button (click)="EditData(campusModal,data.id)" class="btn btn-primary btn-sm ms-2" title="view"><i
+                class="fa fa-pencil"></i></button>
+          </td>
+        </tr>
+        <tr *ngIf="UnivercityList.length==0">
+          <td colspan="5" class="text-center">No University found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<ng-template #campusModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add University</h4>
+    <button type="button" class="close btn" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">×</span>
+    </button>
+  </div>
+  <form [formGroup]="AddUnivercity" (ngSubmit)="saveUnivercity()" >
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <input type="hidden" formControlName="Id">
+          <label class="form-label">Name<span class="text-danger">*</span></label>
+          <input type="text" formControlName="Name" class="form-control" placeholder="Enter University Name">
+          <div *ngIf="isSubmitted && f['Name'].errors">
+            <span *ngIf="f['Name'].errors['required']" class="text-danger">Name is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Location<span class="text-danger">*</span></label>
+          <input type="text" formControlName="location" class="form-control" placeholder="Enter University Location">
+          <div *ngIf="isSubmitted && f['location'].errors">
+            <span *ngIf="f['location'].errors['required']" class="text-danger">Location is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row" *ngIf="IsLogofileVisible">
+        <div class="col-md-12 mb-3">
+          <label class="form-label">Logo<span class="text-danger">*</span></label>
+          <input type="file" formControlName="Logo" class="form-control" (change)="convertFileToBase64($event)">
+          <label *ngIf="Logoname">{{Logoname}}</label>
+          <div *ngIf="isSubmitted && f['Logo'].errors">
+            <span *ngIf="f['Logo'].errors['required']" class="text-danger">Logo is
+              required.</span>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-1 mb-3" style="width:50px;">
+       <input type="checkbox" id="IsLogoShowId" (change)="IsLogofile()" style="height: 29px;width: 50px;" formControlName="IsLogoShow~">
+       </div>
+       <div class="col-md-4 mb-3">
+       <label for="vehicle1"> Use this logo on the offer letter</label><br>
+       </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-success">Save</button>
+      </div>
+  </form>
+</ng-template>
+

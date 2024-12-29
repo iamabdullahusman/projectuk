@@ -1,0 +1,282 @@
+<div class="row">
+  <div class="col-md-12 application-detail">
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+            <form [formGroup]="Visaform" (ngSubmit)="saveVisaform()">
+              <div class="col-sm-12 mb-2">
+                <input type="hidden" formControlName="applicationId" />
+                <label class="form-label"
+                  >Visa Status <span class="text-danger">*</span></label
+                >
+                <select
+                  name="visa"
+                  id="visa"
+                  class="form-control"
+                  formControlName="statusId"
+                  (change)="changestatus($event.target.value)"
+                >
+                  <option
+                    value="1"
+                    *ngIf="
+                      firsttimecheck ||
+                      (Statusvalue == 1 && AfterStatusvalue == 2)
+                    "
+                  >
+                    InPreparation
+                  </option>
+                  <option
+                    value="2"
+                    *ngIf="
+                      (!firsttimecheck &&
+                        Statusvalue == 2 &&
+                        AfterStatusvalue == 3) ||
+                      (!firsttimecheck && Statusvalue == 5) ||
+                      Statusvalue == 1
+                    "
+                  >
+                    Application Submited
+                  </option>
+                  <option
+                    value="3"
+                    *ngIf="
+                      (!firsttimecheck &&
+                        Statusvalue == 3 &&
+                        AfterStatusvalue == 4) ||
+                      (!firsttimecheck &&
+                        Statusvalue == 2 &&
+                        AfterStatusvalue == 3)
+                    "
+                  >
+                    Granted
+                  </option>
+                  <option
+                    value="4"
+                    *ngIf="
+                      (!firsttimecheck &&
+                        Statusvalue == 4 &&
+                        AfterStatusvalue == 5) ||
+                      (!firsttimecheck &&
+                        Statusvalue == 2 &&
+                        AfterStatusvalue == 3)
+                    "
+                  >
+                    Refused
+                  </option>
+                  <option
+                    value="5"
+                    [selected] = "Statusvalue == 5"
+                    *ngIf="
+                      (!firsttimecheck &&
+                        Statusvalue == 5 &&
+                        AfterStatusvalue == 2) ||
+                      (!firsttimecheck &&
+                        Statusvalue == 4 &&
+                        AfterStatusvalue == 5)
+                    "
+                  >
+                    ReApply
+                  </option> 
+                </select>
+                <div *ngIf="f['statusId'].touched && f['statusId'].errors">
+                  <span
+                    *ngIf="f['statusId'].errors['required']"
+                    class="text-danger"
+                    >Visa Status is required.</span
+                  >
+                </div>
+              </div>
+              <div class="col-sm-12 mb-2" *ngIf="!valuecheck">
+                <label class="form-label"
+                  >Draft URL <span class="text-danger"></span
+                ></label>
+                <input
+                  type="url"
+                  class="form-control"
+                  formControlName="applicationUrl"
+                  placeholder="http://"
+                />
+                <div
+                  *ngIf="
+                    f['applicationUrl'].touched && f['applicationUrl'].errors
+                  "
+                >
+                  <span
+                    *ngIf="f['applicationUrl'].errors['required']"
+                    class="text-danger"
+                    >Draft Url is required.</span
+                  >
+                </div>
+              </div>
+
+              <div class="col-sm-12 mb-2" *ngIf="!valuecheck">
+                <label class="form-label"
+                  >Visa Document <span class="text-danger">*</span></label
+                >
+                <input
+                  type="file"
+                  class="form-control"
+                  (change)="onFileChange($event)"
+                  [ngClass]="{ 'is-invalid': fileError }"
+                />
+                <div *ngIf="fileError" class="text-danger">
+                  Please select a PDF file.
+                </div>
+              </div>
+
+              <div class="col-sm-12 mb-2" *ngIf="valuecheck">
+                <label class="form-label"
+                  >{{ datelabel }} <span class="text-danger">*</span></label
+                >
+                <input
+                  type="date"
+                  *ngIf="statuValue == 1"
+                  class="form-control"
+                  max="{{ SetDate }}"
+                  formControlName="statusDate"
+                  placeholder="dd/mm/yy"
+                />
+                <input
+                  type="date"
+                  *ngIf="statuValue != 1 && statuValue != 3 && statuValue != 4"
+                  class="form-control"
+                  formControlName="statusDate"
+                  placeholder="dd/mm/yy"
+                  max="{{ SetDate }}"
+                />
+                <input
+                  type="date"
+                  *ngIf="statuValue == 3"
+                  class="form-control"
+                  formControlName="statusDate"
+                  placeholder="dd/mm/yy"
+                  max="{{ SetGrantedDate }}"
+                />
+                <input
+                  type="date"
+                  *ngIf="statuValue == 4"
+                  class="form-control"
+                  formControlName="statusDate"
+                  placeholder="dd/mm/yy"
+                  max="{{ SetGrantedDate }}"
+                />
+                <div *ngIf="f['statusDate'].touched && f['statusDate'].errors">
+                  <span
+                    *ngIf="f['statusDate'].errors['required']"
+                    class="text-danger"
+                    >Date is required.</span
+                  >
+                </div>
+              </div>
+              <div
+                class="col-sm-12 mb-2"
+                *ngIf="valuecheck && statuValue == 4 && valuecheck"
+              >
+                <label class="form-label"
+                  >Reason
+                  <span class="text-danger">{{ removestar }}</span></label
+                >
+                <input
+                  type="text"
+                  formControlName="reason"
+                  class="form-control"
+                  placeholder= {{placeholderText}}
+                />
+                <div *ngIf="f['reason'].touched && f['reason'].errors">
+                  <span
+                    *ngIf="f['reason'].errors['required']"
+                    class="text-danger"
+                    >Reason is required.</span
+                  >
+                </div>
+              </div>
+
+              <div class="col-sm-12 mb-2" *ngIf="valuecheck && statuValue == 4">
+                <label class="form-label"
+                  >Visa Document
+                  <span class="text-danger">{{ removestar }}</span></label
+                >
+
+                <input
+                  type="file"
+                  class="form-control"
+                  (change)="SelectVisa($event)"
+                />
+                <div *ngIf="fileName">{{ fileName }}</div>
+                <div *ngIf="f['fileContent'].errors && isSubmitted">
+                  <span
+                    *ngIf="f['fileContent'].errors['required']"
+                    class="text-danger"
+                    >Please Choose document.
+                  </span>
+                </div>
+              </div>
+              <div class="col-sm-4 mb-2">
+                <button type="submit" class="btn btn-success me-2">
+                  Submit
+                </button>
+              </div>
+              <div
+                class="col-sm-12 mt-3 text-danger"
+                *ngIf="visadetailsData?.reason && visadetailsData?.reason !== 'null'"
+              >
+                {{ visadetailsData?.reason }}
+              </div>
+              <div
+                class="col-sm-12 mb-2"
+                *ngIf="
+                  statuValue == 1 ||
+                  visadetailsData?.visaStatus == '' ||
+                  visadetailsData?.visaStatus == null
+                "
+              >
+                <p>
+                  Note:<span class="text-muted fst-italic">
+                    We would request you to save the application for visa and
+                    share the URL here with us so we can review the application
+                    which will ensure that you are submitting the correct
+                    information on the visa application that would avoid or
+                    reduce the chance of rejections
+                  </span>
+                </p>
+              </div>
+            </form>
+          </div>
+          <p *ngIf="visadetailsData?.isAllGood == true" class="text-success">
+            Admin has approved visa Inpreparation changes
+          </p>
+        </div>
+
+        <div class="col-sm-6" *ngIf="visastatusData">
+          <div class="row">
+            <div class="col-sm-12 ms-5">
+              <div
+                class="vertical-time-icons vertical-timeline vertical-timeline--animate vertical-timeline--one-column"
+              >
+                <ng-container *ngFor="let item of visastatusData">
+                  <div class="vertical-timeline-item vertical-timeline-element">
+                    <div>
+                      <div class="vertical-timeline-element-icon bounce-in">
+                        <div class="timeline-icon {{ item.borderStageClass }}">
+                          <i class="{{ item.stageClass }}"></i>
+                        </div>
+                      </div>
+                      <div class="vertical-timeline-element-content bounce-in">
+                        <h4 class="fs-5">Visa {{ item.visaStatus }}</h4>
+                        <div class="date text-primary">
+                          {{ item.statusDate | date : "dd/MM/yyyy" }}
+                        </div>
+                        <p>{{ item.reason }}</p>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

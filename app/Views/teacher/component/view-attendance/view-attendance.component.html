@@ -1,0 +1,40 @@
+<div class="container bg-white p-2">
+  <div class="row border-bottom">
+    <div class="col-sm-12 mb-2 d-flex justify-content-between">
+      <div>
+        <span class="fw-600">Subject Name:</span>
+        {{ attendance.subject.fullSubjectName }}
+      </div>
+      <div class="text-end pointer" (click)="close()">
+        <i class="fa fa-times"></i>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-2">
+      <span class="fw-600">Attendance Time:</span>
+      {{ attendance.startDateTime | date : "dd/MM/YYY" }}
+      {{ attendance.startDateTime | date : "HH:mm" }} -
+      {{ attendance.endDateTime | date : "HH:mm" }}
+    </div>
+    <div class="col-sm-12 mb-2">
+      <span class="fw-600">Total Attendance:</span> {{ attendanceInPercentage }}
+    </div>
+  </div>
+  <div class="row m-2">
+    <div class="col-sm-6 border">
+      <div class="w-100 text-center fw-600 border-bottom mx-0">Present</div>
+      <ul>
+        <li *ngFor="let attendanceStudent of presentStudents">
+          {{ attendanceStudent.studentSlotManagement.userMaster.fullName }}
+        </li>
+      </ul>
+    </div>
+    <div class="col-sm-6 border">
+      <div class="w-100 text-center fw-600 border-bottom mx-0">Absence</div>
+      <ul>
+        <li *ngFor="let attendanceStudent of absenceStudents">
+          {{ attendanceStudent.studentSlotManagement.userMaster.fullName}}
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <div class="text-center w-100">
+      <div>
+        {{ pageTitle }}
+      </div>
+      <div>{{ startDate | date : "dd/MM/YYY" }}</div>
+      <div>
+        {{ startDate | date : "hh:mm a" }} - {{ endDate | date : "hh:mm a" }}
+      </div>
+    </div>
+  </div>
+  <div class="table-responsive p-3">
+    <form [formGroup]="attendanceForm" (ngSubmit)="onSubmit()">
+      <div class="w-100 d-flex mb-2 justify-content-between">
+        <button (click)="onBack()" class="btn btn-outline-dark pointer">
+          <i class="fa fa-arrow-left"></i>
+        </button>
+        <button type="submit" class="btn btn-success py-1 px-2" title="save">
+          <i class="fa fa-save"></i>
+        </button>
+      </div>
+      <table
+        class="align-middle mb-0 table table-borderless table-striped table-hover"
+        datatable
+        [dtOptions]="dtOptions"
+      >
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Attendance Type</th>
+            <th>Comment</th>
+          </tr>
+        </thead>
+        <tbody formArrayName="attendances">
+          <tr
+          class="h-5"
+            *ngFor="let attendance of attendanceControls; let i = index"
+            [formGroupName]="i"
+          >
+            <td>
+              {{attendance.get('studentName').value}}
+            </td>
+            <td>
+              <select formControlName="attendanceType" class="form-control" (change)="onAttendanceChange($event, i)">
+                <option hidden>Select</option>
+                <option value="p">Present</option>
+                <option value="a">Absent</option>
+                <option value="l">Late Coming</option>
+                <option value="e">Excused</option>
+              </select>
+              <div *ngIf="attendance.get('attendanceType').errors && attendance.get('attendanceType').touched" class="text-danger h-0">
+                <div *ngIf="attendance.get('attendanceType').errors['required']">Select attendance type</div>
+              </div>
+            </td>
+            <td>
+              <input type="text" class="form-control" formControlName="comment" placeholder="Comment" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+</div>

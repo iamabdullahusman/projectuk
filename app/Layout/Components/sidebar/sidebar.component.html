@@ -1,0 +1,509 @@
+<div
+  [class]="'app-sidebar sidebar-shadow ' + (config$ | async).sidebarTheme"
+  (mouseover)="sidebarHoverMouseIn()"
+  (mouseout)="sidebarHoverMouseOut()"
+>
+  <div class="app-header__logo">
+    <div class="logo-src"></div>
+    <div class="header__pane ms-auto">
+      <button
+        type="button"
+        class="hamburger close-sidebar-btn hamburger--elastic"
+        [ngClass]="{ 'is-active': globals.toggleSidebar }"
+        (click)="toggleSidebar()"
+      >
+        <span class="hamburger-box">
+          <span class="hamburger-inner"></span>
+        </span>
+      </button>
+    </div>
+  </div>
+  <app-teacher-sidebar *ngIf="userType === '8'"></app-teacher-sidebar>
+  <div
+    class="app-sidebar-content"
+    *ngIf="
+      userType !== '5' &&
+      userType !== '4' &&
+      userType !== '6' &&
+      userType !== '7' &&
+      userType !== '8'
+    "
+  >
+    <div class="app-sidebar-scroll">
+      <perfect-scrollbar
+        [autoPropagation]="true"
+        class="scroll-container"
+        [config]="config"
+        [scrollIndicators]="true"
+        style="max-width: 600px; max-height: 95vh"
+      >
+        <div class="v-sidebar-menu vsm-default">
+          <div class="vsm-list">
+            <div class="vsm-header">Navigation</div>
+            <ngb-accordion
+              [destroyOnHide]="false"
+              [closeOthers]="true"
+              #acc="ngbAccordion"
+              activeIds="{{ extraParameter }}"
+            >
+              <ngb-panel id="Admission" *ngIf="userType !== '5'">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-graph3"></i>
+                    <span class="vsm-title">Admission</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown line-hide">
+                    <div class="vsm-item ms-4">
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/dashboard"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-plugin"></i>
+                        <span class="vsm-title ms-4">Overview</span>
+                      </a>
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/inquiry"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-mail"></i>
+                        <span class="vsm-title ms-4">Inquiry</span>
+                      </a>
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/application"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-study"></i>
+                        <span class="vsm-title ms-4">Application</span>
+                      </a>
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/document"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-copy-file"></i>
+                        <span class="vsm-title ms-4">Documentation</span>
+                      </a>
+                      <ngb-accordion
+                        [destroyOnHide]="false"
+                        [closeOthers]="true"
+                        #acc="ngbAccordion"
+                        activeIds="{{ extraParameter }}"
+                      >
+                        <ngb-panel id="Offer" *ngIf="userType !== '5'">
+                          <ng-template ngbPanelHeader>
+                            <button ngbPanelToggle class="vsm-link mt-2">
+                              <i class="vsm-icon pe-7s-rocket"></i>
+                              <span class="vsm-title ms-4">Offer</span>
+                              <i class="vsm-arrow"></i>
+                            </button>
+                          </ng-template>
+                          <ng-template ngbPanelContent>
+                            <div class="vsm-dropdown">
+                              <div class="vsm-list">
+                                <div class="vsm-item"></div>
+                                <a
+                                  routerLinkActive="active-item"
+                                  routerLink="/offer"
+                                  [queryParams]="{ offerType: 'conditional' }"
+                                  class="vsm-link mt-2"
+                                >
+                                  <i class="vsm-icon pe-7s-note2"></i>
+                                  <span class="vsm-title ms-4"
+                                    >Conditional</span
+                                  >
+                                </a>
+
+                                <div class="vsm-item"></div>
+                                <a
+                                  routerLinkActive="active-item"
+                                  routerLink="/offer"
+                                  [queryParams]="{ offerType: 'unconditional' }"
+                                  class="vsm-link mt-2"
+                                >
+                                  <i class="vsm-icon lnr-license"></i>
+                                  <span class="vsm-title ms-4"
+                                    >UnConditional</span
+                                  >
+                                </a>
+                              </div>
+                            </div>
+                          </ng-template>
+                        </ngb-panel>
+                      </ngb-accordion>
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/visa"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-plane"></i>
+                        <span class="vsm-title ms-4">Visa</span>
+                      </a>
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="onboarding"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-culture"></i>
+                        <span class="vsm-title ms-4">Onboarding</span>
+                      </a>
+                    </div>
+                    <ngb-accordion
+                      [destroyOnHide]="false"
+                      [closeOthers]="true"
+                      #acc="ngbAccordion"
+                      activeIds="{{ extraParameter }}"
+                    >
+                      <ngb-panel id="Reports" *ngIf="userType !== '5'">
+                        <ng-template ngbPanelHeader>
+                          <button ngbPanelToggle class="vsm-link ms-4 mt-2">
+                            <i class="vsm-icon pe-7s-graph3"></i>
+                            <span class="vsm-title">Report</span>
+                            <i class="vsm-arrow"></i>
+                          </button>
+                        </ng-template>
+                        <ng-template ngbPanelContent>
+                          <div class="vsm-dropdown ms-4">
+                            <div class="vsm-list">
+                              <div class="vsm-item"></div>
+                              <a
+                                routerLinkActive="active-item"
+                                routerLink="/deposit"
+                                class="vsm-link mt-2"
+                              >
+                                <i class="vsm-icon pe-7s-cash"></i>
+                                <span class="vsm-title">Finance</span>
+                              </a>
+
+                              <div class="vsm-item"></div>
+                              <a
+                                routerLinkActive="active-item"
+                                routerLink="/cas"
+                                class="vsm-link mt-2"
+                              >
+                                <i class="vsm-icon pe-7s-timer"></i>
+                               <span class="vsm-title">UKVI </span> <!--  UKVI Report -->
+                              </a>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </ngb-panel>
+                    </ngb-accordion>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+            <ngb-accordion
+              [destroyOnHide]="false"
+              [closeOthers]="true"
+              #acc="ngbAccordion"
+              activeIds="{{ extraParameter }}"
+            >
+            <!-- *ngIf="userType === '1' && AdminAndSettings" -->
+
+              <ngb-panel
+                id="StudentManagement"
+                *ngIf="userType === '1' && AdminAndSettings"
+              >
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-users"></i>
+                    <span class="vsm-title">Admin</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown line-hide">
+                    <div class="vsm-item ms-4">
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/admin/dashboard"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-home"></i>
+                        <span class="vsm-title ms-4">Dashboard</span>
+                      </a>
+                    </div>
+                    <div class="vsm-item ms-4">
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/teacher"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-study"></i>
+                        <span class="vsm-title ms-4">Teacher</span>
+                      </a>
+                    </div>
+                    <div class="vsm-item ms-4">
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/timetable"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-date"></i>
+                        <span class="vsm-title ms-4">Timetable</span>
+                      </a>
+                    </div>
+                    <div class="vsm-item ms-4">
+                      <a
+                        routerLinkActive="active-item"
+                        routerLink="/exam-timetable"
+                        class="vsm-link mt-2"
+                      >
+                        <i class="vsm-icon pe-7s-note2"></i>
+                        <span class="vsm-title ms-4">Exam Timetable</span>
+                      </a>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+            <ngb-accordion
+              [destroyOnHide]="false"
+              [closeOthers]="true"
+              #acc="ngbAccordion"
+              activeIds="{{ extraParameter }}"
+            >
+              <ngb-panel id="Settings" *ngIf="userType === '1'">
+                <ng-template ngbPanelHeader>
+                  <button ngbPanelToggle class="vsm-link">
+                    <i class="vsm-icon pe-7s-settings"></i>
+                    <span class="vsm-title">Setting</span>
+                    <i class="vsm-arrow"></i>
+                  </button>
+                </ng-template>
+                <ng-template ngbPanelContent>
+                  <div class="vsm-dropdown">
+                    <div class="vsm-list setting-scroll">
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/user"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">User</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/intake"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Intake</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/course"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Course</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/campus"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Campus</span>
+                        </a>
+                      </div>
+                      <!-- *ngIf="AdminAndSettings" -->
+                      <div class="vsm-item" *ngIf="AdminAndSettings" >
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/term"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Term</span>
+                        </a>
+                      </div>
+                      <!-- *ngIf="AdminAndSettings" --> 
+                      <div class="vsm-item" *ngIf="AdminAndSettings" >
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/subject"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Subject</span>
+                        </a>
+                      </div>
+                      <!-- *ngIf="AdminAndSettings" -->
+                      <div class="vsm-item" *ngIf="AdminAndSettings">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/group"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Group</span>
+                        </a>
+                      </div>
+                      <!-- *ngIf="AdminAndSettings" -->
+                      <div class="vsm-item" *ngIf="AdminAndSettings">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/room"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Room</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/feepayby"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Fee Payer</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/socialreference"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Source</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/course/documents"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Document</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/NewEmailTemplates"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Email Event</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/ManageSponsor"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title"> Sponsor</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/SponsorRequest"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title"> Sponsor Mapping</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/Condition"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title"> Condition</span>
+                        </a>
+                      </div>
+                      <div class="vsm-item">
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/Category"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title"> Nationality/Category</span>
+                        </a>
+
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/Fee"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">Fee</span>
+                        </a>
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/Univercity"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">University</span>
+                        </a>
+                        <a
+                          routerLinkActive="active-item"
+                          routerLink="/Universitycoursedetail"
+                          class="vsm-link mt-2"
+                        >
+                          <span class="vsm-title">University Course</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </ngb-panel>
+            </ngb-accordion>
+          </div>
+        </div>
+        <div class="v-sidebar-menu vsm-default">
+          <div class="vsm-list">
+            <div class="vsm-header">Inbox</div>
+
+
+            <!-- Taha said us to remove this feature -->
+            <div class="vsm-item">
+              <a
+                routerLinkActive="active-item"
+                routerLink="/todoList"
+                class="vsm-link mt-2"
+              >
+                <i class="vsm-icon pe-7s-clock"></i>
+                <span class="vsm-title">To Do List</span>
+              </a>
+            </div>
+            <div class="vsm-item">
+              <a
+                routerLinkActive="active-item"
+                routerLink="/Notification"
+                class="vsm-link mt-2"
+              >
+                <i class="vsm-icon fa fa-bell-o"></i>
+                <span class="vsm-title">System Notification</span>
+              </a>
+            </div>
+            <div class="vsm-item">
+              <a
+                routerLinkActive="active-item"
+                routerLink="/Support"
+                class="vsm-link mt-2"
+              >
+                <i class="vsm-icon fa fa-comments-o"></i>
+                <span class="vsm-title">Support</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </perfect-scrollbar>
+    </div>
+  </div>
+  <app-student-sidebar
+    *ngIf="
+      userType === '5' ||
+      userType === '4' ||
+      userType === '6' ||
+      userType === '7'
+    "
+  ></app-student-sidebar>
+</div>

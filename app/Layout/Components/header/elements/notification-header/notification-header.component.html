@@ -1,0 +1,56 @@
+<div class="d-flex">
+    <div class="header-btn-lg pe-0 ps-0">
+        <div class="widget-content p-0">
+            <div class="widget-content-wrapper">
+                <div class="widget-content-left">
+                    <div class="btn-group" ngbDropdown>
+                        <button type="button" class="btn btn-link p-0 me-2" ngbDropdownToggle>
+                            <span>
+                                <div class="">
+                                    <button class="mb-2 me-2 btn-icon btn-icon-only btn btn-link btn-sm">
+                                        <i class="fa fa-bell-o btn-icon-wrapper fsize-3"> </i>
+                                        <span class="badge rounded-pill bg-primary">{{totalUnread}}</span>
+                                    </button>
+                                </div>
+                            </span>
+                        </button>
+                        <div class="dropdown-menu-lg" ngbDropdownMenu>
+                            <ul ngbNav #nav="ngbNav" class="nav-tabs tabs-animated tabs-animated-shadow"
+                                justify="justified">
+                                <li ngbNavItem>
+                                    <div class="">
+                                        <div class="scroll-area-sm">
+                                            <perfect-scrollbar [autoPropagation]="true">
+                                                <div class="notification-list">
+                                                    <div class="pb-2" *ngFor="let notification of notifications">
+                                                        <div>
+                                                            <div class="notification-element px-3 bounce-in">
+                                                                {{notification.discription}}
+
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </perfect-scrollbar>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                            <ul class="nav flex-column">
+                                <li class="nav-item-divider nav-item"></li>
+                                <li class="nav-item-btn text-center nav-item">
+                                    <a class="btn-shadow btn btn-primary btn-sm" href="Notification">See All
+                                        Notification</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

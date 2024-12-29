@@ -1,0 +1,20 @@
+<table datatable class="table table-striped">
+    <thead>
+      <tr>
+        <th style="width: 10%">Day</th>
+        <th style="width: 30%">Time</th>
+        <th style="width: 50%">Subject</th>
+        <th>Room</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let slot of slots" (click)="onSlotClick(slot.day, slot.subjectManagementId)">
+        <td class="text-capitalize">{{ slot.day }}</td>
+        <td>{{ slot.startTime }} - {{ slot.endTime }}</td>
+        <td>{{ slot.subjectManagement.fullSubjectName }}</td>
+        <td>{{ slot.room.roomName }}</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  

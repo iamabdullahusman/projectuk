@@ -1,0 +1,388 @@
+<div class="main-card mb-3 card">
+  <div class="card-header">
+    <div class="d-flex align-items-sm-center">
+      <div class="btn btn-outline-dark me-2 pointer">
+        <i class="fa fa-arrow-left" (click)="back()"></i>
+      </div>
+      <div>
+        {{ pageTitle }}
+      </div>
+    </div>
+  </div>
+  <form [formGroup]="teacherForm" (ngSubmit)="saveTeacher()">
+    <div class="row m-2">
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600"
+          >First Name <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="First name"
+          class="form-control"
+        />
+        <div *ngIf="tf['name'].errors && tf['name'].touched">
+          <div class="text-danger" *ngIf="tf['name'].errors['required']">
+            Name is required.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600"
+          >Last Name <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          formControlName="surname"
+          placeholder="Last name"
+          class="form-control"
+        />
+        <div *ngIf="tf['surname'].errors && tf['surname'].touched">
+          <div class="text-danger" *ngIf="tf['surname'].errors['required']">
+            Surname is required.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600"
+          >Mobile Number <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          formControlName="mobileNumber"
+          placeholder="Mobile number"
+          class="form-control"
+        />
+        <div *ngIf="tf['mobileNumber'].errors && tf['mobileNumber'].touched">
+          <div
+            class="text-danger"
+            *ngIf="tf['mobileNumber'].errors['required']"
+          >
+            Mobile number is required.
+          </div>
+          <div class="text-danger" *ngIf="tf['mobileNumber'].errors['pattern']">
+            Mobile number is invalid.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600">Home Number</label>
+        <input
+          type="text"
+          formControlName="homeNumber"
+          placeholder="Home number"
+          class="form-control"
+        />
+        <div *ngIf="tf['homeNumber'].errors && tf['homeNumber'].touched">
+          <div class="text-danger" *ngIf="tf['homeNumber'].errors['pattern']">
+            Home number is invalid.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600"
+          >Email <span class="text-danger">*</span></label
+        >
+        <input
+          type="text"
+          formControlName="email"
+          placeholder="example@abc.com"
+          class="form-control"
+        />
+        <div *ngIf="tf['email'].errors && tf['email'].touched">
+          <div class="text-danger" *ngIf="tf['email'].errors['required']">
+            Email is required.
+          </div>
+          <div class="text-danger" *ngIf="tf['email'].errors['pattern']">
+            Email is invalid.
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600">Date Of Birth</label>
+        <input type="date" formControlName="dateOfBirth" class="form-control" />
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label class="form-label fw-600">CV</label>
+        <input
+          type="file"
+          class="form-control"
+          (change)="onFileChoose($event)"
+        />
+      </div>
+    </div>
+    <div class="fw-600 lh-0 fs-3 mx-3">
+      Address
+      <hr />
+    </div>
+    <div class="row mx-2 mb-3">
+      <div class="col-sm-12 mb-3">
+        <label class="form-label fw-600">Address</label>
+        <input
+          type="text"
+          formControlName="address"
+          placeholder="Address"
+          class="form-control"
+        />
+      </div>
+      <!-- <div class="col-sm-4">
+        <label class="form-label fw-600">Country</label>
+        <ng-select
+          formControlName="country"
+          [items]="countryData"
+          bindValue="countryId"
+          bindLabel="countryName"
+          placeholder="Select country"
+          [searchable]="true"
+          [clearable]="false"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label class="form-label fw-600">State</label>
+        <input
+          type="text"
+          formControlName="state"
+          placeholder="State"
+          class="form-control"
+        />
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label class="form-label fw-600">City</label>
+        <ng-select
+          formControlName="city"
+          [items]="addressCities"
+          bindValue="cityId"
+          bindLabel="cityName"
+          placeholder="Select City"
+          [searchable]="true"
+          [clearable]="false"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label class="form-label fw-600">Postal Code</label>
+        <input
+          type="text"
+          formControlName="pinCode"
+          placeholder="Postal code"
+          class="form-control"
+        />
+        <div *ngIf="tf['pinCode'].errors && tf['pinCode'].touched">
+          <div class="text-danger" *ngIf="tf['pinCode'].errors['pattern']">
+            Postal code is invalid
+          </div>
+        </div>
+      </div>-->
+    </div>
+    <div class="fw-600 lh-0 fs-3 mx-3 mb-3">
+      First Emergency Contact 
+      <hr />
+    </div>
+    <div class="row mx-2 mb-2">
+      <div class="col-sm-6">
+        <label class="form-label fw-600">Name</label>
+        <input
+          type="text"
+          formControlName="emergencyContactName1"
+          placeholder="Name"
+          class="form-control"
+        />
+      </div>
+      <div class="col-sm-6">
+        <label class="form-label fw-600">Mobile Number</label>
+        <input
+          type="text"
+          formControlName="emergencyNumber1"
+          placeholder="Mobile number"
+          class="form-control"
+        />
+        <div
+          *ngIf="
+            tf['emergencyNumber1'].errors && tf['emergencyNumber1'].touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="tf['emergencyNumber1'].errors['pattern']"
+          >
+            Mobile number is invalid
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 mb-3">
+        <label class="form-label fw-600">Address</label>
+        <input
+          type="text"
+          formControlName="emergencyAddress1"
+          placeholder="Address"
+          class="form-control"
+        />
+      </div>
+      <!-- <div class="col-sm-4">
+        <label class="form-label fw-600">Country</label>
+        <ng-select
+          formControlName="firstEmergencyCountry"
+          [items]="countryData"
+          bindValue="countryId"
+          bindLabel="countryName"
+          placeholder="Select country"
+          [searchable]="true"
+          [clearable]="false"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label class="form-label fw-600">State</label>
+        <input
+          type="text"
+          formControlName="firstEmergencyState"
+          placeholder="State"
+          class="form-control"
+        />
+      </div>
+      <div class="col-sm-4">
+        <label class="form-label fw-600">City</label>
+        <ng-select
+          formControlName="firstEmergencyCity"
+          [items]="addressFirstEmergencyCities"
+          bindValue="cityId"
+          bindLabel="cityName"
+          placeholder="Select City"
+          [searchable]="true"
+          [clearable]="false"
+        >
+        </ng-select>
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label class="form-label fw-600">Postal Code</label>
+        <input
+          type="text"
+          formControlName="firstEmergencyPinCode"
+          placeholder="Postal code"
+          class="form-control"
+        />
+        <div
+          *ngIf="
+            tf['firstEmergencyPinCode'].errors &&
+            tf['firstEmergencyPinCode'].touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="tf['firstEmergencyPinCode'].errors['pattern']"
+          >
+            Postal code is invalid
+          </div>
+        </div> -->
+    </div>
+
+    <div class="fw-600 lh-0 fs-3 mx-3">
+      Second Emergency Contact
+      <hr />
+    </div>
+    <!-- <div class="row mx-2"> -->
+      <div class="row mx-2 mb-2">
+        <div class="col-sm-6">
+          <label class="form-label fw-600">Name</label>
+          <input
+            type="text"
+            formControlName="emergencyContactName2"
+            placeholder="Name"
+            class="form-control"
+          />
+        </div>
+        <div class="col-sm-6">
+          <label class="form-label fw-600">Mobile Number</label>
+          <input
+            type="text"
+            formControlName="emergencyNumber2"
+            placeholder="Mobile number"
+            class="form-control"
+          />
+          <div
+            *ngIf="
+              tf['emergencyNumber2'].errors && tf['emergencyNumber2'].touched
+            "
+          >
+            <div
+              class="text-danger"
+              *ngIf="tf['emergencyNumber2'].errors['pattern']"
+            >
+              Mobile number is invalid
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <label class="form-label fw-600">Address</label>
+          <input
+            type="text"
+            formControlName="emergencyAddress2"
+            placeholder="Address"
+            class="form-control"
+          />
+        </div>
+        <!-- <div class="col-sm-4">
+          <label class="form-label fw-600">Country</label>
+          <ng-select
+            formControlName="secondEmergencyCountry"
+            [items]="countryData"
+            bindValue="countryId"
+            bindLabel="countryName"
+            placeholder="Select country"
+            [searchable]="true"
+            [clearable]="false"
+          >
+          </ng-select>
+        </div>
+        <div class="col-sm-4 mb-3">
+          <label class="form-label fw-600">State</label>
+          <input
+            type="text"
+            formControlName="secondEmergencyState"
+            placeholder="State"
+            class="form-control"
+          />
+        </div>
+        <div class="col-sm-4">
+          <label class="form-label fw-600">City</label>
+          <ng-select
+            formControlName="secondEmergencyCity"
+            [items]="addressSecondEmergencyCities"
+            bindValue="cityId"
+            bindLabel="cityName"
+            placeholder="Select City"
+            [searchable]="true"
+            [clearable]="false"
+          >
+          </ng-select>
+        </div>
+        <div class="col-sm-4 mb-3">
+          <label class="form-label fw-600">Postal Code</label>
+          <input
+            type="text"
+            formControlName="secondEmergencyPinCode"
+            placeholder="Postal code"
+            class="form-control"
+          />
+          <div
+            *ngIf="
+              tf['secondEmergencyPinCode'].errors &&
+              tf['secondEmergencyPinCode'].touched
+            "
+          >
+            <div
+              class="text-danger"
+              *ngIf="tf['secondEmergencyPinCode'].errors['pattern']"
+            >
+              Postal code is invalid
+            </div>
+          </div>
+        </div> -->
+      </div>
+    <!-- </div> -->
+    <div class="modal-footer">
+      <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+  </form>
+</div>
